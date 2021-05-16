@@ -8,8 +8,27 @@ uses
   Classes, SysUtils;
 
 type
+
+{ TLegacyBlockHeaderData }
+  TLegacyBlockHeaderData = packed record
+    Number         : Int64;
+    TimeStart      : Int64;
+    TimeEnd        : Int64;
+    TimeTotal      : integer;
+    TimeLast20     : integer;
+    TrxTotales     : integer;
+    Difficult      : integer;
+    TargetHash     : String[32];
+    Solution       : String[200];
+    LastBlockHash  : String[32];
+    NxtBlkDiff     : integer;
+    AccountMiner   : String[40];
+    MinerFee       : Int64;
+    Reward         : Int64;
+  end;
+
 { TLegacyOrderData }
-  TLegacyOrderData = Packed Record
+  TLegacyOrderData = packed record
     Block : integer;
     OrderID : String[64];
     OrderLines : Integer;
