@@ -105,6 +105,15 @@ type
     property CompressedJSON: Boolean
       read FCompressedJSON
       write FCompressedJSON;
+
+    property AsJSON: TJSONStringType
+      read getAsJSON;
+    property AsJSONData: TJSONData
+      read getAsJSONData;
+    property AsJSONObject: TJSONObject
+      read getAsJSONObject;
+    property AsStream: TStream
+      read getAsStream;
   published
   end;
 
@@ -200,6 +209,15 @@ begin
   Result:= TJSONObject.Create;
   Result.Add(cjOperationType, Ord(FOperationType));
   Result.Add(cjID, FID);
+  Result.Add(cjBlock, FBlock);
+  Result.Add(cjReference, FReference);
+  Result.Add(cjSenderPublicKey, FSenderPublicKey);
+  Result.Add(cjSenderAddress, FSenderAddress);
+  Result.Add(cjReceiverAddress, FReceiverAddress);
+  Result.Add(cjAmount, FAmount);
+  Result.Add(cjFee, FFee);
+  Result.Add(cjSignature, FSignature);
+  Result.Add(cjCreated, DateTimeToUnix(FCreated));
 end;
 
 function TOperation.getAsStream: TStream;
