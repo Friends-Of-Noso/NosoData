@@ -6,7 +6,8 @@ interface
 
 uses
   Classes
-, SysUtils;
+, SysUtils
+;
 
 type
 { TOperationTypes }
@@ -28,6 +29,10 @@ type
   end;
 
 implementation
+
+uses
+  Noso.Data.Legacy
+;
 
 { TOperation }
 
