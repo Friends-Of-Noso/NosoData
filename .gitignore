@@ -1,5 +1,6 @@
 # NosoData project specific
 /bin
+/docs/*.txt
 
 # Compiled l10n files: .mo should be ignored
 *.mo

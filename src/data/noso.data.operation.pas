@@ -11,8 +11,8 @@ uses
 ;
 
 type
-{ TOperationTypes }
-  TOperationTypes = (
+{ TOperationType }
+  TOperationType = (
     otUnknown,
     otTransfer,
     otCustom,
@@ -31,7 +31,7 @@ type
 { TOperation }
   TOperation = class(TObject)
   private
-    FOperationType: TOperationTypes;
+    FOperationType: TOperationType;
     FID: String;
     FBlock: Int64;
     FReference: TJSONStringType;
@@ -68,7 +68,7 @@ type
     function FormatJSON(AOptions : TFormatOptions = DefaultFormat;
       AIndentsize : Integer = DefaultIndentSize): TJSONStringType;
 
-    property OperationType: TOperationTypes
+    property OperationType: TOperationType
       read FOperationType
       write FOperationType;
     property ID: String
@@ -164,7 +164,7 @@ end;
 procedure TOperation.setFromJSONObject(const AJSONObject: TJSONObject);
 begin
   FOperationType:=
-    TOperationTypes(AJSONObject.Get(cjOperationType, Ord(FOperationType)));
+    TOperationType(AJSONObject.Get(cjOperationType, Ord(FOperationType)));
   FID:= AJSONObject.get(cjID, FID);
   FBlock:= AJSONObject.get(cjBlock, FBlock);
   FReference:= AJSONObject.get(cjReference, FReference);
