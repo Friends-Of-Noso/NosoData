@@ -35,7 +35,7 @@ type
     FID: String;
     FBlock: Int64;
     FReference: TJSONStringType;
-    FSenderPublicKey: String; // Really needed ?
+    FSenderPublicKey: String;
     FSenderAddress: String;
     FReceiverAddress: String;
     FAmount: Int64;
@@ -80,7 +80,7 @@ type
     property Reference: TJSONStringType
       read FReference
       write FReference;
-    property SenderPublicKey: String // Really needed ?
+    property SenderPublicKey: String
       read FSenderPublicKey
       write FSenderPublicKey;
     property SenderAddress: String
@@ -130,7 +130,7 @@ const
   cjID = 'id';
   cjBlock = 'block';
   cjReference = 'reference';
-  cjSenderPublicKey = 'sender-public-key'; // Really needed ?
+  cjSenderPublicKey = 'sender-public-key';
   cjSenderAddress = 'sender-address';
   cjReceiverAddress = 'receiver-address';
   cjAmount = 'amount';
@@ -169,7 +169,7 @@ begin
   FBlock:= AJSONObject.get(cjBlock, FBlock);
   FReference:= AJSONObject.get(cjReference, FReference);
   FSenderPublicKey:= AJSONObject.get(cjSenderPublicKey, FSenderPublicKey);
-  FSenderAddress:= AJSONObject.get(cjSenderAddress, FSenderAddress); // Really needed ?
+  FSenderAddress:= AJSONObject.get(cjSenderAddress, FSenderAddress);
   FReceiverAddress:= AJSONObject.get(cjReceiverAddress, FReceiverAddress);
   FAmount:= AJSONObject.get(cjAmount, FAmount);
   FFee:= AJSONObject.get(cjFee, FFee);
@@ -239,7 +239,7 @@ begin
   FID:= '';
   FBlock:= -1;
   FReference:= '';
-  FSenderPublicKey:= ''; // Really needed ?
+  FSenderPublicKey:= '';
   FSenderAddress:= '';
   FReceiverAddress:= '';
   FAmount:= 0;
