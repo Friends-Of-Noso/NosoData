@@ -14,9 +14,8 @@ uses
 
 type
 
-  { TNosoDataOperation }
-
-  TNosoDataOperation= class(TTestCase)
+{ TTestNosoDataOperation }
+  TTestNosoDataOperation= class(TTestCase)
   private
     FOperation: TOperation;
 
@@ -49,34 +48,34 @@ uses
 const
   cjOperationTransfer =
     '{'+
-      '"operation-type":1,'+ // otTransfer
-      '"id":"",'+
-      '"block":1,'+
-      '"reference":"",'+
-      '"sender-public-key":"",'+ // Really needed ?
-      '"sender-address":"",'+
-      '"receiver-address":"",'+
-      '"amount":0,'+
-      '"fee":0,'+
-      '"signature":"",'+
-      '"created":-1'+
+      '"'+cjOperationType+'":1,'+ // otTransfer
+      '"'+cjID+'":"",'+
+      '"'+cjBlock+'":1,'+
+      '"'+cjReference+'":"",'+
+      '"'+cjSenderPublicKey+'":"",'+
+      '"'+cjSenderAddress+'":"",'+
+      '"'+cjReceiverAddress+'":"",'+
+      '"'+cjAmount+'":0,'+
+      '"'+cjFee+'":0,'+
+      '"'+cjSignature+'":"",'+
+      '"'+cjCreated+'":-1'+
     '}';
   cjOperationCustom =
     '{'+
-      '"operation-type":2,'+ // otCustom
-      '"id":"",'+
-      '"block":1,'+
-      '"reference":"",'+
-      '"sender-public-key":"",'+ // Really needed ?
-      '"sender-address":"",'+
-      '"receiver-address":"",'+
-      '"amount":0,'+
-      '"fee":0,'+
-      '"signature":"",'+
-      '"created":-1'+
+      '"'+cjOperationType+'":2,'+ // otCustom
+      '"'+cjID+'":"",'+
+      '"'+cjBlock+'":1,'+
+      '"'+cjReference+'":"",'+
+      '"'+cjSenderPublicKey+'":"",'+
+      '"'+cjSenderAddress+'":"",'+
+      '"'+cjReceiverAddress+'":"",'+
+      '"'+cjAmount+'":0,'+
+      '"'+cjFee+'":0,'+
+      '"'+cjSignature+'":"",'+
+      '"'+cjCreated+'":-1'+
     '}';
 
-procedure TNosoDataOperation.CheckFieldsWithTransfer;
+procedure TTestNosoDataOperation.CheckFieldsWithTransfer;
 begin
   AssertEquals('Noso Operation is type otTransfer(1)', ord(otTransfer), ord(FOperation.OperationType));
   AssertEquals('Noso Operation ID is empty', EmptyStr, FOperation.ID);
@@ -91,7 +90,7 @@ begin
   AssertEquals('Noso Operation Created is 1969-12-31 23:59:59', -1, DateTimeToUnix(FOperation.Created));
 end;
 
-procedure TNosoDataOperation.CheckFieldsWithCustom;
+procedure TTestNosoDataOperation.CheckFieldsWithCustom;
 begin
   AssertEquals('Noso Operation is type otCustom(2)', ord(otCustom), ord(FOperation.OperationType));
   AssertEquals('Noso Operation ID is empty', EmptyStr, FOperation.ID);
@@ -106,7 +105,7 @@ begin
   AssertEquals('Noso Operation Created is 1969-12-31 23:59:59', -1, DateTimeToUnix(FOperation.Created));
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationCreate;
+procedure TTestNosoDataOperation.TestNosoDataOperationCreate;
 begin
   FOperation:= TOperation.Create;
   AssertEquals('Noso Operation is type unknown', ord(otUnknown), ord(FOperation.OperationType));
@@ -123,35 +122,35 @@ begin
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationCreateFromJSONOperationTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONOperationTransfer;
 begin
   FOperation:= TOperation.Create(cjOperationTransfer);
   CheckFieldsWithTransfer;
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationCreateFromJSONOperationCustom;
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONOperationCustom;
 begin
   FOperation:= TOperation.Create(cjOperationCustom);
   CheckFieldsWithCustom;
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationCreateFromJSONDataOperationTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONDataOperationTransfer;
 begin
   FOperation:= TOperation.Create(GetJSONData(cjOperationTransfer));
   CheckFieldsWithTransfer;
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationCreateFromJSONObjectOperationTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONObjectOperationTransfer;
 begin
   FOperation:= TOperation.Create(TJSONObject(GetJSONData(cjOperationTransfer)));
   CheckFieldsWithTransfer;
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationCreateFromSteamOperationTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromSteamOperationTransfer;
 var
   ssOperationObject: TStringStream;
 begin
@@ -162,39 +161,40 @@ begin
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationAsJSONFromTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationAsJSONFromTransfer;
 begin
   FOperation:= TOperation.Create(cjOperationTransfer);
   AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSON);
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationAsJSONDataFromTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationAsJSONDataFromTransfer;
 begin
-  FOperation:= TOperation.Create(GetJSONData(cjOperationTransfer));
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSON);
+  FOperation:= TOperation.Create(cjOperationTransfer);
+  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSONData.AsJSON);
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationAsJSONObjectFromTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationAsJSONObjectFromTransfer;
 begin
-  FOperation:= TOperation.Create(TJSONObject(GetJSONData(cjOperationTransfer)));
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSON);
+  FOperation:= TOperation.Create(cjOperationTransfer);
+  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSONObject.AsJSON);
   FOperation.Free;
 end;
 
-procedure TNosoDataOperation.TestNosoDataOperationAsStreamFromTransfer;
+procedure TTestNosoDataOperation.TestNosoDataOperationAsStreamFromTransfer;
 var
   ssOperationObject: TStringStream;
 begin
-  ssOperationObject:= TStringStream.Create(cjOperationTransfer, TEncoding.UTF8);
-  FOperation:= TOperation.Create(ssOperationObject);
+  FOperation:= TOperation.Create(cjOperationTransfer);
+  ssOperationObject:= TStringStream.Create('', TEncoding.UTF8);
+  ssOperationObject.LoadFromStream(FOperation.AsStream);
+  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, ssOperationObject.DataString);
   ssOperationObject.Free;
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSON);
   FOperation.Free;
 end;
 
 initialization
-  RegisterTest(TNosoDataOperation);
+  RegisterTest(TTestNosoDataOperation);
 end.
 

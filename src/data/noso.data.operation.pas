@@ -10,6 +10,19 @@ uses
 , fpjson
 ;
 
+const
+  cjOperationType = 'operation-type';
+  cjID = 'id';
+  cjBlock = 'block';
+  cjReference = 'reference';
+  cjSenderPublicKey = 'sender-public-key';
+  cjSenderAddress = 'sender-address';
+  cjReceiverAddress = 'receiver-address';
+  cjAmount = 'amount';
+  cjFee = 'fee';
+  cjSignature = 'signature';
+  cjCreated = 'created';
+
 type
 { TOperationType }
   TOperationType = (
@@ -124,19 +137,6 @@ uses
 , Noso.Data.Legacy
 , Noso.JSON.Utils
 ;
-
-const
-  cjOperationType = 'operation-type';
-  cjID = 'id';
-  cjBlock = 'block';
-  cjReference = 'reference';
-  cjSenderPublicKey = 'sender-public-key';
-  cjSenderAddress = 'sender-address';
-  cjReceiverAddress = 'receiver-address';
-  cjAmount = 'amount';
-  cjFee = 'fee';
-  cjSignature = 'signature';
-  cjCreated = 'created';
 
 { TOperation }
 
