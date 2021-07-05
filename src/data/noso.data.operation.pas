@@ -197,6 +197,7 @@ begin
   jObject:= getAsJSONObject;
   jObject.CompressedJSON:= FCompressedJSON;
   Result:= jObject.AsJSON;
+  jObject.Free;
 end;
 
 function TOperation.getAsJSONData: TJSONData;
