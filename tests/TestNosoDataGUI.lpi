@@ -18,11 +18,11 @@
         <CompilerOptions>
           <Version Value="11"/>
           <Target>
-            <Filename Value="../bin/testnosodata-gui"/>
+            <Filename Value="../bin/TestNosoData-GUI"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="data;../src/data;../src/json"/>
+            <OtherUnitFiles Value="data;../src/data"/>
             <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -62,7 +62,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="data;../src/data;../src/json"/>
+            <OtherUnitFiles Value="data;../src/data"/>
             <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -103,7 +103,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="5">
+    <Units Count="6">
       <Unit0>
         <Filename Value="TestNosoDataGUI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -124,10 +124,15 @@
         <UnitName Value="Noso.Data.Legacy"/>
       </Unit3>
       <Unit4>
-        <Filename Value="../src/json/noso.json.utils.pas"/>
+        <Filename Value="data/testnosodataoperations.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Noso.JSON.Utils"/>
+        <UnitName Value="TestNosoDataOperations"/>
       </Unit4>
+      <Unit5>
+        <Filename Value="../src/data/noso.data.operations.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Operations"/>
+      </Unit5>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -137,7 +142,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="data;../src/data;../src/json"/>
+      <OtherUnitFiles Value="data;../src/data"/>
       <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

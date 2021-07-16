@@ -14,9 +14,8 @@ uses
 ;
 
 type
-
 { TTestNosoDataOperation }
-  TTestNosoDataOperation= class(TTestCase)
+  TTestNosoDataOperation = class(TTestCase)
   private
     FOperation: TOperation;
 
@@ -62,6 +61,7 @@ const
       '"'+cjSignature+'":"",'+
       '"'+cjCreated+'":-1'+
     '}';
+
   cjOperationCustom =
     '{'+
       '"'+cjOperationType+'":2,'+ // otCustom

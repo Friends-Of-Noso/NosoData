@@ -23,6 +23,9 @@ const
   cjSignature = 'signature';
   cjCreated = 'created';
 
+resourcestring
+  rsEOperationWrongJSONObject = 'JSON data is not an object';
+
 type
 { TOperationType }
   TOperationType = (
@@ -70,16 +73,18 @@ type
     function getAsStream: TStream;
   protected
   public
-    constructor Create;
-    constructor Create(const AJSON: TJSONStringType);
-    constructor Create(const AJSONData: TJSONData);
-    constructor Create(const AJSONObject: TJSONObject);
-    constructor Create(const AStream: TStream);
+    constructor Create; overload;
+    constructor Create(const AJSON: TJSONStringType); overload;
+    constructor Create(const AJSONData: TJSONData); overload;
+    constructor Create(const AJSONObject: TJSONObject); overload;
+    constructor Create(const AStream: TStream); overload;
 
     destructor Destroy; override;
 
-    function FormatJSON(AOptions : TFormatOptions = DefaultFormat;
-      AIndentsize : Integer = DefaultIndentSize): TJSONStringType;
+    function FormatJSON(
+      AOptions : TFormatOptions = DefaultFormat;
+      AIndentsize : Integer = DefaultIndentSize
+    ): TJSONStringType;
 
     property OperationType: TOperationType
       read FOperationType
@@ -134,8 +139,6 @@ implementation
 
 uses
   DateUtils
-, Noso.Data.Legacy
-, Noso.JSON.Utils
 ;
 
 { TOperation }
@@ -144,7 +147,7 @@ procedure TOperation.setFromJSON(const AJSON: TJSONStringType);
 var
   jData: TJSONData;
 begin
-  jData:= GetJSONData(AJSON);
+  jData:= GetJSON(AJSON);
   try
     setFromJSONData(jData);
   finally
@@ -156,7 +159,7 @@ procedure TOperation.setFromJSONData(const AJSONData: TJSONData);
 begin
   if aJSONData.JSONType <> jtObject then
   begin
-    raise EOperationWrongJSONObject.Create('JSON data is not an object');
+    raise EOperationWrongJSONObject.Create(rsEOperationWrongJSONObject);
   end;
   setFromJSONObject(aJSONData as TJSONObject);
 end;
@@ -181,7 +184,7 @@ procedure TOperation.setFromStream(const AStream: TStream);
 var
   jData: TJSONData;
 begin
-  jData:= GetJSONData(AStream);
+  jData:= GetJSON(AStream);
   try
     setFromJSONData(jData);
   finally
@@ -226,8 +229,10 @@ begin
   Result:= TStringStream.Create(getAsJSON, TEncoding.UTF8);
 end;
 
-function TOperation.FormatJSON(AOptions: TFormatOptions;
-  AIndentsize: Integer): TJSONStringType;
+function TOperation.FormatJSON(
+  AOptions: TFormatOptions;
+  AIndentsize: Integer
+): TJSONStringType;
 begin
   Result:= getAsJSONObject.FormatJSON(AOptions, AIndentsize);
 end;

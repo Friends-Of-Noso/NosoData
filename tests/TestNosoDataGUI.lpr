@@ -6,6 +6,7 @@ uses
   Interfaces
 , Forms
 , GuiTestRunner
+, TestNosoDataOperations
 , TestNosoDataOperation
 ;
 

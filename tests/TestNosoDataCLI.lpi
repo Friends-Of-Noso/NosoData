@@ -38,16 +38,29 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataOperation"/>
       </Unit>
+      <Unit>
+        <Filename Value="data/testnosodataoperations.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataOperations"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../src/data/noso.data.operation.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../src/data/noso.data.operations.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="../bin/TestNosoDataCLI"/>
+      <Filename Value="../bin/TestNosoData-CLI"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="data"/>
+      <OtherUnitFiles Value="data;../src/data"/>
       <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>
