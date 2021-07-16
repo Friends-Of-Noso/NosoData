@@ -8,6 +8,7 @@ uses
   Classes
 , SysUtils
 , fpjson
+, jsonparser
 , Noso.Data.Operations
 ;
 
@@ -27,7 +28,13 @@ const
   cjFee = 'fee';
   cjReward = 'reward';
 
+resourcestring
+  rsEBlockWrongJSONObject = 'JSON data is not an object';
+
 type
+{ EBlockWrongJSONObject }
+  EBlockWrongJSONObject = class(Exception);
+
 { TBlock }
   TBlock = class(TObject)
   private
@@ -45,10 +52,33 @@ type
     FMiner: String;
     FFee: int64;
     FReward: Int64;
+
+    FCompressedJSON: Boolean;
+
+    procedure setFromJSON(const AJSON: TJSONStringType);
+    procedure setFromJSONData(const AJSONData: TJSONData);
+    procedure setFromJSONObject(const AJSONObject: TJSONObject);
+    procedure setFromStream(const AStream: TStream);
+
+    function getAsJSON: TJSONStringType;
+    function getAsJSONData: TJSONData;
+    function getAsJSONObject: TJSONObject;
+    function getAsStream: TStream;
+
   protected
   public
     constructor Create; overload;
+    constructor Create(const AJSON: TJSONStringType); overload;
+    constructor Create(const AJSONData: TJSONData); overload;
+    constructor Create(const AJSONObject: TJSONObject); overload;
+    constructor Create(const AStream: TStream); overload;
+
     destructor Destroy; override;
+
+    function FormatJSON(
+      AOptions : TFormatOptions = DefaultFormat;
+      AIndentsize : Integer = DefaultIndentSize
+    ): TJSONStringType;
 
     property Number: Int64
       read FNumber
@@ -91,12 +121,142 @@ type
     property Reward: Int64
       read FReward
       write FReward;
+
+    property CompressedJSON: Boolean
+      read FCompressedJSON
+      write FCompressedJSON;
+
+    property AsJSON: TJSONStringType
+      read getAsJSON;
+    property AsJSONData: TJSONData
+      read getAsJSONData;
+    property AsJSONObject: TJSONObject
+      read getAsJSONObject;
+    property AsStream: TStream
+      read getAsStream;
+
   published
   end;
 
 implementation
 
 { TBlock }
+
+function TBlock.FormatJSON(
+  AOptions: TFormatOptions;
+  AIndentsize: Integer
+): TJSONStringType;
+begin
+  Result:= getAsJSONObject.FormatJSON(AOptions, AIndentsize);
+end;
+
+procedure TBlock.setFromJSON(const AJSON: TJSONStringType);
+var
+  jData: TJSONData = nil;
+begin
+  jData:= GetJSON(AJSON);
+  try
+    setFromJSONData(jData);
+  finally
+    jData.Free;
+  end;
+end;
+
+procedure TBlock.setFromJSONData(const AJSONData: TJSONData);
+begin
+  if aJSONData.JSONType <> jtObject then
+  begin
+    raise EBlockWrongJSONObject.Create(rsEBlockWrongJSONObject);
+  end;
+  setFromJSONObject(aJSONData as TJSONObject);
+end;
+
+procedure TBlock.setFromJSONObject(const AJSONObject: TJSONObject);
+var
+  jOperations: TJSONData = nil;
+begin
+  FNumber:= AJSONObject.Get(cjNumber, FNumber);
+  FTimeStart:= AJSONObject.Get(cjTimeStart, FTimeStart);
+  FTimeEnd:= AJSONObject.Get(cjTimeEnd, FTimeEnd);
+  FTimeTotal:= AJSONObject.Get(cjTimeTotal, FTimeTotal);
+  FTimeLast20:= AJSONObject.Get(cjTimeLast20, FTimeLast20);
+  jOperations:= AJSONObject.FindPath(cjOperations);
+  if jOperations <> nil then
+  begin
+    if Assigned(FOperations) then
+    begin
+      FOperations.Free;
+    end;
+    FOperations:= TOperations.Create(jOperations);
+  end
+  else
+  begin
+    FOperations.Clear;
+  end;
+  FDifficulty:= AJSONObject.Get(cjDifficulty, FDifficulty);
+  FTargetHash:= AJSONObject.Get(cjTargetHash, FTargetHash);
+  FSolution:= AJSONObject.Get(cjSolution, FSolution);
+  FLastBlockHash:= AJSONObject.Get(cjLastBlockHash, FLastBlockHash);
+  FNextBlockDifficulty:= AJSONObject.Get(cjNextBlockDifficulty, FNextBlockDifficulty);
+  FMiner:= AJSONObject.Get(cjMiner, FMiner);
+  FFee:= AJSONObject.Get(cjFee, FFee);
+  FReward:= AJSONObject.Get(cjReward, FReward);
+end;
+
+procedure TBlock.setFromStream(const AStream: TStream);
+var
+  jData: TJSONData = nil;
+begin
+  jData:= GetJSON(AStream);
+  try
+    setFromJSONData(jData);
+  finally
+    jData.Free;
+  end;
+end;
+
+function TBlock.getAsJSON: TJSONStringType;
+var
+  jObject: TJSONObject = nil;
+begin
+  Result:= '';
+  jObject:= getAsJSONObject;
+  jObject.CompressedJSON:= FCompressedJSON;
+  Result:= jObject.AsJSON;
+  jObject.Free;
+end;
+
+function TBlock.getAsJSONData: TJSONData;
+begin
+  Result:= getAsJSONObject as TJSONData;
+end;
+
+function TBlock.getAsJSONObject: TJSONObject;
+var
+  jArray: TJSONArray = nil;
+begin
+  Result:= TJSONObject.Create;
+  Result.Add(cjNumber, FNumber);
+  Result.Add(cjTimeStart, FTimeStart);
+  Result.Add(cjTimeEnd, FTimeEnd);
+  Result.Add(cjTimeTotal, FTimeTotal);
+  Result.Add(cjTimeLast20, FTimeLast20);
+  jArray:= FOperations.AsJSONArray;
+  Result.Add(cjOperations, jArray);
+  Result.Add(cjDifficulty, FDifficulty);
+  Result.Add(cjTargetHash, FTargetHash);
+  Result.Add(cjSolution, FSolution);
+  Result.Add(cjLastBlockHash, FLastBlockHash);
+  Result.Add(cjNextBlockDifficulty, FNextBlockDifficulty);
+  Result.Add(cjMiner, FMiner);
+  Result.Add(cjFee, FFee);
+  Result.Add(cjReward, FReward);
+end;
+
+function TBlock.getAsStream: TStream;
+begin
+  Result:= TStringStream.Create(getAsJSON, TEncoding.UTF8);
+end;
 
 constructor TBlock.Create;
 begin
@@ -114,6 +274,31 @@ begin
   FMiner:= EmptyStr;
   FFee:= 0;
   FReward:= 0;
+  FCompressedJSON:= True;
+end;
+
+constructor TBlock.Create(const AJSON: TJSONStringType);
+begin
+  Create;
+  setFromJSON(AJSON);
+end;
+
+constructor TBlock.Create(const AJSONData: TJSONData);
+begin
+  Create;
+  setFromJSONData(AJSONData);
+end;
+
+constructor TBlock.Create(const AJSONObject: TJSONObject);
+begin
+  Create;
+  setFromJSONObject(AJSONObject);
+end;
+
+constructor TBlock.Create(const AStream: TStream);
+begin
+  Create;
+  setFromStream(AStream);
 end;
 
 destructor TBlock.Destroy;

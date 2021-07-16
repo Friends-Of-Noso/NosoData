@@ -1,4 +1,4 @@
-unit Noso.Data.Operations;
+unit Noso.Data.Blocks;
 
 {$mode objfpc}{$H+}
 
@@ -10,27 +10,27 @@ uses
 , Contnrs
 , fpjson
 , jsonparser
-, Noso.Data.Operation
+, Noso.Data.Block
 ;
 
 resourcestring
-  rsEOperationsWrongJSONObject = 'JSON data is not an array';
+  rsEBlocksWrongJSONObject = 'JSON data is not an array';
 
 type
-{ EOperationsWrongJSONObject }
-  EOperationsWrongJSONObject = class(Exception);
+{ EBlocksWrongJSONObject }
+  EBlocksWrongJSONObject = class(Exception);
 
-  TOperationsEnumerator =  class; // Forward
-{ TOperations }
-  TOperations = class(TObject)
+  TBlocksEnumerator =  class; // Forward
+{ TBlocks }
+  TBlocks = class(TObject)
   private
-    FOperations: TFPObjectList;
+    FBlocks: TFPObjectList;
     // Compressed JSON field to mimic TJSON one
     FCompressedJSON: Boolean;
 
     function GetCount: Integer;
-    function GetOperation(Index: Integer): TOperation;
-    procedure SetOperation(Index: Integer; AValue: TOperation);
+    function GetBlock(Index: Integer): TBlock;
+    procedure SetBlock(Index: Integer; AValue: TBlock);
 
     procedure setFromJSON(const AJSON: TJSONStringType);
     procedure setFromJSONData(const AJSONData: TJSONData);
@@ -53,22 +53,22 @@ type
     destructor Destroy; override;
 
     procedure Clear;
-    function Add(const AOperation: TOperation): Integer;
+    function Add(const ABlock: TBlock): Integer;
     procedure Delete(const AIndex: Integer); overload;
-    procedure Delete(const AOperation: TOperation); overload;
+    procedure Delete(const ABlock: TBlock); overload;
 
     function FormatJSON(
       AOptions : TFormatOptions = DefaultFormat;
       AIndentsize : Integer = DefaultIndentSize
     ): TJSONStringType;
 
-    function GetEnumerator: TOperationsEnumerator;
+    function GetEnumerator: TBlocksEnumerator;
 
     property Count: Integer
       read GetCount;
-    property Items[Index: Integer]: TOperation
-      read GetOperation
-      write SetOperation; default;
+    property Items[Index: Integer]: TBlock
+      read GetBlock
+      write SetBlock; default;
 
     property AsJSON: TJSONStringType
       read getAsJSON;
@@ -86,42 +86,42 @@ type
   published
   end;
 
-{ TOperationsEnumerator }
-  TOperationsEnumerator = class(TObject)
+{ TBlocksEnumerator }
+  TBlocksEnumerator = class(TObject)
   private
-    FOperations: TOperations;
+    FBlocks: TBlocks;
     FPosition: Integer;
   protected
   public
-    constructor Create(const AOperations: TOperations);
-    function GetCurrent: TOperation;
+    constructor Create(const ABlocks: TBlocks);
+    function GetCurrent: TBlock;
     function MoveNext: Boolean;
 
-    property Current: TOperation
+    property Current: TBlock
       read GetCurrent;
   published
   end;
 
 implementation
 
-{ TOperations }
+{ TBlocks }
 
-function TOperations.GetCount: Integer;
+function TBlocks.GetCount: Integer;
 begin
-  Result:= FOperations.Count;
+  Result:= FBlocks.Count;
 end;
 
-function TOperations.GetOperation(Index: Integer): TOperation;
+function TBlocks.GetBlock(Index: Integer): TBlock;
 begin
-  Result:= FOperations.Items[Index] as TOperation;
+  Result:= FBlocks.Items[Index] as TBlock;
 end;
 
-procedure TOperations.SetOperation(Index: Integer; AValue: TOperation);
+procedure TBlocks.SetBlock(Index: Integer; AValue: TBlock);
 begin
-  FOperations.Items[Index]:= AValue;
+  FBlocks.Items[Index]:= AValue;
 end;
 
-procedure TOperations.setFromJSON(const AJSON: TJSONStringType);
+procedure TBlocks.setFromJSON(const AJSON: TJSONStringType);
 var
   jData: TJSONData = nil;
 begin
@@ -133,28 +133,28 @@ begin
   end;
 end;
 
-procedure TOperations.setFromJSONData(const AJSONData: TJSONData);
+procedure TBlocks.setFromJSONData(const AJSONData: TJSONData);
 begin
   if AJSONData.JSONType <> jtArray then
   begin
-    raise EOperationsWrongJSONObject.Create(rsEOperationsWrongJSONObject);
+    raise EBlocksWrongJSONObject.Create(rsEBlocksWrongJSONObject);
   end;
   setFromJSONArray(AJSONData as TJSONArray);
 end;
 
-procedure TOperations.setFromJSONArray(const AJSONArray: TJSONArray);
+procedure TBlocks.setFromJSONArray(const AJSONArray: TJSONArray);
 var
   index: Integer;
-  operation: TOperation = nil;
+  operation: TBlock = nil;
 begin
   for index:= 0 to Pred(AJSONArray.Count) do
   begin
-    operation:= TOperation.Create(AJSONArray[index]);
-    FOperations.Add(operation);
+    operation:= TBlock.Create(AJSONArray[index]);
+    FBlocks.Add(operation);
   end;
 end;
 
-procedure TOperations.setFromStream(const AStream: TStream);
+procedure TBlocks.setFromStream(const AStream: TStream);
 var
   jData: TJSONData = nil;
 begin
@@ -166,7 +166,7 @@ begin
   end;
 end;
 
-function TOperations.getAsJSON: TJSONStringType;
+function TBlocks.getAsJSON: TJSONStringType;
 var
   jArray: TJSONArray = nil;
 begin
@@ -177,53 +177,53 @@ begin
   jArray.Free;
 end;
 
-function TOperations.getAsJSONData: TJSONData;
+function TBlocks.getAsJSONData: TJSONData;
 begin
   Result:= getAsJSONArray as TJSONData;
 end;
 
-function TOperations.getAsJSONArray: TJSONArray;
+function TBlocks.getAsJSONArray: TJSONArray;
 var
   index: Integer;
   jData: TJSONData = nil;
 begin
   Result:= TJSONArray.Create;
-  for index := 0 to Pred(FOperations.Count) do
+  for index := 0 to Pred(FBlocks.Count) do
   begin
-    jData:= TOperation(FOperations.Items[index]).AsJSONData;
+    jData:= TBlock(FBlocks.Items[index]).AsJSONData;
     Result.Add(jData);
   end;
 end;
 
-function TOperations.getAsStream: TStream;
+function TBlocks.getAsStream: TStream;
 begin
   Result:= TStringStream.Create(getAsJSON, TEncoding.UTF8);
 end;
 
-procedure TOperations.Clear;
+procedure TBlocks.Clear;
 begin
-  FOperations.Clear;
+  FBlocks.Clear;
 end;
 
-function TOperations.Add(const AOperation: TOperation): Integer;
+function TBlocks.Add(const ABlock: TBlock): Integer;
 begin
-  Result:= FOperations.Add(AOperation);
+  Result:= FBlocks.Add(ABlock);
 end;
 
-procedure TOperations.Delete(const AIndex: Integer);
+procedure TBlocks.Delete(const AIndex: Integer);
 begin
-  FOperations.Delete(AIndex);
+  FBlocks.Delete(AIndex);
 end;
 
-procedure TOperations.Delete(const AOperation: TOperation);
+procedure TBlocks.Delete(const ABlock: TBlock);
 var
   index: Integer;
 begin
-  index:= FOperations.IndexOf(AOperation);
-  FOperations.Delete(index);
+  index:= FBlocks.IndexOf(ABlock);
+  FBlocks.Delete(index);
 end;
 
-function TOperations.FormatJSON(
+function TBlocks.FormatJSON(
   AOptions: TFormatOptions;
   AIndentsize: Integer
 ): TJSONStringType;
@@ -231,64 +231,64 @@ begin
   Result:= getAsJSONArray.FormatJSON(AOptions, AIndentsize);
 end;
 
-function TOperations.GetEnumerator: TOperationsEnumerator;
+function TBlocks.GetEnumerator: TBlocksEnumerator;
 begin
-  Result:= TOperationsEnumerator.Create(Self);
+  Result:= TBlocksEnumerator.Create(Self);
 end;
 
-constructor TOperations.Create;
+constructor TBlocks.Create;
 begin
   FCompressedJSON:= True;
-  FOperations:= TFPObjectList.Create(True);
+  FBlocks:= TFPObjectList.Create(True);
 end;
 
-constructor TOperations.Create(const AJSON: TJSONStringType);
+constructor TBlocks.Create(const AJSON: TJSONStringType);
 begin
   Create;
   setFromJSON(AJSON);
 end;
 
-constructor TOperations.Create(const AJSONData: TJSONData);
+constructor TBlocks.Create(const AJSONData: TJSONData);
 begin
   Create;
   setFromJSONData(AJSONData);
 end;
 
-constructor TOperations.Create(const AJSONArray: TJSONArray);
+constructor TBlocks.Create(const AJSONArray: TJSONArray);
 begin
   Create;
   setFromJSONArray(AJSONArray);
 end;
 
-constructor TOperations.Create(const AStream: TStream);
+constructor TBlocks.Create(const AStream: TStream);
 begin
   Create;
   setFromStream(AStream);
 end;
 
-destructor TOperations.Destroy;
+destructor TBlocks.Destroy;
 begin
-  FOperations.Free;
+  FBlocks.Free;
   inherited Destroy;
 end;
 
-{ TOperationsEnumerator }
+{ TBlocksEnumerator }
 
-constructor TOperationsEnumerator.Create(const AOperations: TOperations);
+constructor TBlocksEnumerator.Create(const ABlocks: TBlocks);
 begin
-  FOperations := AOperations;
+  FBlocks := ABlocks;
   FPosition := -1;
 end;
 
-function TOperationsEnumerator.GetCurrent: TOperation;
+function TBlocksEnumerator.GetCurrent: TBlock;
 begin
-  Result:= FOperations.Items[FPosition] as TOperation;
+  Result:= FBlocks.Items[FPosition] as TBlock;
 end;
 
-function TOperationsEnumerator.MoveNext: Boolean;
+function TBlocksEnumerator.MoveNext: Boolean;
 begin
   Inc(FPosition);
-  Result := FPosition < FOperations.Count;
+  Result := FPosition < FBlocks.Count;
 end;
 
 end.

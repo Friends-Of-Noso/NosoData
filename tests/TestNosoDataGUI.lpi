@@ -103,7 +103,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="10">
       <Unit0>
         <Filename Value="TestNosoDataGUI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -143,6 +143,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Noso.Data.Block"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="data/testnosodatablocks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataBlocks"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../src/data/noso.data.blocks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Blocks"/>
+      </Unit9>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

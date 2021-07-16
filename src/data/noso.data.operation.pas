@@ -8,6 +8,7 @@ uses
   Classes
 , SysUtils
 , fpjson
+, jsonparser
 ;
 
 const
@@ -145,7 +146,7 @@ uses
 
 procedure TOperation.setFromJSON(const AJSON: TJSONStringType);
 var
-  jData: TJSONData;
+  jData: TJSONData = nil;
 begin
   jData:= GetJSON(AJSON);
   try
@@ -182,7 +183,7 @@ end;
 
 procedure TOperation.setFromStream(const AStream: TStream);
 var
-  jData: TJSONData;
+  jData: TJSONData = nil;
 begin
   jData:= GetJSON(AStream);
   try
@@ -194,7 +195,7 @@ end;
 
 function TOperation.getAsJSON: TJSONStringType;
 var
-  jObject: TJSONObject;
+  jObject: TJSONObject = nil;
 begin
   Result:= '';
   jObject:= getAsJSONObject;

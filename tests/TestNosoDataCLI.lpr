@@ -5,6 +5,7 @@ program TestNosoDataCLI;
 uses
   Classes
 , consoletestrunner
+, TestNosoDataBlock
 , TestNosoDataOperations
 , TestNosoDataOperation
 ;

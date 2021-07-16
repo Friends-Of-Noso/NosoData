@@ -24,8 +24,41 @@ type
   public
   published
     procedure TestNosoDataBlockCreate;
+    procedure TestNosoDataBlockCreateFromJSON;
+    procedure TestNosoDataBlockCreateFromJSONData;
+    procedure TestNosoDataBlockCreateFromJSONObject;
+    procedure TestNosoDataBlockCreateFromStream;
+
+    procedure TestNosoDataBlockAsJSON;
+    procedure TestNosoDataBlockAsJSONData;
+    procedure TestNosoDataBlockAsJSONObject;
+    procedure TestNosoDataBlockAsStream;
   end;
 implementation
+
+uses
+  fpjson
+, jsonparser
+;
+
+const
+  cjBlockEmpty =
+    '{'+
+      '"'+cjNumber+'":-1,'+
+      '"'+cjTimeStart+'":-1,'+
+      '"'+cjTimeEnd+'":-1,'+
+      '"'+cjTimeTotal+'":-1,'+
+      '"'+cjTimeLast20+'":-1,'+
+      '"'+cjOperations+'":[],'+
+      '"'+cjDifficulty+'":-1,'+
+      '"'+cjTargetHash+'":"",'+
+      '"'+cjSolution+'":"",'+
+      '"'+cjLastBlockHash+'":"",'+
+      '"'+cjNextBlockDifficulty+'":-1,'+
+      '"'+cjMiner+'":"",'+
+      '"'+cjFee+'":0,'+
+      '"'+cjReward+'":0'+
+    '}';
 
 { TTestNosoDataBlock }
 
@@ -53,6 +86,80 @@ begin
   FBlock:= TBlock.Create;
   CheckFieldsCreate;
   FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromJSON;
+begin
+  FBlock:= TBlock.Create(cjBlockEmpty);
+  CheckFieldsCreate;
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromJSONData;
+var
+  jData: TJSONData = nil;
+begin
+  jData:= GetJSON(cjBlockEmpty);
+  FBlock:= TBlock.Create(jData);
+  jData.Free;
+  CheckFieldsCreate;
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromJSONObject;
+var
+  jData: TJSONData = nil;
+begin
+  jData:= GetJSON(cjBlockEmpty);
+  FBlock:= TBlock.Create(TJSONObject(jData));
+  jData.Free;
+  CheckFieldsCreate;
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromStream;
+var
+  ssBlockObject: TStringStream = nil;
+begin
+  ssBlockObject:= TStringStream.Create(cjBlockEmpty, TEncoding.UTF8);
+  FBlock:= TBlock.Create(ssBlockObject);
+  ssBlockObject.Free;
+  CheckFieldsCreate;
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockAsJSON;
+begin
+  FBlock:= TBlock.Create(cjBlockEmpty);
+  AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, FBlock.AsJSON);
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockAsJSONData;
+var
+  jData: TJSONData = nil;
+begin
+  FBlock:= TBlock.Create(cjBlockEmpty);
+  jData:= FBlock.AsJSONData;
+  AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, jData.AsJSON);
+  jData.Free;
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockAsJSONObject;
+var
+  jObject: TJSONObject = nil;
+begin
+  FBlock:= TBlock.Create(cjBlockEmpty);
+  jObject:= FBlock.AsJSONObject;
+  AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, jObject.AsJSON);
+  jObject.Free;
+  FBlock.Free;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockAsStream;
+begin
+
 end;
 
 initialization
