@@ -103,7 +103,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="10">
+    <Units Count="11">
       <Unit0>
         <Filename Value="TestNosoDataGUI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -119,40 +119,45 @@
         <UnitName Value="Noso.Data.Operation"/>
       </Unit2>
       <Unit3>
-        <Filename Value="../src/data/noso.data.legacy.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="Noso.Data.Legacy"/>
-      </Unit3>
-      <Unit4>
         <Filename Value="data/testnosodataoperations.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataOperations"/>
-      </Unit4>
-      <Unit5>
+      </Unit3>
+      <Unit4>
         <Filename Value="../src/data/noso.data.operations.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Noso.Data.Operations"/>
-      </Unit5>
-      <Unit6>
+      </Unit4>
+      <Unit5>
         <Filename Value="data/testnosodatablock.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataBlock"/>
-      </Unit6>
-      <Unit7>
+      </Unit5>
+      <Unit6>
         <Filename Value="../src/data/noso.data.block.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Noso.Data.Block"/>
-      </Unit7>
-      <Unit8>
+      </Unit6>
+      <Unit7>
         <Filename Value="data/testnosodatablocks.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataBlocks"/>
-      </Unit8>
-      <Unit9>
+      </Unit7>
+      <Unit8>
         <Filename Value="../src/data/noso.data.blocks.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Noso.Data.Blocks"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="../src/data/noso.data.legacy.block.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Block"/>
       </Unit9>
+      <Unit10>
+        <Filename Value="data/testnosodatalegacyblock.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyBlock"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

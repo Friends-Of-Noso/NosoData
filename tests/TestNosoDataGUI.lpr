@@ -10,6 +10,7 @@ uses
 , TestNosoDataBlock
 , TestNosoDataOperations
 , TestNosoDataOperation
+, TestNosoDataLegacyBlock
 ;
 
 {$R *.res}
