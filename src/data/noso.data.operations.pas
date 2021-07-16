@@ -51,6 +51,7 @@ type
 
     destructor Destroy; override;
 
+    procedure Clear;
     function Add(const AOperation: TOperation): Integer;
     procedure Delete(const AIndex: Integer); overload;
     procedure Delete(const AOperation: TOperation); overload;
@@ -191,6 +192,11 @@ end;
 function TOperations.getAsStream: TStream;
 begin
   Result:= TStringStream.Create(getAsJSON, TEncoding.UTF8);
+end;
+
+procedure TOperations.Clear;
+begin
+  FOperations.Clear;
 end;
 
 function TOperations.Add(const AOperation: TOperation): Integer;
