@@ -1,11 +1,13 @@
-unit Noso.Data.Legacy;
+unit Noso.Data.Legacy.Records;
 
 {$mode ObjFPC}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils;
+  Classes
+, SysUtils
+;
 
 type
 
