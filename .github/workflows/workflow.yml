@@ -24,6 +24,6 @@ jobs:
       with:
         lazarus-version: ${{ matrix.lazarus-versions }}
     - name: Build the Test App
-      run: lazbuild -B "tests/TestNosoDataCLI.lpi"
+      run: lazbuild -B --bm=Debug "tests/TestNosoDataCLI.lpi"
     - name: Run the Test App
-      run: bin/TestNosoDataCLI "--all" "--format=plain"
+      run: bin/TestNosoData-CLI "--all" "--format=plain"
