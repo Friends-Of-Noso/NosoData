@@ -26,4 +26,4 @@ jobs:
     - name: Build the Test App
       run: lazbuild -B --bm=Debug "tests/TestNosoDataCLI.lpi"
     - name: Run the Test App
-      run: cd bin && TestNosoData-CLI "--all" "--format=plain"
+      run: cd bin && ./TestNosoData-CLI "--all" "--format=plain"
