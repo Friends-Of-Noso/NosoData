@@ -60,6 +60,15 @@
         <Filename Value="../src/data/noso.data.block.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="data/testnosodatalegacyblock.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyBlock"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../src/data/noso.data.legacy.block.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

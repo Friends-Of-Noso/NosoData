@@ -9,7 +9,17 @@ uses
 , SysUtils
 ;
 
+resourcestring
+  rsECannotFindFolder = 'Cannot find folder %s';
+  rsECannotFindFile = 'Cannot find file %s';
+
 type
+{ ECannotFindFolder }
+  ECannotFindFolder = class(Exception);
+
+{ ECannotFindFile }
+  ECannotFindFile = class(Exception);
+
 { TString32 }
   TString32 = String[32];
 
@@ -40,6 +50,13 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    procedure LoadFromFolder(
+      const AFolder: String;
+      const ANumber: Int64
+    );
+    procedure LoadFromFile(const AFilePath: String);
+    procedure LoadFromStream(const AStream: TStream);
 
     property Number: Int64
       read FNumber
@@ -111,6 +128,73 @@ end;
 destructor TLegacyBlock.Destroy;
 begin
   inherited Destroy;
+end;
+
+procedure TLegacyBlock.LoadFromFolder(
+  const AFolder: String;
+  const ANumber: Int64
+);
+var
+  filePath: String;
+begin
+  if not DirectoryExists(AFolder) then
+  begin
+    raise ECannotFindFolder.Create(Format(rsECannotFindFolder, [AFolder]));
+  end;
+  filePath:= IncludeTrailingPathDelimiter(AFolder) +
+    Format('%d.blk', [ANumber]);
+  LoadFromFile(filePath);
+end;
+
+procedure TLegacyBlock.LoadFromFile(const AFilePath: String);
+var
+  sBlock: TFileStream = nil;
+begin
+  if not FileExists(AFilePath) then
+  begin
+    raise ECannotFindFile.Create(Format(rsECannotFindFile, [AFilePath]));
+  end;
+  sBlock:= TFileStream.Create(AFilePath, fmOpenRead);
+  try
+    LoadFromStream(sBlock);
+  finally
+    sBlock.Free;
+  end;
+end;
+
+procedure TLegacyBlock.LoadFromStream(const AStream: TStream);
+var
+  totalBytes: Int64 = 0;
+  bytesRead: Int64 = 0;
+begin
+  bytesRead:= AStream.Read(FNumber, SizeOf(FNumber));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FTimeStart, SizeOf(FTimeStart));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FTimeEnd, SizeOf(FTimeEnd));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FTimeTotal, SizeOf(FTimeTotal));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FTimeLast20, SizeOf(FTimeLast20));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FTransfers, SizeOf(FTransfers));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FDifficulty, SizeOf(FDifficulty));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FTargetHash, SizeOf(FTargetHash));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FSolution, SizeOf(FSolution));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FLastBlockHash, SizeOf(FLastBlockHash));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FMinerAddress, SizeOf(FMinerAddress));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FFee, SizeOf(FFee));
+  Inc(totalBytes, bytesRead);
+  bytesRead:= AStream.Read(FReward, SizeOf(FReward));
+  Inc(totalBytes, bytesRead);
 end;
 
 end.
