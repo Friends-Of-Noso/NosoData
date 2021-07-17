@@ -33,6 +33,7 @@ type
   TLegacyBlock = class(TObject)
   private
     FNumber: Int64;
+    FHash: TString32;
     FTimeStart: Int64;
     FTimeEnd: Int64;
     FTimeTotal: Integer;
@@ -61,6 +62,8 @@ type
     property Number: Int64
       read FNumber
       write FNumber;
+    property Hash: TString32
+      read FHash;
     property TimeStart: Int64
       read FTimeStart
       write FTimeStart;
@@ -105,6 +108,9 @@ type
 
 implementation
 
+const
+  cBlockWithPoS : Int64 = 8425;
+
 { TLegacyBlock }
 
 constructor TLegacyBlock.Create;
@@ -123,6 +129,7 @@ begin
   FMinerAddress:= EmptyStr;
   FFee:= 0;
   FReward:= 0;
+  { #todo 100 -ogcarreno : Calculate the HASH }
 end;
 
 destructor TLegacyBlock.Destroy;
@@ -195,6 +202,7 @@ begin
   Inc(totalBytes, bytesRead);
   bytesRead:= AStream.Read(FReward, SizeOf(FReward));
   Inc(totalBytes, bytesRead);
+  { #todo 100 -ogcarreno : Calculate the HASH }
 end;
 
 end.

@@ -44,6 +44,7 @@ const
 procedure TTestNosoDataLegacyBlock.CheckFieldsCreate;
 begin
   AssertEquals('Noso Legacy Block Number is -1', -1, FLegacyBlock.Number);
+  { #todo 100 -ogcarreno : Test for the HASH }
   AssertEquals('Noso Legacy Block TimeStart is -1', -1, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is -1', -1, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is -1', -1, FLegacyBlock.TimeTotal);
@@ -62,6 +63,7 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockZero;
 begin
   AssertEquals('Noso Legacy Block Number is 0', 0, FLegacyBlock.Number);
+  { #todo 100 -ogcarreno : Test for the HASH }
   AssertEquals('Noso Legacy Block TimeStart is 1531896783', 1531896783, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132800', 1615132800, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 83236017', 83236017, FLegacyBlock.TimeTotal);
@@ -86,6 +88,7 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockOne;
 begin
   AssertEquals('Noso Legacy Block Number is 1', 1, FLegacyBlock.Number);
+  { #todo 100 -ogcarreno : Test for the HASH }
   AssertEquals('Noso Legacy Block TimeStart is 1615132801', 1615132801, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132801', 1615132801, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 0', 0, FLegacyBlock.TimeTotal);
