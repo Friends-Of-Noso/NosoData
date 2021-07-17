@@ -32,6 +32,7 @@
 *.res binary
 *.ico binary
 *.dll binary
+*.blk binary
 
 # Keep these files from archive/exports, mainly from production.
 .gitignore      export-ignore
