@@ -11,6 +11,7 @@ uses
 , TestNosoDataOperations
 , TestNosoDataOperation
 , TestNosoDataLegacyBlock
+, TestNosoDataLegacyTransaction
 ;
 
 {$R *.res}

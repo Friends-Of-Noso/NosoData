@@ -7,6 +7,7 @@ interface
 uses
   Classes
 , SysUtils
+, Noso.Data.Legacy.Types
 ;
 
 resourcestring
@@ -20,15 +21,6 @@ type
 { ECannotFindFile }
   ECannotFindFile = class(Exception);
 
-{ TString32 }
-  TString32 = String[32];
-
-{ TString40 }
-  TString40 = String[40];
-
-{ TString200 }
-  TString200 = String[200];
-
 { TLegacyBlock }
   TLegacyBlock = class(TObject)
   private
@@ -38,7 +30,9 @@ type
     FTimeEnd: Int64;
     FTimeTotal: Integer;
     FTimeLast20: Integer;
-    FTransfers: Integer;
+    { #todo 200 -ogcarreno : Transactions should be a collection }
+    FTransactions: Integer;
+
     FDifficulty: Integer;
     FTargetHash: TString32;
     FSolution: TString200;
@@ -47,6 +41,8 @@ type
     FMinerAddress: TString40;
     FFee: Int64;
     FReward: Int64;
+    //FPoSReward: Int64;
+    //FPoSAddresses: ??;
   protected
   public
     constructor Create;
@@ -57,7 +53,7 @@ type
       const ANumber: Int64
     );
     procedure LoadFromFile(const AFilePath: String);
-    procedure LoadFromStream(const AStream: TStream);
+    function LoadFromStream(const AStream: TStream): Int64;
 
     property Number: Int64
       read FNumber
@@ -76,9 +72,9 @@ type
     property TimeLast20: Integer
       read FTimeLast20
       write FTimeLast20;
-    property Transfers: Integer
-      read FTransfers
-      write FTransfers;
+    property Transactions: Integer
+      read FTransactions
+      write FTransactions;
     property Difficulty: Integer
       read FDifficulty
       write FDifficulty;
@@ -120,7 +116,7 @@ begin
   FTimeEnd:= -1;
   FTimeTotal:= -1;
   FTimeLast20:= -1;
-  FTransfers:= 0;
+  FTransactions:= 0;
   FDifficulty:= -1;
   FTargetHash:= EmptyStr;
   FSolution:= EmptyStr;
@@ -169,39 +165,39 @@ begin
   end;
 end;
 
-procedure TLegacyBlock.LoadFromStream(const AStream: TStream);
+function TLegacyBlock.LoadFromStream(const AStream: TStream): Int64;
 var
-  totalBytes: Int64 = 0;
   bytesRead: Int64 = 0;
 begin
+  Result:= 0;
   bytesRead:= AStream.Read(FNumber, SizeOf(FNumber));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTimeStart, SizeOf(FTimeStart));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTimeEnd, SizeOf(FTimeEnd));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTimeTotal, SizeOf(FTimeTotal));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTimeLast20, SizeOf(FTimeLast20));
-  Inc(totalBytes, bytesRead);
-  bytesRead:= AStream.Read(FTransfers, SizeOf(FTransfers));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
+  bytesRead:= AStream.Read(FTransactions, SizeOf(FTransactions));
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FDifficulty, SizeOf(FDifficulty));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTargetHash, SizeOf(FTargetHash));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FSolution, SizeOf(FSolution));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FLastBlockHash, SizeOf(FLastBlockHash));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FMinerAddress, SizeOf(FMinerAddress));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FFee, SizeOf(FFee));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FReward, SizeOf(FReward));
-  Inc(totalBytes, bytesRead);
+  Inc(Result, bytesRead);
   { #todo 100 -ogcarreno : Calculate the HASH }
 end;
 

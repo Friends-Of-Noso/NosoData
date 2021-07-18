@@ -22,7 +22,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="data;../src/data"/>
+            <OtherUnitFiles Value="data;../src/data;../src/data/legacy"/>
             <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -62,7 +62,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="data;../src/data"/>
+            <OtherUnitFiles Value="data;../src/data;../src/data/legacy"/>
             <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -103,7 +103,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="11">
+    <Units Count="13">
       <Unit0>
         <Filename Value="TestNosoDataGUI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -149,15 +149,25 @@
         <UnitName Value="Noso.Data.Blocks"/>
       </Unit8>
       <Unit9>
-        <Filename Value="../src/data/noso.data.legacy.block.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="Noso.Data.Legacy.Block"/>
-      </Unit9>
-      <Unit10>
         <Filename Value="data/testnosodatalegacyblock.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataLegacyBlock"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="../src/data/legacy/noso.data.legacy.block.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Block"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="../src/data/legacy/noso.data.legacy.transaction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Transaction"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="data/testnosodatalegacytransaction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyTransaction"/>
+      </Unit12>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -167,7 +177,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="data;../src/data"/>
+      <OtherUnitFiles Value="data;../src/data;../src/data/legacy"/>
       <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

@@ -10,6 +10,7 @@ uses
 , TestNosoDataOperations
 , TestNosoDataOperation
 , TestNosoDataLegacyBlock
+, TestNosoDataLegacyTransaction
 ;
 
 type

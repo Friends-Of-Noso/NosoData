@@ -41,22 +41,34 @@ type
     Sender     : String[120];
     Address    : String[40];
     Receiver   : String[40];
-    AmmountFee : Int64;
-    AmmountTrf : Int64;
+    AmountFee  : Int64;
+    AmountTrf  : Int64;
     Signature  : String[120];
     TrfrID     : String[64];
   end;
 
+{ TWalletData }
+  TWalletData = packed record
+    Hash       : String[40]; // El hash publico o direccion
+    Custom     : String[40]; // En caso de que la direccion este personalizada
+    PublicKey  : String[255]; // clave publica
+    PrivateKey : String[255]; // clave privada
+    Balance    : Int64; // el ultimo saldo conocido de la direccion
+    Pending    : Int64; // el ultimo saldo de pagos pendientes
+    Score      : Int64; // estado del registro de la direccion.
+    LastOP     : Int64;// tiempo de la ultima operacion en UnixTime.
+  end;
+
 { TLegacyMyTrxData }
   TLegacyMyTrxData = packed record
-    block    : integer;
-    time     : int64;
-    tipo     : string[6];
-    receiver : string[64];
-    monto    : int64;
-    trfrID   : string[64];
-    OrderID  : String[64];
-    Concepto : String[64];
+    Block     : integer;
+    Time      : int64;
+    Tipo      : string[6];
+    Receiver  : string[64];
+    Amount    : int64;
+    TrfrID    : string[64];
+    OrderID   : String[64];
+    Reference : String[64];
   end;
 
 implementation
