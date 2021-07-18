@@ -1,0 +1,7 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: noso.data.blocks.rseblockswrongjsonobject
+msgid "JSON data is not an array"
+msgstr ""
+

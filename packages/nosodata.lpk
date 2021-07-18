@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="5">
+  <Package Version="4">
     <Name Value="NosoData"/>
     <Type Value="RunTimeOnly"/>
     <Author Value="Gustavo Carreno &lt;guscarreno@gmail.com>"/>
@@ -8,53 +8,53 @@
       <Version Value="11"/>
       <SearchPaths>
         <OtherUnitFiles Value="../src/data;../src/data/legacy"/>
-        <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
+        <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)/"/>
       </SearchPaths>
     </CompilerOptions>
-    <Description Value="Provides container objects for the Noso Coin data"/>
+    <Description Value="Provides container objects to access NosoCoin data"/>
     <Version Minor="1" Build="1"/>
-    <Files>
-      <Item>
+    <Files Count="8">
+      <Item1>
         <Filename Value="../src/data/noso.data.block.pas"/>
         <UnitName Value="Noso.Data.Block"/>
-      </Item>
-      <Item>
+      </Item1>
+      <Item2>
         <Filename Value="../src/data/noso.data.blocks.pas"/>
         <UnitName Value="Noso.Data.Blocks"/>
-      </Item>
-      <Item>
+      </Item2>
+      <Item3>
         <Filename Value="../src/data/noso.data.operation.pas"/>
         <UnitName Value="Noso.Data.Operation"/>
-      </Item>
-      <Item>
+      </Item3>
+      <Item4>
         <Filename Value="../src/data/noso.data.operations.pas"/>
         <UnitName Value="Noso.Data.Operations"/>
-      </Item>
-      <Item>
+      </Item4>
+      <Item5>
         <Filename Value="../src/data/legacy/noso.data.legacy.block.pas"/>
         <UnitName Value="Noso.Data.Legacy.Block"/>
-      </Item>
-      <Item>
+      </Item5>
+      <Item6>
         <Filename Value="../src/data/legacy/noso.data.legacy.transaction.pas"/>
         <UnitName Value="Noso.Data.Legacy.Transaction"/>
-      </Item>
-      <Item>
+      </Item6>
+      <Item7>
         <Filename Value="../src/data/legacy/noso.data.legacy.transactions.pas"/>
         <UnitName Value="Noso.Data.Legacy.Transactions"/>
-      </Item>
-      <Item>
+      </Item7>
+      <Item8>
         <Filename Value="../src/data/legacy/noso.data.legacy.types.pas"/>
         <UnitName Value="Noso.Data.Legacy.Types"/>
-      </Item>
+      </Item8>
     </Files>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="i18n"/>
     </i18n>
-    <RequiredPkgs>
-      <Item>
+    <RequiredPkgs Count="1">
+      <Item1>
         <PackageName Value="FCL"/>
-      </Item>
+      </Item1>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>
