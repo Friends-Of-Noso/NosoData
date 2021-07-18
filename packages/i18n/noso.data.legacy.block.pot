@@ -1,0 +1,13 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: noso.data.legacy.block.rsecannotfindfile
+#, object-pascal-format
+msgid "Cannot find file %s"
+msgstr ""
+
+#: noso.data.legacy.block.rsecannotfindfolder
+#, object-pascal-format
+msgid "Cannot find folder %s"
+msgstr ""
+
