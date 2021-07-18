@@ -28,6 +28,9 @@ type
 { TString200 }
   TString200 = String[200];
 
+{ TArrayOfString32 }
+  TArrayOfString32 = array of TString32;
+
 implementation
 
 end.

@@ -8,6 +8,7 @@ uses
   Classes
 , SysUtils
 , Noso.Data.Legacy.Types
+, Noso.Data.Legacy.Transactions
 ;
 
 resourcestring
@@ -30,9 +31,8 @@ type
     FTimeEnd: Int64;
     FTimeTotal: Integer;
     FTimeLast20: Integer;
-    { #todo 200 -ogcarreno : Transactions should be a collection }
-    FTransactions: Integer;
-
+    FTransactionsCount: Integer;
+    FTransactions: TLegacyTransactions;
     FDifficulty: Integer;
     FTargetHash: TString32;
     FSolution: TString200;
@@ -41,8 +41,8 @@ type
     FMinerAddress: TString40;
     FFee: Int64;
     FReward: Int64;
-    //FPoSReward: Int64;
-    //FPoSAddresses: ??;
+    FPoSReward: Int64;
+    FPoSAddresses: TArrayOfString32;
   protected
   public
     constructor Create;
@@ -72,9 +72,8 @@ type
     property TimeLast20: Integer
       read FTimeLast20
       write FTimeLast20;
-    property Transactions: Integer
-      read FTransactions
-      write FTransactions;
+    property Transactions: TLegacyTransactions
+      read FTransactions;
     property Difficulty: Integer
       read FDifficulty
       write FDifficulty;
@@ -99,6 +98,11 @@ type
     property Reward: Int64
       read FReward
       write FReward;
+    property PoSReward: Int64
+      read FPoSReward
+      write FPoSReward;
+    property PoSAddresses: TArrayOfString32
+      read FPoSAddresses;
   published
   end;
 
@@ -108,30 +112,6 @@ const
   cBlockWithPoS : Int64 = 8425;
 
 { TLegacyBlock }
-
-constructor TLegacyBlock.Create;
-begin
-  FNumber:= -1;
-  FTimeStart:= -1;
-  FTimeEnd:= -1;
-  FTimeTotal:= -1;
-  FTimeLast20:= -1;
-  FTransactions:= 0;
-  FDifficulty:= -1;
-  FTargetHash:= EmptyStr;
-  FSolution:= EmptyStr;
-  FLastBlockHash:= EmptyStr;
-  FNextBlockDifficulty:= -1;
-  FMinerAddress:= EmptyStr;
-  FFee:= 0;
-  FReward:= 0;
-  { #todo 100 -ogcarreno : Calculate the HASH }
-end;
-
-destructor TLegacyBlock.Destroy;
-begin
-  inherited Destroy;
-end;
 
 procedure TLegacyBlock.LoadFromFolder(
   const AFolder: String;
@@ -168,6 +148,8 @@ end;
 function TLegacyBlock.LoadFromStream(const AStream: TStream): Int64;
 var
   bytesRead: Int64 = 0;
+  posAddressCount: Integer = 0;
+  index: Integer = 0;
 begin
   Result:= 0;
   bytesRead:= AStream.Read(FNumber, SizeOf(FNumber));
@@ -180,7 +162,7 @@ begin
   Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTimeLast20, SizeOf(FTimeLast20));
   Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTransactions, SizeOf(FTransactions));
+  bytesRead:= AStream.Read(FTransactionsCount, SizeOf(FTransactionsCount));
   Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FDifficulty, SizeOf(FDifficulty));
   Inc(Result, bytesRead);
@@ -199,6 +181,52 @@ begin
   bytesRead:= AStream.Read(FReward, SizeOf(FReward));
   Inc(Result, bytesRead);
   { #todo 100 -ogcarreno : Calculate the HASH }
+  if FTransactionsCount > 0 then
+  begin
+    bytesRead:= FTransactions.LoadFromStream(AStream, FTransactionsCount);
+    Inc(Result, bytesRead);
+  end;
+  if FNumber >= cBlockWithPoS then
+  begin
+    bytesRead:= AStream.Read(FPoSReward, SizeOf(FPoSReward));
+    Inc(Result, bytesRead);
+    bytesRead:= AStream.Read(posAddressCount, SizeOf(posAddressCount));
+    Inc(Result, bytesRead);
+    SetLength(FPoSAddresses, posAddressCount);
+    for index:= 0 to Pred(posAddressCount) do
+    begin
+      bytesRead:= AStream.Read(FPoSAddresses[index], SizeOf(TString32));
+      Inc(Result, bytesRead);
+    end;
+  end;
+end;
+
+constructor TLegacyBlock.Create;
+begin
+  FNumber:= -1;
+  FTimeStart:= -1;
+  FTimeEnd:= -1;
+  FTimeTotal:= -1;
+  FTimeLast20:= -1;
+  FTransactions:= TLegacyTransactions.Create;
+  FDifficulty:= -1;
+  FTargetHash:= EmptyStr;
+  FSolution:= EmptyStr;
+  FLastBlockHash:= EmptyStr;
+  FNextBlockDifficulty:= -1;
+  FMinerAddress:= EmptyStr;
+  FFee:= 0;
+  FReward:= 0;
+  FPoSReward:= 0;
+  SetLength(FPoSAddresses, 0);
+  { #todo 100 -ogcarreno : Calculate the HASH }
+end;
+
+destructor TLegacyBlock.Destroy;
+begin
+  SetLength(FPoSAddresses, 0);
+  FTransactions.Free;
+  inherited Destroy;
 end;
 
 end.

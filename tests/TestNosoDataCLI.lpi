@@ -99,7 +99,7 @@
         <PackageName Value="FCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="13">
+    <Units Count="15">
       <Unit0>
         <Filename Value="TestNosoDataCLI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -152,11 +152,21 @@
       <Unit11>
         <Filename Value="data/testnosodatalegacytransaction.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyTransaction"/>
       </Unit11>
       <Unit12>
         <Filename Value="../src/data/legacy/noso.data.legacy.transaction.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit12>
+      <Unit13>
+        <Filename Value="data/testnosodatalegacytransactions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyTransactions"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="../src/data/legacy/noso.data.legacy.transactions.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit14>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
