@@ -10,6 +10,7 @@ uses
 , fpcunit
 //, testutils
 , testregistry
+, Noso.Data.Legacy.Block
 , Noso.Data.Legacy.Transaction
 ;
 
@@ -27,6 +28,14 @@ type
   end;
 
 implementation
+
+const
+  cTestDataFolder =
+    '..'+DirectorySeparator+
+    'tests'+DirectorySeparator+
+    'test-data'+DirectorySeparator+
+    'NOSODATA'+DirectorySeparator+
+    'BLOCKS'+DirectorySeparator;
 
 { TTestNosoDataLegacyTransaction }
 
@@ -51,8 +60,11 @@ end;
 procedure TTestNosoDataLegacyTransaction.TestNosoDataLegacyTransactionCreate;
 begin
   FTransaction:= TLegacyTransaction.Create;
-  CheckFieldsCreate;
-  FTransaction.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FTransaction.Free;
+  end;
 end;
 
 initialization

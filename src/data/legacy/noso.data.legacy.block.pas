@@ -9,6 +9,7 @@ uses
 , SysUtils
 , Noso.Data.Legacy.Types
 , Noso.Data.Legacy.Transactions
+, Noso.Data.Legacy.Transaction
 ;
 
 resourcestring
@@ -45,7 +46,9 @@ type
     FPoSAddresses: TArrayOfString32;
   protected
   public
-    constructor Create;
+    constructor Create; overload;
+    constructor Create(const AFilename: String); overload;
+
     destructor Destroy; override;
 
     procedure LoadFromFolder(
@@ -54,6 +57,8 @@ type
     );
     procedure LoadFromFile(const AFilePath: String);
     function LoadFromStream(const AStream: TStream): Int64;
+
+    function FindTransaction(const ATransactionID: String): TLegacyTransaction;
 
     property Number: Int64
       read FNumber
@@ -201,6 +206,23 @@ begin
   end;
 end;
 
+function TLegacyBlock.FindTransaction(
+  const ATransactionID: String
+): TLegacyTransaction;
+var
+  transaction: TLegacyTransaction;
+begin
+  Result:= nil;
+  for transaction in FTransactions do
+  begin
+    if ATransactionID = transaction.OrderID then
+    begin
+      Result:= transaction;
+      break;
+    end;
+  end;
+end;
+
 constructor TLegacyBlock.Create;
 begin
   FNumber:= -1;
@@ -220,6 +242,13 @@ begin
   FPoSReward:= 0;
   SetLength(FPoSAddresses, 0);
   { #todo 100 -ogcarreno : Calculate the HASH }
+  FHash:= EmptyStr;
+end;
+
+constructor TLegacyBlock.Create(const AFilename: String);
+begin
+  Create;
+  LoadFromFile(AFilename);
 end;
 
 destructor TLegacyBlock.Destroy;

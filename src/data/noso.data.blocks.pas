@@ -118,6 +118,7 @@ end;
 
 procedure TBlocks.SetBlock(Index: Integer; AValue: TBlock);
 begin
+  if FBlocks.Items[Index] = AValue then exit;
   FBlocks.Items[Index]:= AValue;
 end;
 

@@ -31,8 +31,11 @@ implementation
 procedure TTestNosoDataLegacyTransactions.TestNosoDataLegacyTransactionsCreate;
 begin
   FTransactions:= TLegacyTransactions.Create;
-  AssertEquals('Noso Legacy Transactions Count is 0', 0, FTransactions.Count);
-  FTransactions.Free;
+  try
+    AssertEquals('Noso Legacy Transactions Count is 0', 0, FTransactions.Count);
+  finally
+    FTransactions.Free;
+  end;
 end;
 
 initialization

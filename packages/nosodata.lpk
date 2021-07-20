@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <Name Value="NosoData"/>
     <Type Value="RunTimeOnly"/>
     <Author Value="Gustavo Carreno &lt;guscarreno@gmail.com>"/>
@@ -8,12 +8,12 @@
       <Version Value="11"/>
       <SearchPaths>
         <OtherUnitFiles Value="../src/data;../src/data/legacy"/>
-        <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)/"/>
+        <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
     <Description Value="Provides container objects to access NosoCoin data"/>
     <Version Minor="1" Build="1"/>
-    <Files Count="8">
+    <Files Count="9">
       <Item1>
         <Filename Value="../src/data/noso.data.block.pas"/>
         <UnitName Value="Noso.Data.Block"/>
@@ -46,7 +46,12 @@
         <Filename Value="../src/data/legacy/noso.data.legacy.types.pas"/>
         <UnitName Value="Noso.Data.Legacy.Types"/>
       </Item8>
+      <Item9>
+        <Filename Value="../src/data/legacy/noso.data.legacy.blocks.pas"/>
+        <UnitName Value="Noso.Data.Legacy.Blocks"/>
+      </Item9>
     </Files>
+    <CompatibilityMode Value="True"/>
     <i18n>
       <EnableI18N Value="True"/>
       <OutDir Value="i18n"/>

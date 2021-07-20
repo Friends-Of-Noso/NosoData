@@ -125,22 +125,31 @@ end;
 procedure TTestNosoDataOperation.TestNosoDataOperationCreate;
 begin
   FOperation:= TOperation.Create;
-  CheckFieldsCreate;
-  FOperation.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONOperationTransfer;
 begin
   FOperation:= TOperation.Create(cjOperationTransfer);
-  CheckFieldsWithTransfer;
-  FOperation.Free;
+  try
+    CheckFieldsWithTransfer;
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONOperationCustom;
 begin
   FOperation:= TOperation.Create(cjOperationCustom);
-  CheckFieldsWithCustom;
-  FOperation.Free;
+  try
+    CheckFieldsWithCustom;
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONDataOperationTransfer;
@@ -150,8 +159,11 @@ begin
   jData:= GetJSON(cjOperationTransfer);
   FOperation:= TOperation.Create(jData);
   jData.Free;
-  CheckFieldsWithTransfer;
-  FOperation.Free;
+  try
+    CheckFieldsWithTransfer;
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromJSONObjectOperationTransfer;
@@ -161,8 +173,11 @@ begin
   jData:= GetJSON(cjOperationTransfer);
   FOperation:= TOperation.Create(TJSONObject(jData));
   jData.Free;
-  CheckFieldsWithTransfer;
-  FOperation.Free;
+  try
+    CheckFieldsWithTransfer;
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromSteamOperationTransfer;
@@ -172,15 +187,21 @@ begin
   ssOperationObject:= TStringStream.Create(cjOperationTransfer, TEncoding.UTF8);
   FOperation:= TOperation.Create(ssOperationObject);
   ssOperationObject.Free;
-  CheckFieldsWithTransfer;
-  FOperation.Free;
+  try
+    CheckFieldsWithTransfer;
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationAsJSONFromTransfer;
 begin
   FOperation:= TOperation.Create(cjOperationTransfer);
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSON);
-  FOperation.Free;
+  try
+    AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, FOperation.AsJSON);
+  finally
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationAsJSONDataFromTransfer;
@@ -189,9 +210,12 @@ var
 begin
   FOperation:= TOperation.Create(cjOperationTransfer);
   jData:= FOperation.AsJSONData;
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, jData.AsJSON);
-  jData.Free;
-  FOperation.Free;
+  try
+    AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, jData.AsJSON);
+  finally
+    jData.Free;
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationAsJSONObjectFromTransfer;
@@ -200,9 +224,12 @@ var
 begin
   FOperation:= TOperation.Create(cjOperationTransfer);
   jObject:= FOperation.AsJSONObject;
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, jObject.AsJSON);
-  jObject.Free;
-  FOperation.Free;
+  try
+    AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, jObject.AsJSON);
+  finally
+    jObject.Free;
+    FOperation.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperation.TestNosoDataOperationAsStreamFromTransfer;
@@ -215,9 +242,12 @@ begin
   sOperation:= FOperation.AsStream;
   ssOperation.LoadFromStream(sOperation);
   sOperation.Free;
-  AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, ssOperation.DataString);
-  ssOperation.Free;
-  FOperation.Free;
+  try
+    AssertEquals('Noso Operation AsJSON matches', cjOperationTransfer, ssOperation.DataString);
+  finally
+    ssOperation.Free;
+    FOperation.Free;
+  end;
 end;
 
 initialization

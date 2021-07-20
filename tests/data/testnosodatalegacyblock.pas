@@ -24,17 +24,19 @@ type
     procedure CheckFieldsBlockZero;
     procedure CheckFieldsBlockOne;
     procedure CheckFieldsBlockFifty;
-    procedure CheckFieldsBlockFiftyTransaction(const ATransaction: TLegacyTransaction);
+    procedure CheckFieldsBlockFiftyTransactionZero(const ATransaction: TLegacyTransaction);
     procedure CheckFieldsBlockTenKay;
-    procedure CheckFieldsBlockTenKayTransaction(const ATransaction: TLegacyTransaction);
+    procedure CheckFieldsBlockTenKayTransactionZero(const ATransaction: TLegacyTransaction);
   protected
   public
   published
     procedure TestNosoDataLegacyBlockCreate;
+    procedure TestNosoDataLegacyBlockCreateFromFile;
     procedure TestNosoDataLegacyBlockZero;
     procedure TestNosoDataLegacyBlockOne;
     procedure TestNosoDataLegacyBlockFifty;
     procedure TestNosoDataLegacyBlockTenKay;
+    procedure TestNosoDataLegacyBlockFindTransaction;
   end;
 
 implementation
@@ -44,14 +46,17 @@ const
     '..'+DirectorySeparator+
     'tests'+DirectorySeparator+
     'test-data'+DirectorySeparator+
-    'blocks'+DirectorySeparator;
+    'NOSODATA'+DirectorySeparator+
+    'BLOCKS'+DirectorySeparator;
+  cBlockFiftyTransactionZero =
+    'OR1icpcdc3rfhg56jxz4r9cnslnm4y880iusnxpk6jct97lly9x8';
 
 { TTestNosoDataLegacyBlock }
 
 procedure TTestNosoDataLegacyBlock.CheckFieldsCreate;
 begin
   AssertEquals('Noso Legacy Block Number is -1', -1, FLegacyBlock.Number);
-  { #todo 100 -ogcarreno : Test for the HASH }
+  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
   AssertEquals('Noso Legacy Block TimeStart is -1', -1, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is -1', -1, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is -1', -1, FLegacyBlock.TimeTotal);
@@ -72,7 +77,7 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockZero;
 begin
   AssertEquals('Noso Legacy Block Number is 0', 0, FLegacyBlock.Number);
-  { #todo 100 -ogcarreno : Test for the HASH }
+  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
   AssertEquals('Noso Legacy Block TimeStart is 1531896783', 1531896783, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132800', 1615132800, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 83236017', 83236017, FLegacyBlock.TimeTotal);
@@ -99,7 +104,7 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockOne;
 begin
   AssertEquals('Noso Legacy Block Number is 1', 1, FLegacyBlock.Number);
-  { #todo 100 -ogcarreno : Test for the HASH }
+  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
   AssertEquals('Noso Legacy Block TimeStart is 1615132801', 1615132801, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132801', 1615132801, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 0', 0, FLegacyBlock.TimeTotal);
@@ -129,13 +134,13 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockFifty;
 begin
   AssertEquals('Noso Legacy Block Number is 50', 50, FLegacyBlock.Number);
-  { #todo 100 -ogcarreno : Test for the HASH }
+  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
   AssertEquals('Noso Legacy Block TimeStart is 1615145807', 1615145807, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615147132', 1615147132, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 1325', 1325, FLegacyBlock.TimeTotal);
   AssertEquals('Noso Legacy Block TimeLast20 is 741', 741, FLegacyBlock.TimeLast20);
   AssertEquals('Noso Legacy Block Transactions count is 1', 1, FLegacyBlock.Transactions.Count);
-  CheckFieldsBlockFiftyTransaction(FLegacyBlock.Transactions[0]);
+  CheckFieldsBlockFiftyTransactionZero(FLegacyBlock.Transactions[0]);
   AssertEquals('Noso Legacy Block Difficulty is 83', 83, FLegacyBlock.Difficulty);
   AssertEquals('Noso Legacy Block TargetHash is 040418C35', '040418C35', FLegacyBlock.TargetHash);
   AssertEquals('Noso Legacy Block Solution is !!!!!"!!!263110321 !!!!!#!!!359183507 !!!!!%!!!351463712 !!!!!%!!!500942098 !!!!!%!!!561574482 !!!!!%!!!733354625 !!!!!%!!!749102786 !!!!!%!!!750918362 !!!!!%!!!834534368 !!!!!%!!!985695035',
@@ -157,7 +162,7 @@ begin
   AssertEquals('Noso Legacy Block PoS Address Count is 0', 0, Length(FLegacyBlock.PoSAddresses));
 end;
 
-procedure TTestNosoDataLegacyBlock.CheckFieldsBlockFiftyTransaction(
+procedure TTestNosoDataLegacyBlock.CheckFieldsBlockFiftyTransactionZero(
   const ATransaction: TLegacyTransaction
 );
 begin
@@ -197,13 +202,13 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockTenKay;
 begin
   AssertEquals('Noso Legacy Block Number is 10000', 10000, FLegacyBlock.Number);
-  { #todo 100 -ogcarreno : Test for the HASH }
+  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
   AssertEquals('Noso Legacy Block TimeStart is 1621570647', 1621570647, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1621571416', 1621571416, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 769', 769, FLegacyBlock.TimeTotal);
   AssertEquals('Noso Legacy Block TimeLast20 is 593', 593, FLegacyBlock.TimeLast20);
   AssertEquals('Noso Legacy Block Transactions count is 3', 3, FLegacyBlock.Transactions.Count);
-  CheckFieldsBlockTenKayTransaction(FLegacyBlock.Transactions[0]);
+  CheckFieldsBlockTenKayTransactionZero(FLegacyBlock.Transactions[0]);
   AssertEquals('Noso Legacy Block Difficulty is 107', 107, FLegacyBlock.Difficulty);
   AssertEquals('Noso Legacy Block TargetHash is F8C0A43EE55', 'F8C0A43EE55', FLegacyBlock.TargetHash);
   AssertEquals('Noso Legacy Block Solution is "v!!!!#/\c71271mNL "j!!!!#6-c74053wL1 "t!!!!!3Nc73684o6I "v!!!!#/kc72102HA8 "P!!!!#11c77420b6Z ":!!!!!!j4c0192n8W "v!!!!#03c71520kJy "8!!!!!!$c72680oLG !T!!!!!:mc779147h9 !T!!!!!:nc71130itp',
@@ -229,7 +234,7 @@ begin
   );
 end;
 
-procedure TTestNosoDataLegacyBlock.CheckFieldsBlockTenKayTransaction(
+procedure TTestNosoDataLegacyBlock.CheckFieldsBlockTenKayTransactionZero(
   const ATransaction: TLegacyTransaction
 );
 begin
@@ -272,40 +277,85 @@ end;
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockCreate;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
-  CheckFieldsCreate;
-  FLegacyBlock.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FLegacyBlock.Free;
+  end;
+end;
+
+procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockCreateFromFile;
+begin
+  FLegacyBlock:= TLegacyBlock.Create(
+    ExcludeTrailingPathDelimiter(cTestDataFolder)+DirectorySeparator+
+    '0.blk'
+  );
+  try
+    CheckFieldsBlockZero;
+  finally
+    FLegacyBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockZero;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
-  FLegacyBlock.LoadFromFolder(cTestDataFolder, 0);
-  CheckFieldsBlockZero;
-  FLegacyBlock.Free;
+  try
+    FLegacyBlock.LoadFromFolder(cTestDataFolder, 0);
+    CheckFieldsBlockZero;
+  finally
+    FLegacyBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockOne;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
-  FLegacyBlock.LoadFromFolder(cTestDataFolder, 1);
-  CheckFieldsBlockOne;
-  FLegacyBlock.Free;
+  try
+    FLegacyBlock.LoadFromFolder(cTestDataFolder, 1);
+    CheckFieldsBlockOne;
+  finally
+    FLegacyBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockFifty;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
-  FLegacyBlock.LoadFromFolder(cTestDataFolder, 50);
-  CheckFieldsBlockFifty;
-  FLegacyBlock.Free;
+  try
+    FLegacyBlock.LoadFromFolder(cTestDataFolder, 50);
+    CheckFieldsBlockFifty;
+  finally
+    FLegacyBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockTenKay;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
-  FLegacyBlock.LoadFromFolder(cTestDataFolder, 10000);
-  CheckFieldsBlockTenKay;
-  FLegacyBlock.Free;
+  try
+    FLegacyBlock.LoadFromFolder(cTestDataFolder, 10000);
+    CheckFieldsBlockTenKay;
+  finally
+    FLegacyBlock.Free;
+  end;
+end;
+
+procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockFindTransaction;
+var
+  transaction: TLegacyTransaction;
+begin
+  FLegacyBlock:= TLegacyBlock.Create(
+    ExcludeTrailingPathDelimiter(cTestDataFolder)+DirectorySeparator+
+    '50.blk'
+  );
+  try
+    transaction:= FLegacyBlock.FindTransaction(cBlockFiftyTransactionZero);
+    AssertNotNull('Noso Legacy Transaction is not null', transaction);
+    CheckFieldsBlockFiftyTransactionZero(transaction);
+  finally
+    FLegacyBlock.Free;
+  end;
 end;
 
 initialization

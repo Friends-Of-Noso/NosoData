@@ -103,7 +103,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="15">
+    <Units Count="17">
       <Unit0>
         <Filename Value="TestNosoDataGUI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -178,6 +178,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Noso.Data.Legacy.Transactions"/>
       </Unit14>
+      <Unit15>
+        <Filename Value="data/testnosodatalegacyblocks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyBlocks"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="../src/data/legacy/noso.data.legacy.blocks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Blocks"/>
+      </Unit16>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

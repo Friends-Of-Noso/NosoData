@@ -78,15 +78,21 @@ end;
 procedure TTestNosoDataBlocks.TestNosoDataBlocksCreate;
 begin
   FBlocks:= TBlocks.Create;
-  CheckEmpty;
-  FBlocks.Free;
+  try
+    CheckEmpty;
+  finally
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksCreateFromJSON;
 begin
   FBlocks:= TBlocks.Create(cjBlocksOneEmpty);
-  CheckOneTransfer;
-  FBlocks.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksCreateFromJSONData;
@@ -96,8 +102,11 @@ begin
   jData:= GetJSON(cjBlocksOneEmpty);
   FBlocks:= TBlocks.Create(jData);
   jData.Free;
-  CheckOneTransfer;
-  FBlocks.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksCreateFromJSONArray;
@@ -107,8 +116,11 @@ begin
   jData:= GetJSON(cjBlocksOneEmpty);
   FBlocks:= TBlocks.Create(TJSONArray(jData));
   jData.Free;
-  CheckOneTransfer;
-  FBlocks.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksCreateFromStream;
@@ -118,15 +130,21 @@ begin
   ssBlocksArray:= TStringStream.Create(cjBlocksOneEmpty, TEncoding.UTF8);
   FBlocks:= TBlocks.Create(ssBlocksArray);
   ssBlocksArray.Free;
-  CheckOneTransfer;
-  FBlocks.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksAsJSONFromOneTransfer;
 begin
   FBlocks:= TBlocks.Create(cjBlocksOneEmpty);
-  AssertEquals('Blocks from AsJSON matches', cjBlocksOneEmpty, FBlocks.AsJSON);
-  FBlocks.Free;
+  try
+    AssertEquals('Blocks from AsJSON matches', cjBlocksOneEmpty, FBlocks.AsJSON);
+  finally
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksAsJSONDataFromOneTransfer;
@@ -135,9 +153,12 @@ var
 begin
   FBlocks:= TBlocks.Create(cjBlocksOneEmpty);
   jData:= FBlocks.AsJSONData;
-  AssertEquals('Blocks from AsJSON matches', cjBlocksOneEmpty, jData.AsJSON);
-  jData.Free;
-  FBlocks.Free;
+  try
+    AssertEquals('Blocks from AsJSON matches', cjBlocksOneEmpty, jData.AsJSON);
+  finally
+    jData.Free;
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksAsJSONArrayFromOneTransfer;
@@ -146,9 +167,12 @@ var
 begin
   FBlocks:= TBlocks.Create(cjBlocksOneEmpty);
   jArray:= FBlocks.AsJSONArray;
-  AssertEquals('Blocks from AsJSON matches', cjBlocksOneEmpty, jArray.AsJSON);
-  jArray.Free;
-  FBlocks.Free;
+  try
+    AssertEquals('Blocks from AsJSON matches', cjBlocksOneEmpty, jArray.AsJSON);
+  finally
+    jArray.Free;
+    FBlocks.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlocks.TestNosoDataBlocksAsStreamFromOneTransfer;
@@ -161,9 +185,12 @@ begin
   sBlocks:= FBlocks.AsStream;
   ssBlocks.LoadFromStream(sBlocks);
   sBlocks.Free;
-  AssertEquals('Noso Block AsJSON matches', cjBlocksOneEmpty, ssBlocks.DataString);
-  ssBlocks.Free;
-  FBlocks.Free;
+  try
+    AssertEquals('Noso Block AsJSON matches', cjBlocksOneEmpty, ssBlocks.DataString);
+  finally
+    ssBlocks.Free;
+    FBlocks.Free;
+  end;
 end;
 
 initialization

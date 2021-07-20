@@ -9,6 +9,7 @@ uses
 , TestNosoDataBlock
 , TestNosoDataOperations
 , TestNosoDataOperation
+, TestNosoDataLegacyBlocks
 , TestNosoDataLegacyBlock
 , TestNosoDataLegacyTransactions
 , TestNosoDataLegacyTransaction

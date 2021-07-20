@@ -75,15 +75,21 @@ end;
 procedure TTestNosoDataOperations.TestNosoDataOperationsCreate;
 begin
   FOperations:= TOperations.Create;
-  CheckEmpty;
-  FOperations.Free;
+  try
+    CheckEmpty;
+  finally
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsCreateFromJSON;
 begin
   FOperations:= TOperations.Create(cjOperationsOneTransfer);
-  CheckOneTransfer;
-  FOperations.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsCreateFromJSONData;
@@ -93,8 +99,11 @@ begin
   jData:= GetJSON(cjOperationsOneTransfer);
   FOperations:= TOperations.Create(jData);
   jData.Free;
-  CheckOneTransfer;
-  FOperations.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsCreateFromJSONArray;
@@ -104,8 +113,11 @@ begin
   jData:= GetJSON(cjOperationsOneTransfer);
   FOperations:= TOperations.Create(TJSONArray(jData));
   jData.Free;
-  CheckOneTransfer;
-  FOperations.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsCreateFromStream;
@@ -115,15 +127,21 @@ begin
   ssOperationsArray:= TStringStream.Create(cjOperationsOneTransfer, TEncoding.UTF8);
   FOperations:= TOperations.Create(ssOperationsArray);
   ssOperationsArray.Free;
-  CheckOneTransfer;
-  FOperations.Free;
+  try
+    CheckOneTransfer;
+  finally
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsAsJSONFromOneTransfer;
 begin
   FOperations:= TOperations.Create(cjOperationsOneTransfer);
-  AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, FOperations.AsJSON);
-  FOperations.Free;
+  try
+    AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, FOperations.AsJSON);
+  finally
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsAsJSONDataFromOneTransfer;
@@ -132,9 +150,12 @@ var
 begin
   FOperations:= TOperations.Create(cjOperationsOneTransfer);
   jData:= FOperations.AsJSONData;
-  AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, jData.AsJSON);
-  jData.Free;
-  FOperations.Free;
+  try
+    AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, jData.AsJSON);
+  finally
+    jData.Free;
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsAsJSONArrayFromOneTransfer;
@@ -143,9 +164,12 @@ var
 begin
   FOperations:= TOperations.Create(cjOperationsOneTransfer);
   jArray:= FOperations.AsJSONArray;
-  AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, jArray.AsJSON);
-  jArray.Free;
-  FOperations.Free;
+  try
+    AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, jArray.AsJSON);
+  finally
+    jArray.Free;
+    FOperations.Free;
+  end;
 end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsAsStreamFromOneTransfer;
@@ -158,9 +182,12 @@ begin
   sOperations:= FOperations.AsStream;
   ssOperations.LoadFromStream(sOperations);
   sOperations.Free;
-  AssertEquals('Noso Operation AsJSON matches', cjOperationsOneTransfer, ssOperations.DataString);
-  ssOperations.Free;
-  FOperations.Free;
+  try
+    AssertEquals('Noso Operation AsJSON matches', cjOperationsOneTransfer, ssOperations.DataString);
+  finally
+    ssOperations.Free;
+    FOperations.Free;
+  end;
 end;
 
 initialization

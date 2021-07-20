@@ -12,6 +12,7 @@ uses
 ;
 
 type
+  TLegacyTransactionsEnumerator = class; //Forward
 { TLegacyTransactions }
   TLegacyTransactions = class(TObject)
   private
@@ -29,6 +30,8 @@ type
     procedure Delete(const AIndex: Integer);
     procedure Delete(const ATransaction: TLegacyTransaction);
 
+    function GetEnumerator: TLegacyTransactionsEnumerator;
+
     function LoadFromStream(
       const AStream: TStream;
       const ACount: Integer
@@ -39,6 +42,22 @@ type
     property Items[Index: Integer]: TLegacyTransaction
       read GetTransaction
       write SetTransaction; default;
+  published
+  end;
+
+{ TLegacyTransactionsEnumerator }
+  TLegacyTransactionsEnumerator = class(Tobject)
+  private
+    FLegacyTransactions: TLegacyTransactions;
+    FPosition: Integer;
+  protected
+  public
+    constructor Create(const ALegacyTransactions: TLegacyTransactions);
+    function GetCurrent: TLegacyTransaction;
+    function MoveNext: Boolean;
+
+    property Current: TLegacyTransaction
+      read GetCurrent;
   published
   end;
 
@@ -61,6 +80,7 @@ procedure TLegacyTransactions.SetTransaction(
   AValue: TLegacyTransaction
 );
 begin
+  if FTransactions.Items[Index] = AValue then exit;
   FTransactions.Items[Index]:= AValue;
 end;
 
@@ -83,6 +103,11 @@ end;
 procedure TLegacyTransactions.Delete(const ATransaction: TLegacyTransaction);
 begin
   FTransactions.Delete(FTransactions.IndexOf(ATransaction));
+end;
+
+function TLegacyTransactions.GetEnumerator: TLegacyTransactionsEnumerator;
+begin
+  Result:= TLegacyTransactionsEnumerator.Create(Self);
 end;
 
 function TLegacyTransactions.LoadFromStream(
@@ -114,6 +139,27 @@ destructor TLegacyTransactions.Destroy;
 begin
   FTransactions.Free;
   inherited Destroy;
+end;
+
+{ TLegacyTransactionsEnumerator }
+
+constructor TLegacyTransactionsEnumerator.Create(
+  const ALegacyTransactions: TLegacyTransactions
+);
+begin
+  FLegacyTransactions := ALegacyTransactions;
+  FPosition := -1;
+end;
+
+function TLegacyTransactionsEnumerator.GetCurrent: TLegacyTransaction;
+begin
+  Result:= FLegacyTransactions.Items[FPosition] as TLegacyTransaction;
+end;
+
+function TLegacyTransactionsEnumerator.MoveNext: Boolean;
+begin
+  Inc(FPosition);
+  Result := FPosition < FLegacyTransactions.Count;
 end;
 
 end.

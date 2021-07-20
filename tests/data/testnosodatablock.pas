@@ -84,15 +84,21 @@ end;
 procedure TTestNosoDataBlock.TestNosoDataBlockCreate;
 begin
   FBlock:= TBlock.Create;
-  CheckFieldsCreate;
-  FBlock.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromJSON;
 begin
   FBlock:= TBlock.Create(cjBlockEmpty);
-  CheckFieldsCreate;
-  FBlock.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromJSONData;
@@ -102,8 +108,11 @@ begin
   jData:= GetJSON(cjBlockEmpty);
   FBlock:= TBlock.Create(jData);
   jData.Free;
-  CheckFieldsCreate;
-  FBlock.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromJSONObject;
@@ -113,8 +122,11 @@ begin
   jData:= GetJSON(cjBlockEmpty);
   FBlock:= TBlock.Create(TJSONObject(jData));
   jData.Free;
-  CheckFieldsCreate;
-  FBlock.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromStream;
@@ -124,15 +136,21 @@ begin
   ssBlockObject:= TStringStream.Create(cjBlockEmpty, TEncoding.UTF8);
   FBlock:= TBlock.Create(ssBlockObject);
   ssBlockObject.Free;
-  CheckFieldsCreate;
-  FBlock.Free;
+  try
+    CheckFieldsCreate;
+  finally
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockAsJSON;
 begin
   FBlock:= TBlock.Create(cjBlockEmpty);
-  AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, FBlock.AsJSON);
-  FBlock.Free;
+  try
+    AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, FBlock.AsJSON);
+  finally
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockAsJSONData;
@@ -141,9 +159,12 @@ var
 begin
   FBlock:= TBlock.Create(cjBlockEmpty);
   jData:= FBlock.AsJSONData;
-  AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, jData.AsJSON);
-  jData.Free;
-  FBlock.Free;
+  try
+    AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, jData.AsJSON);
+  finally
+    jData.Free;
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockAsJSONObject;
@@ -152,9 +173,12 @@ var
 begin
   FBlock:= TBlock.Create(cjBlockEmpty);
   jObject:= FBlock.AsJSONObject;
-  AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, jObject.AsJSON);
-  jObject.Free;
-  FBlock.Free;
+  try
+    AssertEquals('Noso Block AsJSON matches', cjBlockEmpty, jObject.AsJSON);
+  finally
+    jObject.Free;
+    FBlock.Free;
+  end;
 end;
 
 procedure TTestNosoDataBlock.TestNosoDataBlockAsStream;

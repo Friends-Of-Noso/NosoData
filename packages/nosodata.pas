@@ -10,7 +10,8 @@ interface
 uses
   Noso.Data.Block, Noso.Data.Blocks, Noso.Data.Operation, 
   Noso.Data.Operations, Noso.Data.Legacy.Block, Noso.Data.Legacy.Transaction, 
-  Noso.Data.Legacy.Transactions, Noso.Data.Legacy.Types;
+  Noso.Data.Legacy.Transactions, Noso.Data.Legacy.Types, 
+  Noso.Data.Legacy.Blocks;
 
 implementation
 

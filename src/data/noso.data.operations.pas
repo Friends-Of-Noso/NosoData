@@ -118,6 +118,7 @@ end;
 
 procedure TOperations.SetOperation(Index: Integer; AValue: TOperation);
 begin
+  if FOperations.Items[Index] = AValue then exit;
   FOperations.Items[Index]:= AValue;
 end;
 
