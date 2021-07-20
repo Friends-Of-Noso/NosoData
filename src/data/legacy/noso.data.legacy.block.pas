@@ -124,6 +124,7 @@ uses
 
 const
   cBlockWithPoS : Int64 = 8425;
+  cBlockFilenameFormat = '%d.blk';
 
 { TLegacyBlock }
 
@@ -153,7 +154,7 @@ begin
     raise ECannotFindFolder.Create(Format(rsECannotFindFolder, [AFolder]));
   end;
   filePath:= IncludeTrailingPathDelimiter(AFolder) +
-    Format('%d.blk', [ANumber]);
+    Format(cBlockFilenameFormat, [ANumber]);
   LoadFromFile(filePath);
 end;
 
@@ -317,6 +318,7 @@ end;
 constructor TLegacyBlock.Create;
 begin
   FNumber:= -1;
+  FHash:= EmptyStr;
   FTimeStart:= -1;
   FTimeEnd:= -1;
   FTimeTotal:= -1;
@@ -332,13 +334,13 @@ begin
   FReward:= 0;
   FPoSReward:= 0;
   SetLength(FPoSAddresses, 0);
-  FHash:= GetHASH;
 end;
 
 constructor TLegacyBlock.Create(const AFilename: String);
 begin
   Create;
   LoadFromFile(AFilename);
+  FHash:= GetHASH;
 end;
 
 destructor TLegacyBlock.Destroy;

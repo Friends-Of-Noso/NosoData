@@ -56,8 +56,8 @@ const
 procedure TTestNosoDataLegacyBlock.CheckFieldsCreate;
 begin
   AssertEquals('Noso Legacy Block Number is -1', -1, FLegacyBlock.Number);
-  AssertEquals('Noso Legacy Block Hash is 2DF1F99A280EE0E7DAD8F3FCB40B4E9C',
-    '2DF1F99A280EE0E7DAD8F3FCB40B4E9C',
+  AssertEquals('Noso Legacy Block Hash is empty',
+    EmptyStr,
     FLegacyBlock.Hash
   );
   AssertEquals('Noso Legacy Block TimeStart is -1', -1, FLegacyBlock.TimeStart);

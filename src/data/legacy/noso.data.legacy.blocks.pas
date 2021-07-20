@@ -37,11 +37,17 @@ type
   published
   end;
 
-const
-  cDataFolder = 'NOSODATA';
-  cBlocksFolder = 'BLOCKS';
-
 implementation
+
+const
+  cDataFolderName = 'NOSODATA';
+  cBlocksFolderName = 'BLOCKS';
+  cFilenameFormat =
+    '%s'+DirectorySeparator+
+    '%s'+DirectorySeparator+
+    '%s'+DirectorySeparator+
+    '%d.blk'
+  ;
 
 { TLegacyBlocks }
 
@@ -51,10 +57,10 @@ var
 begin
   Result:= nil;
   if (Index < 0) or (Index > FCount) then exit;
-  filename:= Format('%s/%s/%s/%d.blk',[
+  filename:= Format(cFilenameFormat,[
     ExcludeTrailingPathDelimiter(FFolder),
-    cDataFolder,
-    cBlocksFolder,
+    cDataFolderName,
+    cBlocksFolderName,
     Index
     ]);
   if not FileExists(filename) then exit;
@@ -68,10 +74,10 @@ begin
   FCount:= -1;
   repeat
     Inc(FCount);
-    filename:= Format('%s/%s/%s/%d.blk',[
+    filename:= Format(cFilenameFormat,[
       ExcludeTrailingPathDelimiter(FFolder),
-      cDataFolder,
-      cBlocksFolder,
+      cDataFolderName,
+      cBlocksFolderName,
       Fcount
       ]);
   until not FileExists(filename);
