@@ -35,6 +35,7 @@ type
     constructor Create;
 
     function LoadFromStream(const AStream: TStream): Int64;
+    function SaveToStream(const AStream: TStream): Int64;
 
     property Block: Integer
       read FBlock
@@ -137,6 +138,41 @@ begin
   Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FTrfrID, SizeOf(FTrfrID));
   Inc(Result, bytesRead);
+end;
+
+function TLegacyTransaction.SaveToStream(const AStream: TStream): Int64;
+var
+  bytesWritten: Int64 = 0;
+begin
+  Result:= 0;
+  bytesWritten:= AStream.Write(FBlock, SizeOf(FBlock));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FOrderID, SizeOf(FOrderID));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FOrderLines, SizeOf(FOrderLines));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FOrderType, SizeOf(FOrderType));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTimeStamp, SizeOf(FTimeStamp));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FReference, SizeOf(FReference));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTrxLine, SizeOf(FTrxLine));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FSender, SizeOf(FSender));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FAddress, SizeOf(FAddress));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FReceiver, SizeOf(FReceiver));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FAmountFee, SizeOf(FAmountFee));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FAmountTrf, SizeOf(FAmountTrf));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FSignature, SizeOf(FSignature));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTrfrID, SizeOf(FTrfrID));
+  Inc(Result, bytesWritten);
 end;
 
 end.

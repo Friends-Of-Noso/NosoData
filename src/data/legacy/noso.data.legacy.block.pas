@@ -44,6 +44,8 @@ type
     FReward: Int64;
     FPoSReward: Int64;
     FPoSAddresses: TArrayOfString32;
+
+    function GetHASH: String;
   protected
   public
     constructor Create; overload;
@@ -57,6 +59,9 @@ type
     );
     procedure LoadFromFile(const AFilePath: String);
     function LoadFromStream(const AStream: TStream): Int64;
+
+    procedure SaveToFile(const AFilePath: String);
+    function SaveToStream(const AStream: TStream): Int64;
 
     function FindTransaction(const ATransactionID: String): TLegacyTransaction;
 
@@ -113,10 +118,28 @@ type
 
 implementation
 
+uses
+  MD5
+;
+
 const
   cBlockWithPoS : Int64 = 8425;
 
 { TLegacyBlock }
+
+function TLegacyBlock.GetHASH: String;
+var
+  sBlock: TBytesStream;
+begin
+  Result:= EmptyStr;
+  sBlock:= TBytesStream.Create;
+  try
+    SaveToStream(sBlock);
+    Result:= UpperCase(MD5Print(MD5Buffer(sBlock.Bytes[0], sBlock.Size))) ;
+  finally
+    sBlock.Free;
+  end;
+end;
 
 procedure TLegacyBlock.LoadFromFolder(
   const AFolder: String;
@@ -185,7 +208,6 @@ begin
   Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FReward, SizeOf(FReward));
   Inc(Result, bytesRead);
-  { #todo 100 -ogcarreno : Calculate the HASH }
   if FTransactionsCount > 0 then
   begin
     bytesRead:= FTransactions.LoadFromStream(AStream, FTransactionsCount);
@@ -202,6 +224,75 @@ begin
     begin
       bytesRead:= AStream.Read(FPoSAddresses[index], SizeOf(TString32));
       Inc(Result, bytesRead);
+    end;
+  end;
+  FHash:= GetHASH;
+end;
+
+procedure TLegacyBlock.SaveToFile(const AFilePath: String);
+var
+  sBlock: TFileStream;
+begin
+  sBlock:= TFileStream.Create(AFilePath, fmOpenWrite);
+  try
+    SaveToStream(sBlock);
+  finally
+    sBlock.Free;
+  end;
+end;
+
+function TLegacyBlock.SaveToStream(const AStream: TStream): Int64;
+var
+  bytesWritten: Int64 = 0;
+  posAddressCount: Integer = 0;
+  index: Integer = 0;
+begin
+  Result:= 0;
+  AStream.Position:= 0;
+  bytesWritten:= AStream.Write(FNumber, SizeOf(FNumber));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTimeStart, SizeOf(FTimeStart));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTimeEnd, SizeOf(FTimeEnd));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTimeTotal, SizeOf(FTimeTotal));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTimeLast20, SizeOf(FTimeLast20));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTransactionsCount, SizeOf(FTransactionsCount));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FDifficulty, SizeOf(FDifficulty));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FTargetHash, SizeOf(FTargetHash));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FSolution, SizeOf(FSolution));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FLastBlockHash, SizeOf(FLastBlockHash));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FMinerAddress, SizeOf(FMinerAddress));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FFee, SizeOf(FFee));
+  Inc(Result, bytesWritten);
+  bytesWritten:= AStream.Write(FReward, SizeOf(FReward));
+  Inc(Result, bytesWritten);
+  if FTransactionsCount > 0 then
+  begin
+    bytesWritten:= FTransactions.SaveToStream(AStream);
+    Inc(Result, bytesWritten);
+  end;
+  if FNumber >= cBlockWithPoS then
+  begin
+    bytesWritten:= AStream.Write(FPoSReward, SizeOf(FPoSReward));
+    Inc(Result, bytesWritten);
+    posAddressCount:= Length(FPoSAddresses);
+    bytesWritten:= AStream.Write(posAddressCount, SizeOf(posAddressCount));
+    Inc(Result, bytesWritten);
+    for index:= 0 to Pred(posAddressCount) do
+    begin
+      bytesWritten:= AStream.Write(FPoSAddresses[index], SizeOf(TString32));
+      Inc(Result, bytesWritten);
     end;
   end;
 end;
@@ -241,8 +332,7 @@ begin
   FReward:= 0;
   FPoSReward:= 0;
   SetLength(FPoSAddresses, 0);
-  { #todo 100 -ogcarreno : Calculate the HASH }
-  FHash:= EmptyStr;
+  FHash:= GetHASH;
 end;
 
 constructor TLegacyBlock.Create(const AFilename: String);

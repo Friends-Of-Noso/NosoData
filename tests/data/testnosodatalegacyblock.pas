@@ -56,7 +56,10 @@ const
 procedure TTestNosoDataLegacyBlock.CheckFieldsCreate;
 begin
   AssertEquals('Noso Legacy Block Number is -1', -1, FLegacyBlock.Number);
-  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
+  AssertEquals('Noso Legacy Block Hash is 2DF1F99A280EE0E7DAD8F3FCB40B4E9C',
+    '2DF1F99A280EE0E7DAD8F3FCB40B4E9C',
+    FLegacyBlock.Hash
+  );
   AssertEquals('Noso Legacy Block TimeStart is -1', -1, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is -1', -1, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is -1', -1, FLegacyBlock.TimeTotal);
@@ -77,7 +80,10 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockZero;
 begin
   AssertEquals('Noso Legacy Block Number is 0', 0, FLegacyBlock.Number);
-  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
+  AssertEquals('Noso Legacy Block Hash is 4E8A4743AA6083F3833DDA1216FE3717',
+    '4E8A4743AA6083F3833DDA1216FE3717',
+    FLegacyBlock.Hash
+  );
   AssertEquals('Noso Legacy Block TimeStart is 1531896783', 1531896783, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132800', 1615132800, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 83236017', 83236017, FLegacyBlock.TimeTotal);
@@ -104,7 +110,10 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockOne;
 begin
   AssertEquals('Noso Legacy Block Number is 1', 1, FLegacyBlock.Number);
-  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
+  AssertEquals('Noso Legacy Block Hash is 3C6FF57DDEBB7E70BA885E73C96CC2D2',
+    '3C6FF57DDEBB7E70BA885E73C96CC2D2',
+    FLegacyBlock.Hash
+  );
   AssertEquals('Noso Legacy Block TimeStart is 1615132801', 1615132801, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132801', 1615132801, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 0', 0, FLegacyBlock.TimeTotal);
@@ -134,7 +143,10 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockFifty;
 begin
   AssertEquals('Noso Legacy Block Number is 50', 50, FLegacyBlock.Number);
-  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
+  AssertEquals('Noso Legacy Block Hash is D27B2ACD8E573A55B4BCEE70D545EE44',
+    'D27B2ACD8E573A55B4BCEE70D545EE44',
+    FLegacyBlock.Hash
+  );
   AssertEquals('Noso Legacy Block TimeStart is 1615145807', 1615145807, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615147132', 1615147132, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 1325', 1325, FLegacyBlock.TimeTotal);
@@ -202,7 +214,10 @@ end;
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockTenKay;
 begin
   AssertEquals('Noso Legacy Block Number is 10000', 10000, FLegacyBlock.Number);
-  AssertEquals('Noso Legacy Block Hash is empty', EmptyStr, FLegacyBlock.Hash);
+  AssertEquals('Noso Legacy Block Hash is 5EC5FB56654032AADCDB90484CC4361C',
+    '5EC5FB56654032AADCDB90484CC4361C',
+    FLegacyBlock.Hash
+  );
   AssertEquals('Noso Legacy Block TimeStart is 1621570647', 1621570647, FLegacyBlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1621571416', 1621571416, FLegacyBlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 769', 769, FLegacyBlock.TimeTotal);

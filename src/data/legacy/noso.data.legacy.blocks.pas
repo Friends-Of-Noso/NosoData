@@ -17,7 +17,6 @@ type
     FFolder: String;
     FCount: Int64;
 
-    procedure doRefresh;
     function GetBlock(Index: Int64): TLegacyBlock;
   protected
   public
@@ -46,22 +45,6 @@ implementation
 
 { TLegacyBlocks }
 
-procedure TLegacyBlocks.doRefresh;
-var
-  filename: String;
-begin
-  FCount:= -1;
-  repeat
-    Inc(FCount);
-    filename:= Format('%s/%s/%s/%d.blk',[
-      ExcludeTrailingPathDelimiter(FFolder),
-      cDataFolder,
-      cBlocksFolder,
-      Fcount
-      ]);
-  until not FileExists(filename);
-end;
-
 function TLegacyBlocks.GetBlock(Index: Int64): TLegacyBlock;
 var
   filename: String;
@@ -79,8 +62,19 @@ begin
 end;
 
 procedure TLegacyBlocks.Refresh;
+var
+  filename: String;
 begin
-  doRefresh;
+  FCount:= -1;
+  repeat
+    Inc(FCount);
+    filename:= Format('%s/%s/%s/%d.blk',[
+      ExcludeTrailingPathDelimiter(FFolder),
+      cDataFolder,
+      cBlocksFolder,
+      Fcount
+      ]);
+  until not FileExists(filename);
 end;
 
 constructor TLegacyBlocks.Create;
@@ -93,7 +87,7 @@ constructor TLegacyBlocks.Create(const AFolder: String);
 begin
   Create;
   FFolder:= AFolder;
-  doRefresh;
+  Refresh;
 end;
 
 destructor TLegacyBlocks.Destroy;

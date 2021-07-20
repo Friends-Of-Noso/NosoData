@@ -49,7 +49,7 @@ end;
 
 procedure TTestNosoDataLegacyBlocks.CheckFieldsWithFolder;
 begin
-  AssertEquals('Noso Data Legacy Blocks Folder is ../tests/test-data/', '../tests/test-data/', FBlocks.Folder);
+  AssertEquals('Noso Data Legacy Blocks Folder is '+cTestDataFolder, cTestDataFolder, FBlocks.Folder);
   AssertEquals('Noso Data Legacy Blocks count is 3', 3, FBlocks.Count);
 end;
 
@@ -58,7 +58,10 @@ procedure TTestNosoDataLegacyBlocks.CheckFieldsBlockZero(
 );
 begin
   AssertEquals('Noso Legacy Block Number is 0', 0, ABlock.Number);
-  { #todo 100 -ogcarreno : Test for the HASH }
+  AssertEquals('Noso Legacy Block Hash is 4E8A4743AA6083F3833DDA1216FE3717',
+    '4E8A4743AA6083F3833DDA1216FE3717',
+    ABlock.Hash
+  );
   AssertEquals('Noso Legacy Block TimeStart is 1531896783', 1531896783, ABlock.TimeStart);
   AssertEquals('Noso Legacy Block TimeEnd is 1615132800', 1615132800, ABlock.TimeEnd);
   AssertEquals('Noso Legacy Block TimeTotal is 83236017', 83236017, ABlock.TimeTotal);

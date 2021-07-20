@@ -36,6 +36,9 @@ type
       const AStream: TStream;
       const ACount: Integer
     ): Int64;
+    function SaveToStream(
+      const AStream: TStream
+    ): Int64;
 
     property Count: Integer
       read GetCount;
@@ -127,6 +130,23 @@ begin
     bytesRead:= transaction.LoadFromStream(AStream);
     Inc(Result, bytesRead);
     FTransactions.Add(transaction);
+  end;
+end;
+
+function TLegacyTransactions.SaveToStream(
+  const AStream: TStream
+): Int64;
+var
+  index: Integer = 0;
+  transaction: TLegacyTransaction = nil;
+  bytesWritten: Int64 = 0;
+begin
+  Result:= 0;
+  for index:= 0 to Pred(FTransactions.Count) do
+  begin
+    transaction:= FTransactions.Items[index] as TLegacyTransaction;
+    bytesWritten:= transaction.SaveToStream(AStream);
+    Inc(Result, bytesWritten);
   end;
 end;
 
