@@ -13,6 +13,8 @@ uses
 , TestNosoDataLegacyBlock
 , TestNosoDataLegacyTransactions
 , TestNosoDataLegacyTransaction
+, TestNosoDataLegacyWallet
+, TestNosoDataLegacyAddress
 ;
 
 type

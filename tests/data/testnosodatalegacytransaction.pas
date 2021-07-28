@@ -10,7 +10,7 @@ uses
 , fpcunit
 //, testutils
 , testregistry
-, Noso.Data.Legacy.Block
+//, Noso.Data.Legacy.Block
 , Noso.Data.Legacy.Transaction
 ;
 
@@ -29,13 +29,13 @@ type
 
 implementation
 
-const
-  cTestDataFolder =
-    '..'+DirectorySeparator+
-    'tests'+DirectorySeparator+
-    'test-data'+DirectorySeparator+
-    'NOSODATA'+DirectorySeparator+
-    'BLOCKS'+DirectorySeparator;
+//const
+//  cTestDataFolder =
+//    '..'+DirectorySeparator+
+//    'tests'+DirectorySeparator+
+//    'test-data'+DirectorySeparator+
+//    'NOSODATA'+DirectorySeparator+
+//    'BLOCKS'+DirectorySeparator;
 
 { TTestNosoDataLegacyTransaction }
 

@@ -47,8 +47,8 @@ type
     TrfrID     : String[64];
   end;
 
-{ TWalletData }
-  TWalletData = packed record
+{ TLegacyWalletData }
+  TLegacyWalletData = packed record
     Hash       : String[40]; // El hash publico o direccion
     Custom     : String[40]; // En caso de que la direccion este personalizada
     PublicKey  : String[255]; // clave publica

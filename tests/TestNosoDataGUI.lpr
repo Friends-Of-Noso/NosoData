@@ -14,6 +14,8 @@ uses
 , TestNosoDataLegacyBlock
 , TestNosoDataLegacyTransactions
 , TestNosoDataLegacyTransaction
+, TestNosoDataLegacyWallet
+, TestNosoDataLegacyAddress
 ;
 
 {$R *.res}
