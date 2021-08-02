@@ -15,6 +15,7 @@ uses
 , TestNosoDataLegacyTransactions
 , TestNosoDataLegacyTransaction
 , TestNosoDataLegacyWallet
+, TestNosoDataLegacyAddresses
 , TestNosoDataLegacyAddress
 ;
 

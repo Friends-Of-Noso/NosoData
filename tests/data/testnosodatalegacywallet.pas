@@ -29,21 +29,16 @@ type
 
 implementation
 
-{ TTestNosoDataLegacyWallet }
-
 procedure TTestNosoDataLegacyWallet.CheckFieldsCreate;
 begin
-  AssertEquals('Noso Data Legacy Wallet count is 0', 0, FLegacyWallet.Count);
+  AssertEquals('Noso Legacy Wallet Addresses count is 0', 0, FLegacyWallet.Addresses.Count);
 end;
 
 procedure TTestNosoDataLegacyWallet.TestNosoDataLegacyWalletCreate;
 begin
   FLegacyWallet:= TLegacyWallet.Create;
-  try
-    CheckFieldsCreate;
-  finally
-    FLegacyWallet.Free;
-  end;
+  CheckFieldsCreate;
+  FLegacyWallet.Free;
 end;
 
 initialization

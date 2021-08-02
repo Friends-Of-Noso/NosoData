@@ -103,7 +103,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="21">
+    <Units Count="23">
       <Unit0>
         <Filename Value="TestNosoDataGUI.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -189,14 +189,14 @@
         <UnitName Value="Noso.Data.Legacy.Blocks"/>
       </Unit16>
       <Unit17>
-        <Filename Value="data/testnosodatalegacywallet.pas"/>
+        <Filename Value="data/testnosodatalegacyaddresses.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataLegacyWallet"/>
+        <UnitName Value="TestNosoDataLegacyAddresses"/>
       </Unit17>
       <Unit18>
-        <Filename Value="../src/data/legacy/noso.data.legacy.wallet.pas"/>
+        <Filename Value="../src/data/legacy/noso.data.legacy.addresses.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="Noso.Data.Legacy.Wallet"/>
+        <UnitName Value="Noso.Data.Legacy.Addresses"/>
       </Unit18>
       <Unit19>
         <Filename Value="data/testnosodatalegacyaddress.pas"/>
@@ -208,6 +208,16 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Noso.Data.Legacy.Address"/>
       </Unit20>
+      <Unit21>
+        <Filename Value="data/testnosodatalegacywallet.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyWallet"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="../src/data/legacy/noso.data.legacy.wallet.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Wallet"/>
+      </Unit22>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
