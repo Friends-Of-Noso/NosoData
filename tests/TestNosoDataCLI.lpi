@@ -184,6 +184,7 @@
       <Unit18>
         <Filename Value="../src/data/legacy/noso.data.legacy.wallet.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Wallet"/>
       </Unit18>
       <Unit19>
         <Filename Value="data/testnosodatalegacyaddress.pas"/>
