@@ -8,4 +8,4 @@
 [![Latest Release](https://img.shields.io/github/v/release/gcarreno/NosoData?label=latest%20release)](https://github.com/gcarreno/NosoData/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/gcarreno/NosoData/total)](https://github.com/gcarreno/NosoData/releases)
 
-This is the repository with the basic data blocks for the Noso re-write
+This is the repository with the basic data blocks for the Noso re-write in Object Pascal.
