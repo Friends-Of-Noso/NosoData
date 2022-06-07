@@ -12,6 +12,11 @@ uses
 , Noso.Data.Legacy.Transaction
 ;
 
+const
+  cBlockWithPoS : Int64 = 8425;
+  cBlockWithMN  : Int64 = 48010;
+  cLegacyBlockFilenameFormat  = '%d.blk';
+
 resourcestring
   rsECannotFindFolder = 'Cannot find folder %s';
   rsECannotFindFile = 'Cannot find file %s';
@@ -129,11 +134,6 @@ uses
   MD5
 ;
 
-const
-  cBlockWithPoS : Int64 = 8425;
-  cBlockWithMN  : Int64 = 48010;
-  cBlockFilenameFormat  = '%d.blk';
-
 { TLegacyBlock }
 
 procedure TLegacyBlock.SetHASH;
@@ -164,7 +164,7 @@ begin
     raise ECannotFindFolder.Create(Format(rsECannotFindFolder, [AFolder]));
   end;
   filePath:= IncludeTrailingPathDelimiter(AFolder) +
-    Format(cBlockFilenameFormat, [ANumber]);
+    Format(cLegacyBlockFilenameFormat, [ANumber]);
   LoadFromFile(filePath);
 end;
 

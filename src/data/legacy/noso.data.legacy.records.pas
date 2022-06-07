@@ -31,7 +31,7 @@ type
 
 { TLegacyOrderData }
   TLegacyOrderData = packed record
-    Block      : integer;
+    Block      : integer; //  MAXINT = 2'147'483'647
     OrderID    : String[64];
     OrderLines : Integer;
     OrderType  : String[6];
@@ -58,6 +58,15 @@ type
     Score      : Int64; // estado del registro de la direccion.
     LastOP     : Int64;// tiempo de la ultima operacion en UnixTime.
   end;
+
+{ TLegacySummaryData }
+  TLegacySummaryData = Packed Record
+     Hash    : String[40]; // El hash publico o direccion
+     Custom  : String[40]; // En caso de que la direccion este personalizada
+     Balance : int64; // el ultimo saldo conocido de la direccion
+     Score   : int64; // estado del registro de la direccion.
+     LastOP  : int64;// tiempo de la ultima operacion en UnixTime.
+     end;
 
 { TLegacyMyTrxData }
   TLegacyMyTrxData = packed record

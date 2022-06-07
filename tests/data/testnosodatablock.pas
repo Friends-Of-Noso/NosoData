@@ -10,6 +10,7 @@ uses
 , fpcunit
 //, testutils
 , testregistry
+, Noso.Data.Legacy.Block
 , Noso.Data.Block
 ;
 
@@ -20,15 +21,21 @@ type
     FBlock: TBlock;
 
     procedure CheckFieldsCreate;
+    procedure CheckFieldsInOut(
+      const ALegacyBlockIn,
+      ALegacyBlockOut: TLegacyBlock
+    );
   protected
   public
   published
     procedure TestNosoDataBlockCreate;
+    procedure TestNosoDataBlockCreateFromLegacyBlock;
     procedure TestNosoDataBlockCreateFromJSON;
     procedure TestNosoDataBlockCreateFromJSONData;
     procedure TestNosoDataBlockCreateFromJSONObject;
     procedure TestNosoDataBlockCreateFromStream;
 
+    procedure TestNosoDataBlockAsLegacy;
     procedure TestNosoDataBlockAsJSON;
     procedure TestNosoDataBlockAsJSONData;
     procedure TestNosoDataBlockAsJSONObject;
@@ -81,6 +88,30 @@ begin
   AssertEquals('Block '+cjReward+' is 0', 0, FBlock.Reward);
 end;
 
+procedure TTestNosoDataBlock.CheckFieldsInOut(
+  const ALegacyBlockIn,
+  ALegacyBlockOut: TLegacyBlock
+);
+begin
+  AssertEquals('Block '+cjNumber+' is -1', ALegacyBlockIn.Number, ALegacyBlockOut.Number);
+  AssertEquals('Block '+cjTimeStart+' is -1', ALegacyBlockIn.TimeStart, ALegacyBlockOut.TimeStart);
+  AssertEquals('Block '+cjTimeEnd+' is -1', ALegacyBlockIn.TimeEnd, ALegacyBlockOut.TimeEnd);
+  AssertEquals('Block '+cjTimeTotal+' is -1', ALegacyBlockIn.TimeTotal, ALegacyBlockOut.TimeTotal);
+  AssertEquals('Block '+cjTimeLast20+' is -1', ALegacyBlockIn.TimeLast20, ALegacyBlockOut.TimeLast20);
+  { TODO 100 -ogcarreno : How to test for operations }
+  //AssertNotNull('Block '+cjOperations+' is not null', ALegacyBlockOut.Operations);
+  { TODO 100 -ogcarreno : How to test for operations count }
+  //AssertEquals('Block '+cjOperations+' count is 0', ALegacyBlockIn.Count, ALegacyBlockOut.Count);
+  AssertEquals('Block '+cjDifficulty+' is -1', ALegacyBlockIn.Difficulty, ALegacyBlockOut.Difficulty);
+  AssertEquals('Block '+cjTargetHash+' is empty', ALegacyBlockIn.TargetHash, ALegacyBlockOut.TargetHash);
+  AssertEquals('Block '+cjSolution+' is empty', ALegacyBlockIn.Solution, ALegacyBlockOut.Solution);
+  AssertEquals('Block '+cjLastBlockHash+' is empty', ALegacyBlockIn.LastBlockHash, ALegacyBlockOut.LastBlockHash);
+  AssertEquals('Block '+cjNextBlockDifficulty+' is -1', ALegacyBlockIn.NextBlockDifficulty, ALegacyBlockOut.NextBlockDifficulty);
+  AssertEquals('Block '+cjMiner+' is empty', ALegacyBlockIn.Miner, ALegacyBlockOut.Miner);
+  AssertEquals('Block '+cjFee+' is 0', ALegacyBlockIn.Fee, ALegacyBlockOut.Fee);
+  AssertEquals('Block '+cjReward+' is 0', ALegacyBlockIn.Reward, ALegacyBlockOut.Reward);
+end;
+
 procedure TTestNosoDataBlock.TestNosoDataBlockCreate;
 begin
   FBlock:= TBlock.Create;
@@ -88,6 +119,23 @@ begin
     CheckFieldsCreate;
   finally
     FBlock.Free;
+  end;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockCreateFromLegacyBlock;
+var
+  legacyBlock: TLegacyBlock;
+begin
+  legacyBlock:= TLegacyBlock.Create;
+  try
+    FBlock:= TBlock.Create(legacyBlock);
+    try
+      CheckFieldsCreate;
+    finally
+      FBlock.Free;
+    end;
+  finally
+    legacyBlock.Free;
   end;
 end;
 
@@ -140,6 +188,25 @@ begin
     CheckFieldsCreate;
   finally
     FBlock.Free;
+  end;
+end;
+
+procedure TTestNosoDataBlock.TestNosoDataBlockAsLegacy;
+var
+  legacyBlockIn, legacyBlockOut: TLegacyBlock;
+begin
+  legacyBlockIn:= TLegacyBlock.Create;
+  try
+    FBlock:= TBlock.Create(legacyBlockIn);
+    try
+      legacyBlockOut:= FBlock.AsLegacy;
+      CheckFieldsInOut(legacyBlockIn, legacyBlockOut);
+    finally
+      legacyBlockOut.Free;
+      FBlock.Free;
+    end;
+  finally
+    legacyBlockIn.Free;
   end;
 end;
 

@@ -16,7 +16,7 @@ type
 
   TLegacyTransaction = class(TObject)
   private
-    FBlock      : Integer;
+    FBlock      : Integer; // Will go boom at MAXINT = 2'147'483'647
     FOrderID    : TString64;
     FOrderLines : Integer;
     FOrderType  : TString6;

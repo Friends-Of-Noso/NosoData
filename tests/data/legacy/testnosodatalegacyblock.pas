@@ -303,7 +303,7 @@ begin
   AssertEquals('Noso Legacy Block TimeTotal is 599', 599, FLegacyBlock.TimeTotal);
   AssertEquals('Noso Legacy Block TimeLast20 is 0', 0, FLegacyBlock.TimeLast20);
   AssertEquals('Noso Legacy Block Transactions count is 0', 0, FLegacyBlock.Transactions.Count);
-  //CheckFieldsBlockTenKayTransactionZero(FLegacyBlock.Transactions[0]);
+  //CheckFieldsBlockFiftyKayTransactionZero(FLegacyBlock.Transactions[0]);
   AssertEquals('Noso Legacy Block Difficulty is 0', 0, FLegacyBlock.Difficulty);
   AssertEquals('Noso Legacy Block TargetHash is 310680D992D4E9B7DBC19F75DE769262', '310680D992D4E9B7DBC19F75DE769262', FLegacyBlock.TargetHash);
   AssertEquals('Noso Legacy Block Solution is !%!1!!!!!106855750 0000000004B1D7802442092303319536 3000000390 999999905 999999705',

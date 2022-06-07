@@ -9,7 +9,10 @@ uses
 , SysUtils
 , fpjson
 , jsonparser
+, Noso.Data.Legacy.Block
+, Noso.Data.Legacy.Transaction
 , Noso.Data.Operations
+, Noso.Data.Operation
 ;
 
 const
@@ -43,7 +46,6 @@ type
     FTimeEnd: Int64;
     FTimeTotal: Integer;
     FTimeLast20: Integer;
-    FOperations: TOperations;
     FDifficulty: Integer;
     FTargetHash: String;
     FSolution: String;
@@ -52,13 +54,19 @@ type
     FMiner: String;
     FFee: int64;
     FReward: Int64;
+    FOperations: TOperations;
+    { TODO 99 -ogcarreno : Implement PoS & MN Rewards }
 
     FCompressedJSON: Boolean;
+
+    procedure setFromLegacy(const ALegacyBlock: TLegacyBlock);
 
     procedure setFromJSON(const AJSON: TJSONStringType);
     procedure setFromJSONData(const AJSONData: TJSONData);
     procedure setFromJSONObject(const AJSONObject: TJSONObject);
     procedure setFromStream(const AStream: TStream);
+
+    function getAsLegacy: TLegacyBlock;
 
     function getAsJSON: TJSONStringType;
     function getAsJSONData: TJSONData;
@@ -68,6 +76,7 @@ type
   protected
   public
     constructor Create; overload;
+    constructor Create(const ALegacyBlock: TLegacyBlock); overload;
     constructor Create(const AJSON: TJSONStringType); overload;
     constructor Create(const AJSONData: TJSONData); overload;
     constructor Create(const AJSONObject: TJSONObject); overload;
@@ -95,8 +104,6 @@ type
     property TimeLast20: Integer
       read FTimeLast20
       write FTimeLast20;
-    property Operations: TOperations
-      read FOperations;
     property Difficulty: Integer
       read FDifficulty
       write FDifficulty;
@@ -121,10 +128,16 @@ type
     property Reward: Int64
       read FReward
       write FReward;
+    property Operations: TOperations
+      read FOperations;
+    { TODO 99 -ogcarreno : Implement PoS & MN Rewards Properties }
 
     property CompressedJSON: Boolean
       read FCompressedJSON
       write FCompressedJSON;
+
+    property AsLegacy: TLegacyBlock
+      read getAsLegacy;
 
     property AsJSON: TJSONStringType
       read getAsJSON;
@@ -148,6 +161,37 @@ function TBlock.FormatJSON(
 ): TJSONStringType;
 begin
   Result:= getAsJSONObject.FormatJSON(AOptions, AIndentsize);
+end;
+
+procedure TBlock.setFromLegacy(const ALegacyBlock: TLegacyBlock);
+var
+  legacyTransaction: TLegacyTransaction;
+begin
+  FNumber:= ALegacyBlock.Number;
+  FTimeStart:= ALegacyBlock.TimeStart;
+  FTimeEnd:= ALegacyBlock.TimeEnd;
+  FTimeTotal:= ALegacyBlock.TimeTotal;
+  FTimeLast20:= ALegacyBlock.TimeLast20;
+  FDifficulty:= ALegacyBlock.Difficulty;
+  FTargetHash:= ALegacyBlock.TargetHash;
+  FSolution:= ALegacyBlock.Solution;
+  FLastBlockHash:= ALegacyBlock.LastBlockHash;
+  FNextBlockDifficulty:= ALegacyBlock.NextBlockDifficulty;
+  FMiner:= ALegacyBlock.Miner;
+  FFee:= ALegacyBlock.Fee;
+  FReward:= ALegacyBlock.Reward;
+  for legacyTransaction in ALegacyBlock.Transactions do
+  begin
+    FOperations.Add(TOperation.Create(legacyTransaction));
+  end;
+  if FNumber >= cBlockWithPoS then
+  begin
+    { TODO 99 -ogcarreno : Implement PoS Rewards }
+  end;
+  if FNumber >= cBlockWithMN then
+  begin
+    { TODO 99 -ogcarreno : Implement MN Rewards }
+  end;
 end;
 
 procedure TBlock.setFromJSON(const AJSON: TJSONStringType);
@@ -215,6 +259,41 @@ begin
   end;
 end;
 
+function TBlock.getAsLegacy: TLegacyBlock;
+var
+  operation: TOperation;
+begin
+  Result:= TLegacyBlock.Create;
+  Result.Number:= FNumber;
+  Result.TimeStart:= FTimeStart;
+  Result.TimeEnd:= FTimeEnd;
+  Result.TimeTotal:= FTimeTotal;
+  Result.TimeLast20:= FTimeLast20;
+  Result.Difficulty:= FDifficulty;
+  Result.TargetHash:= FTargetHash;
+  Result.Solution:= FSolution;
+  Result.LastBlockHash:= FLastBlockHash;
+  Result.NextBlockDifficulty:= FNextBlockDifficulty;
+  Result.Miner:= FMiner;
+  Result.Fee:= FFee;
+  Result.Reward:= FReward;
+  for operation in FOperations do
+  begin
+    if operation.OperationType in [otTransfer, otCustom] then
+    begin
+      Result.Transactions.Add(operation.AsLegacy);
+    end;
+  end;
+  if Result.Number >= cBlockWithPoS then
+  begin
+    { TODO 99 -ogcarreno : Implement PoS Rewards }
+  end;
+  if Result.Number >= cBlockWithMN then
+  begin
+    { TODO 99 -ogcarreno : Implement MN Rewards }
+  end;
+end;
+
 function TBlock.getAsJSON: TJSONStringType;
 var
   jObject: TJSONObject = nil;
@@ -275,6 +354,12 @@ begin
   FFee:= 0;
   FReward:= 0;
   FCompressedJSON:= True;
+end;
+
+constructor TBlock.Create(const ALegacyBlock: TLegacyBlock);
+begin
+  Create;
+  setFromLegacy(ALegacyBlock);
 end;
 
 constructor TBlock.Create(const AJSON: TJSONStringType);

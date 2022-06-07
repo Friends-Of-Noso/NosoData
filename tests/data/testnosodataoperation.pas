@@ -10,6 +10,7 @@ uses
 , fpcunit
 //, testutils
 , testregistry
+, Noso.Data.Legacy.Transaction
 , Noso.Data.Operation
 ;
 
@@ -26,6 +27,8 @@ type
   public
   published
     procedure TestNosoDataOperationCreate;
+    procedure TestNosoDataOperationCreateFromLegacyTransactionTransfer;
+    procedure TestNosoDataOperationCreateFromLegacyTransactionCustom;
     procedure TestNosoDataOperationCreateFromJSONOperationTransfer;
     procedure TestNosoDataOperationCreateFromJSONOperationCustom;
     procedure TestNosoDataOperationCreateFromJSONDataOperationTransfer;
@@ -129,6 +132,44 @@ begin
     CheckFieldsCreate;
   finally
     FOperation.Free;
+  end;
+end;
+
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromLegacyTransactionTransfer;
+var
+  legacyTransaction: TLegacyTransaction;
+begin
+  legacyTransaction:= TLegacyTransaction.Create;
+  legacyTransaction.OrderType:= 'TRFR';
+  legacyTransaction.Block:= 1;
+  try
+    FOperation:= TOperation.Create(legacyTransaction);
+    try
+      CheckFieldsWithTransfer;
+    finally
+      FOperation.Free;
+    end;
+  finally
+    legacyTransaction.Free;
+  end;
+end;
+
+procedure TTestNosoDataOperation.TestNosoDataOperationCreateFromLegacyTransactionCustom;
+var
+  legacyTransaction: TLegacyTransaction;
+begin
+  legacyTransaction:= TLegacyTransaction.Create;
+  legacyTransaction.OrderType:= 'CUSTOM';
+  legacyTransaction.Block:= 1;
+  try
+    FOperation:= TOperation.Create(legacyTransaction);
+    try
+      CheckFieldsWithCustom;
+    finally
+      FOperation.Free;
+    end;
+  finally
+    legacyTransaction.Free;
   end;
 end;
 

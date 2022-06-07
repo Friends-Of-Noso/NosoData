@@ -9,6 +9,7 @@ uses
 , SysUtils
 , fpjson
 , jsonparser
+, Noso.Data.Legacy.Transaction
 ;
 
 const
@@ -63,10 +64,14 @@ type
 
     FCompressedJSON: Boolean;
 
+    procedure setFromLegacy(const ALegacyTransaction: TLegacyTransaction);
+
     procedure setFromJSON(const AJSON: TJSONStringType);
     procedure setFromJSONData(const AJSONData: TJSONData);
     procedure setFromJSONObject(const AJSONObject: TJSONObject);
     procedure setFromStream(const AStream: TStream);
+
+    function getAsLegacy: TLegacyTransaction;
 
     function getAsJSON: TJSONStringType;
     function getAsJSONData: TJSONData;
@@ -75,6 +80,7 @@ type
   protected
   public
     constructor Create; overload;
+    constructor Create(const ALegacyTransaction: TLegacyTransaction); overload;
     constructor Create(const AJSON: TJSONStringType); overload;
     constructor Create(const AJSONData: TJSONData); overload;
     constructor Create(const AJSONObject: TJSONObject); overload;
@@ -125,6 +131,9 @@ type
       read FCompressedJSON
       write FCompressedJSON;
 
+    property AsLegacy: TLegacyTransaction
+      read getAsLegacy;
+
     property AsJSON: TJSONStringType
       read getAsJSON;
     property AsJSONData: TJSONData
@@ -143,6 +152,27 @@ uses
 ;
 
 { TOperation }
+
+procedure TOperation.setFromLegacy(
+  const ALegacyTransaction: TLegacyTransaction
+);
+begin
+  // These are the 2 only ones at the moment, I think.
+  if ALegacyTransaction.OrderType = 'TRFR' then FOperationType:= otTransfer;
+  if ALegacyTransaction.OrderType = 'CUSTOM' then FOperationType:= otCustom;
+  FID:= ALegacyTransaction.OrderID;
+  { TODO 99 -ogcarreno : Sort out the 2nd level of transactions }
+  // Deal with ALegacyTransaction.TrfrID being the 2nd level
+  FBlock:= ALegacyTransaction.Block; // Will go boom at MAXINT = 2'147'483'647
+  FReference:= ALegacyTransaction.Reference;
+  FSenderPublicKey:= ALegacyTransaction.Sender;
+  FSenderAddress:= ALegacyTransaction.Address;
+  FReceiverAddress:= ALegacyTransaction.Receiver;
+  FAmount:= ALegacyTransaction.AmountTrf;
+  FFee:= ALegacyTransaction.AmountFee;
+  FSignature:= ALegacyTransaction.Signature;
+  FCreated:= UnixToDateTime(ALegacyTransaction.TimeStamp);
+end;
 
 procedure TOperation.setFromJSON(const AJSON: TJSONStringType);
 var
@@ -191,6 +221,28 @@ begin
   finally
     jData.Free;
   end;
+end;
+
+function TOperation.getAsLegacy: TLegacyTransaction;
+begin
+  Result:= TLegacyTransaction.Create;
+  // These are the 2 only ones at the moment, I think.
+  case FOperationType of
+    otTransfer: Result.OrderType:= 'TRFR';
+    otCustom: Result.OrderType:= 'CUSTOM';
+  end;
+  Result.OrderID:= FID;
+  { TODO 99 -ogcarreno : Sort out the 2nd level of transactions }
+  // Deal with ALegacyTransaction.TrfrID being the 2nd level
+  Result.Block:= FBlock; // Will go boom at MAXINT = 2'147'483'647
+  Result.Reference:= FReference;
+  Result.Sender:= FSenderPublicKey;
+  Result.Address:= FSenderAddress;
+  Result.Receiver:= FReceiverAddress;
+  Result.AmountTrf:= FAmount;
+  Result.AmountFee:= FFee;
+  Result.Signature:= FSignature;
+  Result.TimeStamp:= DateTimeToUnix(FCreated);
 end;
 
 function TOperation.getAsJSON: TJSONStringType;
@@ -253,6 +305,12 @@ begin
   FFee:= 0;
   FSignature:= '';
   FCreated:= UnixToDateTime(-1);
+end;
+
+constructor TOperation.Create(const ALegacyTransaction: TLegacyTransaction);
+begin
+  Create;
+  setFromLegacy(ALegacyTransaction);
 end;
 
 constructor TOperation.Create(const AJSON: TJSONStringType);
