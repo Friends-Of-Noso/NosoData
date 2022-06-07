@@ -11,7 +11,8 @@ uses
   Noso.Data.Block, Noso.Data.Blocks, Noso.Data.Operation, 
   Noso.Data.Operations, Noso.Data.Legacy.Block, Noso.Data.Legacy.Transaction, 
   Noso.Data.Legacy.Transactions, Noso.Data.Legacy.Types, 
-  Noso.Data.Legacy.Blocks;
+  Noso.Data.Legacy.Blocks, Noso.Data.Legacy.Address, 
+  Noso.Data.Legacy.Addresses, Noso.Data.Legacy.Wallet;
 
 implementation
 

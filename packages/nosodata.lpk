@@ -13,7 +13,7 @@
     </CompilerOptions>
     <Description Value="Provides container objects to access NosoCoin data"/>
     <Version Minor="1" Build="1"/>
-    <Files Count="9">
+    <Files Count="12">
       <Item1>
         <Filename Value="../src/data/noso.data.block.pas"/>
         <UnitName Value="Noso.Data.Block"/>
@@ -50,6 +50,18 @@
         <Filename Value="../src/data/legacy/noso.data.legacy.blocks.pas"/>
         <UnitName Value="Noso.Data.Legacy.Blocks"/>
       </Item9>
+      <Item10>
+        <Filename Value="../src/data/legacy/noso.data.legacy.address.pas"/>
+        <UnitName Value="Noso.Data.Legacy.Address"/>
+      </Item10>
+      <Item11>
+        <Filename Value="../src/data/legacy/noso.data.legacy.addresses.pas"/>
+        <UnitName Value="Noso.Data.Legacy.Addresses"/>
+      </Item11>
+      <Item12>
+        <Filename Value="../src/data/legacy/noso.data.legacy.wallet.pas"/>
+        <UnitName Value="Noso.Data.Legacy.Wallet"/>
+      </Item12>
     </Files>
     <CompatibilityMode Value="True"/>
     <i18n>
