@@ -24,7 +24,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="data;../src/data;../src/data/legacy"/>
+            <OtherUnitFiles Value="data;data/legacy;../src/data;../src/data/legacy"/>
             <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -59,7 +59,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="data;../src/data;../src/data/legacy"/>
+            <OtherUnitFiles Value="data;data/legacy;../src/data;../src/data/legacy"/>
             <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -105,61 +105,61 @@
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="data/testnosodataoperation.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataOperation"/>
-      </Unit1>
-      <Unit2>
-        <Filename Value="data/testnosodataoperations.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataOperations"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="../src/data/noso.data.operation.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="../src/data/noso.data.operations.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="data/testnosodatablock.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataBlock"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="../src/data/noso.data.block.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="data/testnosodatalegacyblock.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataLegacyBlock"/>
-      </Unit7>
-      <Unit8>
         <Filename Value="data/testnosodatablocks.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataBlocks"/>
-      </Unit8>
-      <Unit9>
+      </Unit1>
+      <Unit2>
         <Filename Value="../src/data/noso.data.blocks.pas"/>
         <IsPartOfProject Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="data/testnosodatablock.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataBlock"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="../src/data/noso.data.block.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="data/testnosodataoperations.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataOperations"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="../src/data/noso.data.operations.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="data/testnosodataoperation.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataOperation"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="../src/data/noso.data.operation.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="data/legacy/testnosodatalegacyblocks.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="TestNosoDataLegacyBlocks"/>
       </Unit9>
       <Unit10>
-        <Filename Value="../src/data/legacy/noso.data.legacy.block.pas"/>
+        <Filename Value="../src/data/legacy/noso.data.legacy.blocks.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit10>
       <Unit11>
-        <Filename Value="data/testnosodatalegacytransaction.pas"/>
+        <Filename Value="data/legacy/testnosodatalegacyblock.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataLegacyTransaction"/>
+        <UnitName Value="TestNosoDataLegacyBlock"/>
       </Unit11>
       <Unit12>
-        <Filename Value="../src/data/legacy/noso.data.legacy.transaction.pas"/>
+        <Filename Value="../src/data/legacy/noso.data.legacy.block.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit12>
       <Unit13>
-        <Filename Value="data/testnosodatalegacytransactions.pas"/>
+        <Filename Value="data/legacy/testnosodatalegacytransactions.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataLegacyTransactions"/>
       </Unit13>
@@ -168,16 +168,16 @@
         <IsPartOfProject Value="True"/>
       </Unit14>
       <Unit15>
-        <Filename Value="data/testnosodatalegacyblocks.pas"/>
+        <Filename Value="data/legacy/testnosodatalegacytransaction.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataLegacyBlocks"/>
+        <UnitName Value="TestNosoDataLegacyTransaction"/>
       </Unit15>
       <Unit16>
-        <Filename Value="../src/data/legacy/noso.data.legacy.blocks.pas"/>
+        <Filename Value="../src/data/legacy/noso.data.legacy.transaction.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit16>
       <Unit17>
-        <Filename Value="data/testnosodatalegacywallet.pas"/>
+        <Filename Value="data/legacy/testnosodatalegacywallet.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestNosoDataLegacyWallet"/>
       </Unit17>
@@ -187,21 +187,21 @@
         <UnitName Value="Noso.Data.Legacy.Wallet"/>
       </Unit18>
       <Unit19>
-        <Filename Value="data/testnosodatalegacyaddress.pas"/>
+        <Filename Value="data/legacy/testnosodatalegacyaddresses.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataLegacyAddress"/>
+        <UnitName Value="TestNosoDataLegacyAddresses"/>
       </Unit19>
       <Unit20>
-        <Filename Value="../src/data/legacy/noso.data.legacy.address.pas"/>
+        <Filename Value="../src/data/legacy/noso.data.legacy.addresses.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit20>
       <Unit21>
-        <Filename Value="data/testnosodatalegacyaddresses.pas"/>
+        <Filename Value="data/legacy/testnosodatalegacyaddress.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="TestNosoDataLegacyAddresses"/>
+        <UnitName Value="TestNosoDataLegacyAddress"/>
       </Unit21>
       <Unit22>
-        <Filename Value="../src/data/legacy/noso.data.legacy.addresses.pas"/>
+        <Filename Value="../src/data/legacy/noso.data.legacy.address.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit22>
     </Units>
@@ -213,7 +213,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="data;../src/data;../src/data/legacy"/>
+      <OtherUnitFiles Value="data;data/legacy;../src/data;../src/data/legacy"/>
       <UnitOutputDirectory Value="../bin/lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
   </CompilerOptions>
