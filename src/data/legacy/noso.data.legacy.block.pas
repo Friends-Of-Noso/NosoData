@@ -42,10 +42,12 @@ type
     FMinerAddress: TString40;
     FFee: Int64;
     FReward: Int64;
-    FPoSReward: Int64;
-    FPoSAddresses: TArrayOfString32;
+    FProofofStakeReward: Int64;
+    FProofofStakeAddresses: TArrayOfString32;
+    FMasterNodeReward: Int64;
+    FMasterNodeAddresses: TArrayOfString32;
 
-    function GetHASH: String;
+    procedure SetHASH;
   protected
   public
     constructor Create; overload;
@@ -69,7 +71,7 @@ type
       read FNumber
       write FNumber;
     property Hash: TString32
-      read FHash;
+      read FHASH;
     property TimeStart: Int64
       read FTimeStart
       write FTimeStart;
@@ -109,10 +111,15 @@ type
       read FReward
       write FReward;
     property PoSReward: Int64
-      read FPoSReward
-      write FPoSReward;
+      read FProofofStakeReward
+      write FProofofStakeReward;
     property PoSAddresses: TArrayOfString32
-      read FPoSAddresses;
+      read FProofofStakeAddresses;
+    property MNReward: Int64
+      read FMasterNodeReward
+      write FMasterNodeReward;
+    property MNAddresses: TArrayOfString32
+      read FMasterNodeAddresses;
   published
   end;
 
@@ -124,21 +131,24 @@ uses
 
 const
   cBlockWithPoS : Int64 = 8425;
-  cBlockFilenameFormat = '%d.blk';
+  cBlockWithMN  : Int64 = 48010;
+  cBlockFilenameFormat  = '%d.blk';
 
 { TLegacyBlock }
 
-function TLegacyBlock.GetHASH: String;
+procedure TLegacyBlock.SetHASH;
 var
   sBlock: TBytesStream;
 begin
-  Result:= EmptyStr;
-  sBlock:= TBytesStream.Create;
-  try
-    SaveToStream(sBlock);
-    Result:= UpperCase(MD5Print(MD5Buffer(sBlock.Bytes[0], sBlock.Size))) ;
-  finally
-    sBlock.Free;
+  if FHash = EmptyStr then
+  begin
+    sBlock:= TBytesStream.Create;
+    try
+      SaveToStream(sBlock);
+      FHash:= UpperCase(MD5Print(MD5Buffer(sBlock.Bytes[0], sBlock.Size)));
+    finally
+      sBlock.Free;
+    end;
   end;
 end;
 
@@ -178,6 +188,7 @@ function TLegacyBlock.LoadFromStream(const AStream: TStream): Int64;
 var
   bytesRead: Int64 = 0;
   posAddressCount: Integer = 0;
+  mnAddressCount: Integer = 0;
   index: Integer = 0;
 begin
   Result:= 0;
@@ -209,25 +220,41 @@ begin
   Inc(Result, bytesRead);
   bytesRead:= AStream.Read(FReward, SizeOf(FReward));
   Inc(Result, bytesRead);
+  // Load Transactions
   if FTransactionsCount > 0 then
   begin
     bytesRead:= FTransactions.LoadFromStream(AStream, FTransactionsCount);
     Inc(Result, bytesRead);
   end;
+  // Load PoS rewards
   if FNumber >= cBlockWithPoS then
   begin
-    bytesRead:= AStream.Read(FPoSReward, SizeOf(FPoSReward));
+    bytesRead:= AStream.Read(FProofofStakeReward, SizeOf(FProofofStakeReward));
     Inc(Result, bytesRead);
     bytesRead:= AStream.Read(posAddressCount, SizeOf(posAddressCount));
     Inc(Result, bytesRead);
-    SetLength(FPoSAddresses, posAddressCount);
+    SetLength(FProofofStakeAddresses, posAddressCount);
     for index:= 0 to Pred(posAddressCount) do
     begin
-      bytesRead:= AStream.Read(FPoSAddresses[index], SizeOf(TString32));
+      bytesRead:= AStream.Read(FProofofStakeAddresses[index], SizeOf(TString32));
       Inc(Result, bytesRead);
     end;
   end;
-  FHash:= GetHASH;
+  //Load MN rewards
+  if FNumber >= cBlockWithMN then
+  begin
+    bytesRead:= AStream.Read(FMasterNodeReward, SizeOf(FMasterNodeReward));
+    Inc(Result, bytesRead);
+    bytesRead:= AStream.Read(mnAddressCount, SizeOf(mnAddressCount));
+    Inc(Result, bytesRead);
+    SetLength(FMasterNodeAddresses, mnAddressCount);
+    for index:= 0 to Pred(mnAddressCount) do
+    begin
+      bytesRead:= AStream.Read(FMasterNodeAddresses[index], SizeOf(TString32));
+      Inc(Result, bytesRead);
+    end;
+  end;
+  SetHASH;
 end;
 
 procedure TLegacyBlock.SaveToFile(const AFilePath: String);
@@ -246,6 +273,7 @@ function TLegacyBlock.SaveToStream(const AStream: TStream): Int64;
 var
   bytesWritten: Int64 = 0;
   posAddressCount: Integer = 0;
+  mnAddressCount: Integer = 0;
   index: Integer = 0;
 begin
   Result:= 0;
@@ -278,21 +306,37 @@ begin
   Inc(Result, bytesWritten);
   bytesWritten:= AStream.Write(FReward, SizeOf(FReward));
   Inc(Result, bytesWritten);
+  // Save Transactions
   if FTransactionsCount > 0 then
   begin
     bytesWritten:= FTransactions.SaveToStream(AStream);
     Inc(Result, bytesWritten);
   end;
+  // Save PoS rewards
   if FNumber >= cBlockWithPoS then
   begin
-    bytesWritten:= AStream.Write(FPoSReward, SizeOf(FPoSReward));
+    bytesWritten:= AStream.Write(FProofofStakeReward, SizeOf(FProofofStakeReward));
     Inc(Result, bytesWritten);
-    posAddressCount:= Length(FPoSAddresses);
+    posAddressCount:= Length(FProofofStakeAddresses);
     bytesWritten:= AStream.Write(posAddressCount, SizeOf(posAddressCount));
     Inc(Result, bytesWritten);
     for index:= 0 to Pred(posAddressCount) do
     begin
-      bytesWritten:= AStream.Write(FPoSAddresses[index], SizeOf(TString32));
+      bytesWritten:= AStream.Write(FProofofStakeAddresses[index], SizeOf(TString32));
+      Inc(Result, bytesWritten);
+    end;
+  end;
+  // Save MN rewards
+  if FNumber >= cBlockWithMN then
+  begin
+    bytesWritten:= AStream.Write(FMasterNodeReward, SizeOf(FMasterNodeReward));
+    Inc(Result, bytesWritten);
+    mnAddressCount:= Length(FMasterNodeAddresses);
+    bytesWritten:= AStream.Write(mnAddressCount, SizeOf(mnAddressCount));
+    Inc(Result, bytesWritten);
+    for index:= 0 to Pred(mnAddressCount) do
+    begin
+      bytesWritten:= AStream.Write(FMasterNodeAddresses[index], SizeOf(TString32));
       Inc(Result, bytesWritten);
     end;
   end;
@@ -332,20 +376,21 @@ begin
   FMinerAddress:= EmptyStr;
   FFee:= 0;
   FReward:= 0;
-  FPoSReward:= 0;
-  SetLength(FPoSAddresses, 0);
+  FProofofStakeReward:= 0;
+  SetLength(FProofofStakeAddresses, 0);
+  FMasterNodeReward:= 0;
+  SetLength(FMasterNodeAddresses, 0);
 end;
 
 constructor TLegacyBlock.Create(const AFilename: String);
 begin
   Create;
   LoadFromFile(AFilename);
-  FHash:= GetHASH;
 end;
 
 destructor TLegacyBlock.Destroy;
 begin
-  SetLength(FPoSAddresses, 0);
+  SetLength(FProofofStakeAddresses, 0);
   FTransactions.Free;
   inherited Destroy;
 end;

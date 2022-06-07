@@ -27,6 +27,7 @@ type
     procedure CheckFieldsBlockFiftyTransactionZero(const ATransaction: TLegacyTransaction);
     procedure CheckFieldsBlockTenKay;
     procedure CheckFieldsBlockTenKayTransactionZero(const ATransaction: TLegacyTransaction);
+    procedure CheckFieldsBlockFiftyKay;
   protected
   public
   published
@@ -36,6 +37,7 @@ type
     procedure TestNosoDataLegacyBlockOne;
     procedure TestNosoDataLegacyBlockFifty;
     procedure TestNosoDataLegacyBlockTenKay;
+    procedure TestNosoDataLegacyBlockFiftyKay;
     procedure TestNosoDataLegacyBlockFindTransaction;
   end;
 
@@ -289,6 +291,50 @@ begin
   );
 end;
 
+procedure TTestNosoDataLegacyBlock.CheckFieldsBlockFiftyKay;
+begin
+  AssertEquals('Noso Legacy Block Number is 10000', 50000, FLegacyBlock.Number);
+  AssertEquals('Noso Legacy Block Hash is F40B85E3BC2FB3A96FF09D2ABA472501',
+    'F40B85E3BC2FB3A96FF09D2ABA472501',
+    FLegacyBlock.Hash
+  );
+  AssertEquals('Noso Legacy Block TimeStart is 1648062601', 1648062601, FLegacyBlock.TimeStart);
+  AssertEquals('Noso Legacy Block TimeEnd is 1648063200', 1648063200, FLegacyBlock.TimeEnd);
+  AssertEquals('Noso Legacy Block TimeTotal is 599', 599, FLegacyBlock.TimeTotal);
+  AssertEquals('Noso Legacy Block TimeLast20 is 0', 0, FLegacyBlock.TimeLast20);
+  AssertEquals('Noso Legacy Block Transactions count is 0', 0, FLegacyBlock.Transactions.Count);
+  //CheckFieldsBlockTenKayTransactionZero(FLegacyBlock.Transactions[0]);
+  AssertEquals('Noso Legacy Block Difficulty is 0', 0, FLegacyBlock.Difficulty);
+  AssertEquals('Noso Legacy Block TargetHash is 310680D992D4E9B7DBC19F75DE769262', '310680D992D4E9B7DBC19F75DE769262', FLegacyBlock.TargetHash);
+  AssertEquals('Noso Legacy Block Solution is !%!1!!!!!106855750 0000000004B1D7802442092303319536 3000000390 999999905 999999705',
+    '!%!1!!!!!106855750 0000000004B1D7802442092303319536 3000000390 999999905 999999705',
+    FLegacyBlock.Solution
+  );
+  AssertEquals('Noso Legacy Block LastBlockHash is 310680D992D4E9B7DBC19F75DE769262',
+    '310680D992D4E9B7DBC19F75DE769262',
+    FLegacyBlock.LastBlockHash
+  );
+  AssertEquals('Noso Legacy Block NextBlockDifficulty is 0', 0, FLegacyBlock.NextBlockDifficulty);
+  AssertEquals('Noso Legacy Block Miner is N2pMuKEruKWbkVF2h3T6pMwNuQ8tQEd',
+    'N2pMuKEruKWbkVF2h3T6pMwNuQ8tQEd',
+    FLegacyBlock.Miner
+  );
+  AssertEquals('Noso Legacy Block Fee is 0', 0, FLegacyBlock.Fee);
+  AssertEquals('Noso Legacy Block Reward is 5000000000', 5000000000, FLegacyBlock.Reward);
+  AssertEquals('Noso Legacy Block PoS Reward is 3236245', 3236245, FLegacyBlock.PoSReward);
+  AssertEquals('Noso Legacy Block PoS Address Count is 309', 309, Length(FLegacyBlock.PoSAddresses));
+  AssertEquals('Noso Legacy Block PoS Address 0 is N4PeJyqj8diSXnfhxSQdLpo8ddXTaGd',
+    'N4PeJyqj8diSXnfhxSQdLpo8ddXTaGd',
+    FLegacyBlock.PoSAddresses[0]
+  );
+  AssertEquals('Noso Legacy Block MN Reward is 7874015', 7874015, FLegacyBlock.MNReward);
+  AssertEquals('Noso Legacy Block MN Address Count is 127', 127, Length(FLegacyBlock.MNAddresses));
+  AssertEquals('Noso Legacy Block MN Address 0 is NLXvurcqcmfzDccvCVeVB876QVTiFa',
+    'NLXvurcqcmfzDccvCVeVB876QVTiFa',
+    FLegacyBlock.MNAddresses[0]
+  );
+end;
+
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockCreate;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
@@ -351,6 +397,17 @@ begin
   try
     FLegacyBlock.LoadFromFolder(cTestDataFolder, 10000);
     CheckFieldsBlockTenKay;
+  finally
+    FLegacyBlock.Free;
+  end;
+end;
+
+procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockFiftyKay;
+begin
+  FLegacyBlock:= TLegacyBlock.Create;
+  try
+    FLegacyBlock.LoadFromFolder(cTestDataFolder, 50000);
+    CheckFieldsBlockFiftyKay;
   finally
     FLegacyBlock.Free;
   end;
