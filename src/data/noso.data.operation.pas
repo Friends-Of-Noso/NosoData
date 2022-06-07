@@ -286,8 +286,12 @@ function TOperation.FormatJSON(
   AOptions: TFormatOptions;
   AIndentsize: Integer
 ): TJSONStringType;
+var
+  objectJSON: TJSONObject;
 begin
-  Result:= getAsJSONObject.FormatJSON(AOptions, AIndentsize);
+  objectJSON:= getAsJSONObject;
+  Result:= objectJSON.FormatJSON(AOptions, AIndentsize);
+  objectJSON.Free;
 end;
 
 constructor TOperation.Create;

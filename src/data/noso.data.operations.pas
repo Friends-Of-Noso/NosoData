@@ -228,8 +228,12 @@ function TOperations.FormatJSON(
   AOptions: TFormatOptions;
   AIndentsize: Integer
 ): TJSONStringType;
+var
+  arrayJSON: TJSONArray;
 begin
-  Result:= getAsJSONArray.FormatJSON(AOptions, AIndentsize);
+  arrayJSON:= getAsJSONArray;
+  Result:= arrayJSON.FormatJSON(AOptions, AIndentsize);
+  arrayJSON.Free;
 end;
 
 function TOperations.GetEnumerator: TOperationsEnumerator;

@@ -53,9 +53,13 @@ type
     destructor Destroy; override;
 
     procedure Clear;
+
     function Add(const ABlock: TBlock): Integer;
+
     procedure Delete(const AIndex: Integer); overload;
     procedure Delete(const ABlock: TBlock); overload;
+
+    procedure SaveToFile(const AFileName: String);
 
     function FormatJSON(
       AOptions : TFormatOptions = DefaultFormat;
@@ -224,12 +228,34 @@ begin
   FBlocks.Delete(index);
 end;
 
+procedure TBlocks.SaveToFile(const AFileName: String);
+var
+  fileStream: TFileStream;
+  jsonStream: TStream;
+begin
+  fileStream:= TFileStream.Create(AFileName, fmOpenWrite);
+  try
+    jsonStream:= getAsStream;
+    try
+      fileStream.CopyFrom(jsonStream, jsonStream.Size);
+    finally
+      jsonStream.Free;
+    end;
+  finally
+    fileStream.Free;
+  end;
+end;
+
 function TBlocks.FormatJSON(
   AOptions: TFormatOptions;
   AIndentsize: Integer
 ): TJSONStringType;
+var
+  arrayJSON: TJSONArray;
 begin
-  Result:= getAsJSONArray.FormatJSON(AOptions, AIndentsize);
+  arrayJSON:= getAsJSONArray;
+  Result:= arrayJSON.FormatJSON(AOptions, AIndentsize);
+  arrayJSON.Free;
 end;
 
 function TBlocks.GetEnumerator: TBlocksEnumerator;
