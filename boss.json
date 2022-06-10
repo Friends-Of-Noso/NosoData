@@ -1,7 +1,7 @@
 {
 	"name": "gcarreno/nosodata",
 	"description": "Basic Noso data blocks in Object Pascal",
-	"version": "0.1.0",
+	"version": "0.1.0.1",
 	"homepage": "https://github.com/gcarreno/NosoData",
 	"mainsrc": "./src",
 	"projects": [],
