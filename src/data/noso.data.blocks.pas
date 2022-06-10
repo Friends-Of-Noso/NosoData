@@ -233,7 +233,7 @@ var
   fileStream: TFileStream;
   jsonStream: TStream;
 begin
-  fileStream:= TFileStream.Create(AFileName, fmOpenWrite);
+  fileStream:= TFileStream.Create(AFileName, fmCreate);
   try
     jsonStream:= getAsStream;
     try
