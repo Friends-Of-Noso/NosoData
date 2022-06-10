@@ -4,6 +4,8 @@
 	"version": "0.1.0.1",
 	"homepage": "https://github.com/gcarreno/NosoData",
 	"mainsrc": "./src",
-	"projects": [],
+	"projects": [
+		"./packages/nosodata.lpk"
+	],
 	"dependencies": {}
 }
