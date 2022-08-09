@@ -8,4 +8,14 @@
 [![Latest Release](https://img.shields.io/github/v/release/gcarreno/NosoData?label=latest%20release)](https://github.com/gcarreno/NosoData/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/gcarreno/NosoData/total)](https://github.com/gcarreno/NosoData/releases)
 
-This is the repository with the basic data blocks for the Noso re-write in Object Pascal.
+This project contains various Object Oriented Programming Classes to deal with [Noso Coins](https://github.com/Noso-Project/NosoWallet)' data files.
+
+It contains classes that read from the current files, in the Legacy namespace.
+
+It contains classes that can absord one of those Legacy classes. These classes are also able to deal with `JSON` Input/Output.
+
+## Todo
+
+1. Add the PoS and MNs rewards to the non Legacy classes and their `JSON` Input/Output. Make sure all tests pass green.
+2. Create the Legacy class for the wallet file and it's conter part with `JSON` Input/Output. Create and make sure all tests pass green.
+
