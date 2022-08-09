@@ -16,20 +16,21 @@ uses
 ;
 
 const
-  cjNumber = 'number';
-  cjTimeStart = 'time-start';
-  cjTimeEnd = 'time-end';
-  cjTimeTotal = 'time-total';
-  cjTimeLast20 = 'time-last-20';
-  cjOperations = 'operations';
-  cjDifficulty = 'difficulty';
-  cjTargetHash = 'target-hash';
-  cjSolution = 'solution';
-  cjLastBlockHash = 'last-block-hash';
+  cjNumber              = 'number';
+  cjHash                = 'hash';
+  cjTimeStart           = 'time-start';
+  cjTimeEnd             = 'time-end';
+  cjTimeTotal           = 'time-total';
+  cjTimeLast20          = 'time-last-20';
+  cjOperations          = 'operations';
+  cjDifficulty          = 'difficulty';
+  cjTargetHash          = 'target-hash';
+  cjSolution            = 'solution';
+  cjLastBlockHash       = 'last-block-hash';
   cjNextBlockDifficulty = 'next-block-difficulty';
-  cjMiner = 'miner';
-  cjFee = 'fee';
-  cjReward = 'reward';
+  cjMiner               = 'miner';
+  cjFee                 = 'fee';
+  cjReward              = 'reward';
 
 resourcestring
   rsEBlockWrongJSONObject = 'JSON data is not an object';
@@ -324,8 +325,6 @@ begin
   Result.Add(cjTimeEnd, FTimeEnd);
   Result.Add(cjTimeTotal, FTimeTotal);
   Result.Add(cjTimeLast20, FTimeLast20);
-  jArray:= FOperations.AsJSONArray;
-  Result.Add(cjOperations, jArray);
   Result.Add(cjDifficulty, FDifficulty);
   Result.Add(cjTargetHash, FTargetHash);
   Result.Add(cjSolution, FSolution);
@@ -334,6 +333,8 @@ begin
   Result.Add(cjMiner, FMiner);
   Result.Add(cjFee, FFee);
   Result.Add(cjReward, FReward);
+  jArray:= FOperations.AsJSONArray;
+  Result.Add(cjOperations, jArray);
 end;
 
 function TBlock.getAsStream: TStream;

@@ -56,7 +56,6 @@ const
       '"'+cjTimeEnd+'":-1,'+
       '"'+cjTimeTotal+'":-1,'+
       '"'+cjTimeLast20+'":-1,'+
-      '"'+cjOperations+'":[],'+
       '"'+cjDifficulty+'":-1,'+
       '"'+cjTargetHash+'":"",'+
       '"'+cjSolution+'":"",'+
@@ -64,7 +63,8 @@ const
       '"'+cjNextBlockDifficulty+'":-1,'+
       '"'+cjMiner+'":"",'+
       '"'+cjFee+'":0,'+
-      '"'+cjReward+'":0'+
+      '"'+cjReward+'":0,'+
+      '"'+cjOperations+'":[]'+
     '}';
 
 { TTestNosoDataBlock }
