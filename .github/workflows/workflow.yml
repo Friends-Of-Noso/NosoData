@@ -14,14 +14,14 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest,windows-latest,macos-latest]
-        lazarus-versions: [stable, 2.2.0, 2.0.12, 2.0.10]
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+        lazarus-versions: [stable, 2.2.0, 2.0.12]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
     - name: Install Lazarus
-      uses: gcarreno/setup-lazarus@v3.2
+      uses: gcarreno/setup-lazarus@v3
       with:
         lazarus-version: ${{ matrix.lazarus-versions }}
         with-cache: false
