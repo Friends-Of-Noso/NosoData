@@ -49,7 +49,11 @@ end;
 
 procedure TTestNosoDataLegacyBlocks.CheckFieldsWithFolder;
 begin
-  AssertEquals('Noso Data Legacy Blocks Folder is '+cTestDataFolder, cTestDataFolder, FBlocks.Folder);
+  AssertEquals(
+    'Noso Data Legacy Blocks Folder is '+ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+    ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+    FBlocks.Folder
+  );
   AssertEquals('Noso Data Legacy Blocks count is 3', 3, FBlocks.Count);
 end;
 
@@ -97,7 +101,9 @@ end;
 
 procedure TTestNosoDataLegacyBlocks.TestNosoLegacyBlocksCreateWithFolder;
 begin
-  FBlocks:= TLegacyBlocks.Create(cTestDataFolder);
+  FBlocks:= TLegacyBlocks.Create(
+    ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder
+  );
   try
     CheckFieldsWithFolder;
   finally
@@ -109,7 +115,9 @@ procedure TTestNosoDataLegacyBlocks.TestNosoLegacyBlocksGetBlock;
 var
   block: TLegacyBlock;
 begin
-  FBlocks:= TLegacyBlocks.Create(cTestDataFolder);
+  FBlocks:= TLegacyBlocks.Create(
+    ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder
+  );
   try
     block:= FBlocks[0];
     CheckFieldsBlockZero(block);

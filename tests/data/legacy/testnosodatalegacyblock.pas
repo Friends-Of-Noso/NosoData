@@ -348,7 +348,10 @@ end;
 procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockCreateFromFile;
 begin
   FLegacyBlock:= TLegacyBlock.Create(
-    ExcludeTrailingPathDelimiter(cTestDataFolder)+DirectorySeparator+
+    ExcludeTrailingPathDelimiter(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+
+      cTestDataFolder
+    )+DirectorySeparator+
     '0.blk'
   );
   try
@@ -362,7 +365,10 @@ procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockZero;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
   try
-    FLegacyBlock.LoadFromFolder(cTestDataFolder, 0);
+    FLegacyBlock.LoadFromFolder(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+      0
+    );
     CheckFieldsBlockZero;
   finally
     FLegacyBlock.Free;
@@ -373,7 +379,10 @@ procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockOne;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
   try
-    FLegacyBlock.LoadFromFolder(cTestDataFolder, 1);
+    FLegacyBlock.LoadFromFolder(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+      1
+    );
     CheckFieldsBlockOne;
   finally
     FLegacyBlock.Free;
@@ -384,7 +393,10 @@ procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockFifty;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
   try
-    FLegacyBlock.LoadFromFolder(cTestDataFolder, 50);
+    FLegacyBlock.LoadFromFolder(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+      50
+    );
     CheckFieldsBlockFifty;
   finally
     FLegacyBlock.Free;
@@ -395,7 +407,10 @@ procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockTenKay;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
   try
-    FLegacyBlock.LoadFromFolder(cTestDataFolder, 10000);
+    FLegacyBlock.LoadFromFolder(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+      10000
+    );
     CheckFieldsBlockTenKay;
   finally
     FLegacyBlock.Free;
@@ -406,7 +421,10 @@ procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockFiftyKay;
 begin
   FLegacyBlock:= TLegacyBlock.Create;
   try
-    FLegacyBlock.LoadFromFolder(cTestDataFolder, 50000);
+    FLegacyBlock.LoadFromFolder(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+      50000
+    );
     CheckFieldsBlockFiftyKay;
   finally
     FLegacyBlock.Free;
@@ -418,7 +436,9 @@ var
   transaction: TLegacyTransaction;
 begin
   FLegacyBlock:= TLegacyBlock.Create(
-    ExcludeTrailingPathDelimiter(cTestDataFolder)+DirectorySeparator+
+    ExcludeTrailingPathDelimiter(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder
+    )+DirectorySeparator+
     '50.blk'
   );
   try

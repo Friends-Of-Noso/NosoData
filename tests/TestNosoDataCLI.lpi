@@ -148,6 +148,7 @@
       <Unit10>
         <Filename Value="../src/data/legacy/noso.data.legacy.blocks.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Blocks"/>
       </Unit10>
       <Unit11>
         <Filename Value="data/legacy/testnosodatalegacyblock.pas"/>
@@ -195,6 +196,7 @@
       <Unit20>
         <Filename Value="../src/data/legacy/noso.data.legacy.addresses.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Addresses"/>
       </Unit20>
       <Unit21>
         <Filename Value="data/legacy/testnosodatalegacyaddress.pas"/>
@@ -204,6 +206,7 @@
       <Unit22>
         <Filename Value="../src/data/legacy/noso.data.legacy.address.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Address"/>
       </Unit22>
     </Units>
   </ProjectOptions>

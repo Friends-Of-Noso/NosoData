@@ -12,7 +12,7 @@ This project contains various Object Oriented Programming Classes to deal with [
 
 It contains classes that read from the current files, in the Legacy namespace.
 
-It contains classes that can absorb one of those Legacy classes. These classes are also able to deal with `JSON` Input/Output.
+It contains classes that can absorb one of those Legacy classes. These classes are also able to deal with `JSON` Marshalling/Un-Marshalling.
 
 ## Todo
 

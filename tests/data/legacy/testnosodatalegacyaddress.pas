@@ -86,9 +86,9 @@ procedure TTestNosoDataLegacyAddress.TestNosoDataLegacyAddressFromFile;
 var
   fsWallet: TFileStream;
 begin
-  if FileExists(cWalletFile) then
+  if FileExists(ExtractFileDir(ParamStr(0))+DirectorySeparator+cWalletFile) then
   begin
-    fsWallet:= TFileStream.Create(cWalletFile, fmOpenRead);
+    fsWallet:= TFileStream.Create(ExtractFileDir(ParamStr(0))+DirectorySeparator+cWalletFile, fmOpenRead);
     FLegacyAddress:= TLegacyAddress.Create;
     try
       FLegacyAddress.LoadFromStream(fsWallet);
