@@ -12,10 +12,10 @@ This project contains various Object Oriented Programming Classes to deal with [
 
 It contains classes that read from the current files, in the Legacy namespace.
 
-It contains classes that can absord one of those Legacy classes. These classes are also able to deal with `JSON` Input/Output.
+It contains classes that can absorb one of those Legacy classes. These classes are also able to deal with `JSON` Input/Output.
 
 ## Todo
 
 1. Add the PoS and MNs rewards to the non Legacy classes and their `JSON` Input/Output. Make sure all tests pass green.
-2. Create the Legacy class for the wallet file and it's conter part with `JSON` Input/Output. Create and make sure all tests pass green.
+2. Create the Legacy class for the wallet file and it's counter part with `JSON` Input/Output. Create and make sure all tests pass green.
 
