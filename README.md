@@ -1,6 +1,6 @@
 # Noso Data
 
-[![Build Status](https://github.com/gcarreno/NosoData/workflows/build-test/badge.svg?branch=main)](https://github.com/gcarreno/NosoData/actions)
+[![Build Status](https://github.com/gcarreno/NosoData/workflows/build-test/badge.svg)](https://github.com/gcarreno/NosoData/actions)
 [![Supports Windows](https://img.shields.io/badge/support-Windows-blue?logo=Windows)](https://github.com/gcarreno/NosoData/releases/latest)
 [![Supports Linux](https://img.shields.io/badge/support-Linux-yellow?logo=Linux)](https://github.com/gcarreno/NosoData/releases/latest)
 [![Supports macOS](https://img.shields.io/badge/support-macOS-black?logo=macOS)](https://github.com/gcarreno/NosoData/releases/latest)
