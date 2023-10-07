@@ -1,13 +1,13 @@
 name: build-test
 
 on:
-  pull_request:
   push:
-    paths-ignore:
-    - "README.md"
-    branches:
-      - main
-      - releases/*
+    branches: [ main ]
+    tags: [ "*" ]
+    paths-ignore: [ "README.md", "LICENSE", "cliff.toml", "CHANGELOG.md" ]
+
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
