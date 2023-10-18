@@ -1,6 +1,7 @@
 # NosoData project specific
 /bin
 /docs/*.txt
+TestNosoData-GUI.fpcunit.ini
 
 # Compiled l10n files: .mo should be ignored
 *.mo
