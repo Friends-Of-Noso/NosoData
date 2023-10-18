@@ -23,7 +23,7 @@ const
   cjTimeEnd             = 'time-end';
   cjTimeTotal           = 'time-total';
   cjTimeLast20          = 'time-last-20';
-  cjOperations          = 'operations';
+  cjBlockOperations     = 'block-operations';
   cjDifficulty          = 'difficulty';
   cjTargetHash          = 'target-hash';
   cjSolution            = 'solution';
@@ -340,7 +340,7 @@ end;
 
 function TBlock.getAsJSONObject: TJSONObject;
 var
-  jArray: TJSONArray = nil;
+  jObject: TJSONObject = nil;
 begin
   Result:= TJSONObject.Create;
   Result.Add(cjNumber, FNumber);
@@ -360,8 +360,8 @@ begin
   Result.Add(cjFee, FFee);
   Result.Add(cjReward, FReward);
   Result.Add(cjMerkleRoot, FMerkleRoot);
-  jArray:= FOperations.AsJSONArray;
-  Result.Add(cjOperations, jArray);
+  jObject:= FOperations.AsJSONObject;
+  Result.Add(cjBlockOperations, jObject);
 end;
 
 function TBlock.getAsStream: TStream;

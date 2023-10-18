@@ -13,17 +13,17 @@ uses
 ;
 
 const
-  cjOperationType = 'operation-type';
-  cjID = 'id';
-  cjBlock = 'block';
-  cjReference = 'reference';
+  cjOperationType   = 'operation-type';
+  cjID              = 'id';
+  cjBlock           = 'block';
+  cjReference       = 'reference';
   cjSenderPublicKey = 'sender-public-key';
-  cjSenderAddress = 'sender-address';
+  cjSenderAddress   = 'sender-address';
   cjReceiverAddress = 'receiver-address';
-  cjAmount = 'amount';
-  cjFee = 'fee';
-  cjSignature = 'signature';
-  cjCreated = 'created';
+  cjAmount          = 'amount';
+  cjFee             = 'fee';
+  cjSignature       = 'signature';
+  cjCreated         = 'created';
 
 resourcestring
   rsEOperationWrongJSONObject = 'JSON data is not an object';

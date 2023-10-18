@@ -46,19 +46,23 @@ uses
 
 const
   cjOperationsOneTransfer =
-    '[{'+
-      '"'+cjOperationType+'":1,'+ // otTransfer
-      '"'+cjID+'":"",'+
-      '"'+cjBlock+'":1,'+
-      '"'+cjReference+'":"",'+
-      '"'+cjSenderPublicKey+'":"",'+
-      '"'+cjSenderAddress+'":"",'+
-      '"'+cjReceiverAddress+'":"",'+
-      '"'+cjAmount+'":0,'+
-      '"'+cjFee+'":0,'+
-      '"'+cjSignature+'":"",'+
-      '"'+cjCreated+'":-1'+
-    '}]';
+    '{'+
+      '"'+cjOperationsID+'":"",'+
+      '"'+cjOperations+'":['+
+        '{'+
+          '"'+cjOperationType+'":1,'+ // otTransfer
+          '"'+cjID+'":"",'+
+          '"'+cjBlock+'":1,'+
+          '"'+cjReference+'":"",'+
+          '"'+cjSenderPublicKey+'":"",'+
+          '"'+cjSenderAddress+'":"",'+
+          '"'+cjReceiverAddress+'":"",'+
+          '"'+cjAmount+'":0,'+
+          '"'+cjFee+'":0,'+
+          '"'+cjSignature+'":"",'+
+          '"'+cjCreated+'":-1'+
+        '}'+
+      ']}';
 
 { TTestNosoDataOperations }
 
@@ -111,7 +115,7 @@ var
   jData: TJSONData = nil;
 begin
   jData:= GetJSON(cjOperationsOneTransfer);
-  FOperations:= TOperations.Create(TJSONArray(jData));
+  FOperations:= TOperations.Create(TJSONObject(jData));
   jData.Free;
   try
     CheckOneTransfer;
@@ -122,11 +126,11 @@ end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsCreateFromStream;
 var
-  ssOperationsArray: TStringStream = nil;
+  ssOperationsObject: TStringStream = nil;
 begin
-  ssOperationsArray:= TStringStream.Create(cjOperationsOneTransfer, TEncoding.UTF8);
-  FOperations:= TOperations.Create(ssOperationsArray);
-  ssOperationsArray.Free;
+  ssOperationsObject:= TStringStream.Create(cjOperationsOneTransfer, TEncoding.UTF8);
+  FOperations:= TOperations.Create(ssOperationsObject);
+  ssOperationsObject.Free;
   try
     CheckOneTransfer;
   finally
@@ -160,14 +164,14 @@ end;
 
 procedure TTestNosoDataOperations.TestNosoDataOperationsAsJSONArrayFromOneTransfer;
 var
-  jArray: TJSONArray = nil;
+  jObject: TJSONObject = nil;
 begin
   FOperations:= TOperations.Create(cjOperationsOneTransfer);
-  jArray:= FOperations.AsJSONArray;
+  jObject:= FOperations.AsJSONObject;
   try
-    AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, jArray.AsJSON);
+    AssertEquals('Operations from AsJSON matches', cjOperationsOneTransfer, jObject.AsJSON);
   finally
-    jArray.Free;
+    jObject.Free;
     FOperations.Free;
   end;
 end;

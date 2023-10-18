@@ -12,6 +12,7 @@ uses
 , testregistry
 , Noso.Data.Legacy.Block
 , Noso.Data.Block
+, Noso.Data.Operations
 ;
 
 type
@@ -68,7 +69,10 @@ const
       '"'+cjFee+'":0,'+
       '"'+cjReward+'":0,'+
       '"'+cjMerkleRoot+'":"",'+
-      '"'+cjOperations+'":[]'+
+      '"'+cjBlockOperations+'":{'+
+        '"'+cjOperationsID+'":"",'+
+        '"'+cjOperations+'":[]'+
+      '}'+
     '}';
 
 { TTestNosoDataBlock }

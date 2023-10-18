@@ -13,8 +13,12 @@ uses
 , Noso.Data.Operation
 ;
 
+const
+  cjOperationsID = 'operations-id';
+  cjOperations   = 'operations';
+
 resourcestring
-  rsEOperationsWrongJSONObject = 'JSON data is not an array';
+  rsEOperationsWrongJSONObject = 'JSON data is not an object';
 
 type
 { EOperationsWrongJSONObject }
@@ -24,6 +28,7 @@ type
 { TOperations }
   TOperations = class(TObject)
   private
+    FOperationsID: String;
     FOperations: TFPObjectList;
     // Compressed JSON field to mimic TJSON one
     FCompressedJSON: Boolean;
@@ -34,12 +39,12 @@ type
 
     procedure setFromJSON(const AJSON: TJSONStringType);
     procedure setFromJSONData(const AJSONData: TJSONData);
-    procedure setFromJSONArray(const AJSONArray: TJSONArray);
+    procedure setFromJSONObject(const AJSONObject: TJSONObject);
     procedure setFromStream(const AStream: TStream);
 
     function getAsJSON: TJSONStringType;
     function getAsJSONData: TJSONData;
-    function getAsJSONArray: TJSONArray;
+    function getAsJSONObject: TJSONObject;
     function getAsStream: TStream;
 
   protected
@@ -47,7 +52,7 @@ type
     constructor Create; overload;
     constructor Create(const AJSON: TJSONStringType); overload;
     constructor Create(const AJSONData: TJSONData); overload;
-    constructor Create(const AJSONArray: TJSONArray); overload;
+    constructor Create(const AJSONObject: TJSONObject); overload;
     constructor Create(const AStream: TStream); overload;
 
     destructor Destroy; override;
@@ -64,6 +69,9 @@ type
 
     function GetEnumerator: TOperationsEnumerator;
 
+    property OperationsID: String
+      read FOperationsID
+      write FOperationsID;
     property Count: Integer
       read GetCount;
     property Items[Index: Integer]: TOperation
@@ -74,8 +82,8 @@ type
       read getAsJSON;
     property AsJSONData: TJSONData
       read getAsJSONData;
-    property AsJSONArray: TJSONArray
-      read getAsJSONArray;
+    property AsJSONObject: TJSONObject
+      read getAsJSONObject;
     property AsStream: TStream
       read getAsStream;
 
@@ -101,6 +109,7 @@ type
       read GetCurrent;
   published
   end;
+
 
 implementation
 
@@ -136,21 +145,24 @@ end;
 
 procedure TOperations.setFromJSONData(const AJSONData: TJSONData);
 begin
-  if AJSONData.JSONType <> jtArray then
+  if AJSONData.JSONType <> jtObject then
   begin
     raise EOperationsWrongJSONObject.Create(rsEOperationsWrongJSONObject);
   end;
-  setFromJSONArray(AJSONData as TJSONArray);
+  setFromJSONObject(AJSONData as TJSONObject);
 end;
 
-procedure TOperations.setFromJSONArray(const AJSONArray: TJSONArray);
+procedure TOperations.setFromJSONObject(const AJSONObject: TJSONObject);
 var
   index: Integer;
+  jOperations: TJSONArray;
   operation: TOperation = nil;
 begin
-  for index:= 0 to Pred(AJSONArray.Count) do
+  FOperationsID:= AJSONObject.Get(cjOperationsID, FOperationsID);
+  jOperations:= AJSONObject.Arrays[cjOperations];
+  for index:= 0 to Pred(jOperations.Count) do
   begin
-    operation:= TOperation.Create(AJSONArray[index]);
+    operation:= TOperation.Create(jOperations[index]);
     FOperations.Add(operation);
   end;
 end;
@@ -169,30 +181,34 @@ end;
 
 function TOperations.getAsJSON: TJSONStringType;
 var
-  jArray: TJSONArray = nil;
+  jObject: TJSONObject = nil;
 begin
   Result:= EmptyStr;
-  jArray:= getAsJSONArray;
-  jArray.CompressedJSON:= FCompressedJSON;
-  Result:= jArray.AsJSON;
-  jArray.Free;
+  jObject:= getAsJSONObject;
+  jObject.CompressedJSON:= FCompressedJSON;
+  Result:= jObject.AsJSON;
+  jObject.Free;
 end;
 
 function TOperations.getAsJSONData: TJSONData;
 begin
-  Result:= getAsJSONArray as TJSONData;
+  Result:= getAsJSONObject as TJSONData;
 end;
 
-function TOperations.getAsJSONArray: TJSONArray;
+function TOperations.getAsJSONObject: TJSONObject;
 var
   index: Integer;
   jData: TJSONData = nil;
+  jOperations: TJSONArray;
 begin
-  Result:= TJSONArray.Create;
+  Result:= TJSONObject.Create;
+  Result.Add(cjOperationsID, FOperationsID);
+  jOperations:= TJSONArray.Create;
+  Result.Add(cjOperations, jOperations);
   for index := 0 to Pred(FOperations.Count) do
   begin
     jData:= TOperation(FOperations.Items[index]).AsJSONData;
-    Result.Add(jData);
+    jOperations.Add(jData);
   end;
 end;
 
@@ -203,6 +219,7 @@ end;
 
 procedure TOperations.Clear;
 begin
+  FOperationsID:= EmptyStr;
   FOperations.Clear;
 end;
 
@@ -229,11 +246,11 @@ function TOperations.FormatJSON(
   AIndentsize: Integer
 ): TJSONStringType;
 var
-  arrayJSON: TJSONArray;
+  objectJSON: TJSONObject;
 begin
-  arrayJSON:= getAsJSONArray;
-  Result:= arrayJSON.FormatJSON(AOptions, AIndentsize);
-  arrayJSON.Free;
+  objectJSON:= getAsJSONObject;
+  Result:= objectJSON.FormatJSON(AOptions, AIndentsize);
+  objectJSON.Free;
 end;
 
 function TOperations.GetEnumerator: TOperationsEnumerator;
@@ -243,6 +260,7 @@ end;
 
 constructor TOperations.Create;
 begin
+  FOperationsID:= EmptyStr;
   FCompressedJSON:= True;
   FOperations:= TFPObjectList.Create(True);
 end;
@@ -259,10 +277,10 @@ begin
   setFromJSONData(AJSONData);
 end;
 
-constructor TOperations.Create(const AJSONArray: TJSONArray);
+constructor TOperations.Create(const AJSONObject: TJSONObject);
 begin
   Create;
-  setFromJSONArray(AJSONArray);
+  setFromJSONObject(AJSONObject);
 end;
 
 constructor TOperations.Create(const AStream: TStream);
