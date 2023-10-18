@@ -18,6 +18,7 @@ uses
 const
   cjNumber              = 'number';
   cjHash                = 'hash';
+  cjHashLegacy          = 'hash-legacy';
   cjTimeStart           = 'time-start';
   cjTimeEnd             = 'time-end';
   cjTimeTotal           = 'time-total';
@@ -27,10 +28,12 @@ const
   cjTargetHash          = 'target-hash';
   cjSolution            = 'solution';
   cjLastBlockHash       = 'last-block-hash';
+  cjLastBlockHashLegacy = 'last-block-hash-legacy';
   cjNextBlockDifficulty = 'next-block-difficulty';
   cjMiner               = 'miner';
   cjFee                 = 'fee';
   cjReward              = 'reward';
+  cjMerkleRoot          = 'merkle-root';
 
 resourcestring
   rsEBlockWrongJSONObject = 'JSON data is not an object';
@@ -43,6 +46,8 @@ type
   TBlock = class(TObject)
   private
     FNumber: Int64;
+    FHash: String;
+    FHashLegacy: String;
     FTimeStart: Int64;
     FTimeEnd: Int64;
     FTimeTotal: Integer;
@@ -51,11 +56,13 @@ type
     FTargetHash: String;
     FSolution: String;
     FLastBlockHash: String;
+    FLastBlockHashLegacy: String;
     FNextBlockDifficulty: Integer;
     FMiner: String;
     FFee: int64;
     FReward: Int64;
     FOperations: TOperations;
+    FMerkleRoot: String;
     { TODO 99 -ogcarreno : Implement PoS & MN Rewards }
 
     FCompressedJSON: Boolean;
@@ -93,6 +100,12 @@ type
     property Number: Int64
       read FNumber
       write FNumber;
+    property Hash: String
+      read FHash
+      write FHash;
+    property HashLegacy: String
+      read FHashLegacy
+      write FHashLegacy;
     property TimeStart: Int64
       read FTimeStart
       write FTimeStart;
@@ -117,6 +130,9 @@ type
     property LastBlockHash: String
       read FLastBlockHash
       write FLastBlockHash;
+    property LastBlockHashLegacy: String
+      read FLastBlockHashLegacy
+      write FLastBlockHashLegacy;
     property NextBlockDifficulty: Integer
       read FNextBlockDifficulty
       write FNextBlockDifficulty;
@@ -129,9 +145,11 @@ type
     property Reward: Int64
       read FReward
       write FReward;
+    property MerkleRoot: String
+      read FMerkleRoot
+      write FMerkleRoot;
     property Operations: TOperations
       read FOperations;
-    { TODO 99 -ogcarreno : Implement PoS & MN Rewards Properties }
 
     property CompressedJSON: Boolean
       read FCompressedJSON
@@ -173,6 +191,7 @@ var
   legacyTransaction: TLegacyTransaction;
 begin
   FNumber:= ALegacyBlock.Number;
+  FHashLegacy:= ALegacyBlock.Hash;
   FTimeStart:= ALegacyBlock.TimeStart;
   FTimeEnd:= ALegacyBlock.TimeEnd;
   FTimeTotal:= ALegacyBlock.TimeTotal;
@@ -180,7 +199,7 @@ begin
   FDifficulty:= ALegacyBlock.Difficulty;
   FTargetHash:= ALegacyBlock.TargetHash;
   FSolution:= ALegacyBlock.Solution;
-  FLastBlockHash:= ALegacyBlock.LastBlockHash;
+  FLastBlockHashLegacy:= ALegacyBlock.LastBlockHash;
   FNextBlockDifficulty:= ALegacyBlock.NextBlockDifficulty;
   FMiner:= ALegacyBlock.Miner;
   FFee:= ALegacyBlock.Fee;
@@ -191,11 +210,11 @@ begin
   end;
   if FNumber >= cBlockWithPoS then
   begin
-    { TODO 99 -ogcarreno : Implement PoS Rewards }
+    { TODO 99 -ogcarreno : Implement PoS Rewards as Transactions }
   end;
   if FNumber >= cBlockWithMNandPoS then
   begin
-    { TODO 99 -ogcarreno : Implement MN Rewards }
+    { TODO 99 -ogcarreno : Implement MN Rewards as Transactions }
   end;
 end;
 
@@ -225,6 +244,8 @@ var
   jOperations: TJSONData = nil;
 begin
   FNumber:= AJSONObject.Get(cjNumber, FNumber);
+  FHash:= AJSONObject.Get(cjHash, FHash);
+  FHashLegacy:= AJSONObject.Get(cjHashLegacy, FHashLegacy);
   FTimeStart:= AJSONObject.Get(cjTimeStart, FTimeStart);
   FTimeEnd:= AJSONObject.Get(cjTimeEnd, FTimeEnd);
   FTimeTotal:= AJSONObject.Get(cjTimeTotal, FTimeTotal);
@@ -246,10 +267,12 @@ begin
   FTargetHash:= AJSONObject.Get(cjTargetHash, FTargetHash);
   FSolution:= AJSONObject.Get(cjSolution, FSolution);
   FLastBlockHash:= AJSONObject.Get(cjLastBlockHash, FLastBlockHash);
+  FLastBlockHashLegacy:= AJSONObject.Get(cjLastBlockHashLegacy, FLastBlockHashLegacy);
   FNextBlockDifficulty:= AJSONObject.Get(cjNextBlockDifficulty, FNextBlockDifficulty);
   FMiner:= AJSONObject.Get(cjMiner, FMiner);
   FFee:= AJSONObject.Get(cjFee, FFee);
   FReward:= AJSONObject.Get(cjReward, FReward);
+  FMerkleRoot:= AJSONObject.Get(cjMerkleRoot, FMerkleRoot);
 end;
 
 procedure TBlock.setFromStream(const AStream: TStream);
@@ -277,7 +300,7 @@ begin
   Result.Difficulty:= FDifficulty;
   Result.TargetHash:= FTargetHash;
   Result.Solution:= FSolution;
-  Result.LastBlockHash:= FLastBlockHash;
+  Result.LastBlockHash:= FLastBlockHashLegacy;
   Result.NextBlockDifficulty:= FNextBlockDifficulty;
   Result.Miner:= FMiner;
   Result.Fee:= FFee;
@@ -291,11 +314,11 @@ begin
   end;
   if Result.Number >= cBlockWithPoS then
   begin
-    { TODO 99 -ogcarreno : Implement PoS Rewards }
+    { TODO 99 -ogcarreno : Implement PoS Rewards as Transactions }
   end;
   if Result.Number >= cBlockWithMNandPoS then
   begin
-    { TODO 99 -ogcarreno : Implement MN Rewards }
+    { TODO 99 -ogcarreno : Implement MN Rewards as Transactions }
   end;
 end;
 
@@ -321,6 +344,8 @@ var
 begin
   Result:= TJSONObject.Create;
   Result.Add(cjNumber, FNumber);
+  Result.Add(cjHash, FHash);
+  Result.Add(cjHashLegacy, FHashLegacy);
   Result.Add(cjTimeStart, FTimeStart);
   Result.Add(cjTimeEnd, FTimeEnd);
   Result.Add(cjTimeTotal, FTimeTotal);
@@ -329,10 +354,12 @@ begin
   Result.Add(cjTargetHash, FTargetHash);
   Result.Add(cjSolution, FSolution);
   Result.Add(cjLastBlockHash, FLastBlockHash);
+  Result.Add(cjLastBlockHashLegacy, FLastBlockHashLegacy);
   Result.Add(cjNextBlockDifficulty, FNextBlockDifficulty);
   Result.Add(cjMiner, FMiner);
   Result.Add(cjFee, FFee);
   Result.Add(cjReward, FReward);
+  Result.Add(cjMerkleRoot, FMerkleRoot);
   jArray:= FOperations.AsJSONArray;
   Result.Add(cjOperations, jArray);
 end;
@@ -345,6 +372,8 @@ end;
 constructor TBlock.Create;
 begin
   FNumber:= -1;
+  FHash:= EmptyStr;
+  FHashLegacy:= EmptyStr;
   FTimeStart:= -1;
   FTimeEnd:= -1;
   FTimeTotal:= -1;
@@ -354,10 +383,12 @@ begin
   FTargetHash:= EmptyStr;
   FSolution:= EmptyStr;
   FLastBlockHash:= EmptyStr;
+  FLastBlockHashLegacy:= EmptyStr;
   FNextBlockDifficulty:= -1;
   FMiner:= EmptyStr;
   FFee:= 0;
   FReward:= 0;
+  FMerkleRoot:= EmptyStr;
   FCompressedJSON:= True;
 end;
 

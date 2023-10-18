@@ -112,6 +112,7 @@
       <Unit2>
         <Filename Value="../src/data/noso.data.blocks.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Blocks"/>
       </Unit2>
       <Unit3>
         <Filename Value="data/testnosodatablock.pas"/>
@@ -171,6 +172,7 @@
       <Unit14>
         <Filename Value="../src/data/legacy/noso.data.legacy.transactions.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Transactions"/>
       </Unit14>
       <Unit15>
         <Filename Value="data/legacy/testnosodatalegacytransaction.pas"/>

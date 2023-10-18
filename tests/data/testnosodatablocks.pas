@@ -48,6 +48,8 @@ const
   cjBlocksOneEmpty =
     '[{'+
       '"'+cjNumber+'":-1,'+
+      '"'+cjHash+'":"",'+
+      '"'+cjHashLegacy+'":"",'+
       '"'+cjTimeStart+'":-1,'+
       '"'+cjTimeEnd+'":-1,'+
       '"'+cjTimeTotal+'":-1,'+
@@ -56,11 +58,13 @@ const
       '"'+cjTargetHash+'":"",'+
       '"'+cjSolution+'":"",'+
       '"'+cjLastBlockHash+'":"",'+
+      '"'+cjLastBlockHashLegacy+'":"",'+
       '"'+cjNextBlockDifficulty+'":-1,'+
       '"'+cjMiner+'":"",'+
       '"'+cjFee+'":0,'+
       '"'+cjReward+'":0,'+
-    '"'+cjOperations+'":[]'+
+      '"'+cjMerkleRoot+'":"",'+
+      '"'+cjOperations+'":[]'+
     '}]';
 
 { TTestNosoDataBlocks }

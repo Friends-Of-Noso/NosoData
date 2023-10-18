@@ -36,8 +36,8 @@ type
     otCustom,
     otSendGVT,
     otProjectFunds,
-    otReserved5,
-    otReserved6,
+    otPoSReward,
+    otMNReward,
     otReserved7,
     otReserved8,
     otReserved9
@@ -151,15 +151,30 @@ uses
   DateUtils
 ;
 
+const
+  cTransactionTypeUnknown      = 'UNKNWN';
+  cTransactionTypeTransfer     = 'TRFR';
+  cTransactionTypeCustom       = 'CUSTOM';
+  cTransactionTypeSendGVT      = 'SNDGVT';
+  cTransactionTypePoSReward    = 'POSRWD';
+  cTransactionTypeMNReward     = 'MNRWD';
+  cTransactionTypeProjectFunds = 'PROJCT';
+
 { TOperation }
 
 procedure TOperation.setFromLegacy(
   const ALegacyTransaction: TLegacyTransaction
 );
 begin
-  // These are the 2 only ones at the moment, I think.
-  if ALegacyTransaction.OrderType = 'TRFR' then FOperationType:= otTransfer;
-  if ALegacyTransaction.OrderType = 'CUSTOM' then FOperationType:= otCustom;
+  case ALegacyTransaction.OrderType of
+    cTransactionTypeTransfer: FOperationType:= otTransfer;
+    cTransactionTypeCustom: FOperationType:= otCustom;
+    cTransactionTypeSendGVT: FOperationType:= otSendGVT;
+    cTransactionTypePoSReward: FOperationType:= otPoSReward;
+    cTransactionTypeMNReward: FOperationType:= otMNReward;
+    cTransactionTypeProjectFunds: FOperationType:= otProjectFunds;
+  otherwise
+  end;
   FID:= ALegacyTransaction.OrderID;
   { TODO 99 -ogcarreno : Sort out the 2nd level of transactions }
   // Deal with ALegacyTransaction.TrfrID being the 2nd level
@@ -226,14 +241,15 @@ end;
 function TOperation.getAsLegacy: TLegacyTransaction;
 begin
   Result:= TLegacyTransaction.Create;
-  // These are the 2 only ones at the moment, I think.
   case FOperationType of
-    otTransfer: Result.OrderType:= 'TRFR';
-    otCustom: Result.OrderType:= 'CUSTOM';
-    otSendGVT: Result.OrderType:= 'SNDGVT';
-    otProjectFunds: Result.OrderType:= 'PROJCT';
+    otTransfer: Result.OrderType:= cTransactionTypeTransfer;
+    otCustom: Result.OrderType:= cTransactionTypeCustom;
+    otSendGVT: Result.OrderType:= cTransactionTypeSendGVT;
+    otPoSReward: Result.OrderType:= cTransactionTypePoSReward;
+    otMNReward: Result.OrderType:= cTransactionTypeMNReward;
+    otProjectFunds: Result.OrderType:= cTransactionTypeProjectFunds;
   otherwise
-    Result.OrderType:= 'UNKNWN';
+    Result.OrderType:= cTransactionTypeUnknown;
   end;
   Result.OrderID:= FID;
   { TODO 99 -ogcarreno : Sort out the 2nd level of transactions }

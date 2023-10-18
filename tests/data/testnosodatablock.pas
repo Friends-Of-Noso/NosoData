@@ -52,6 +52,8 @@ const
   cjBlockEmpty =
     '{'+
       '"'+cjNumber+'":-1,'+
+      '"'+cjHash+'":"",'+
+      '"'+cjHashLegacy+'":"",'+
       '"'+cjTimeStart+'":-1,'+
       '"'+cjTimeEnd+'":-1,'+
       '"'+cjTimeTotal+'":-1,'+
@@ -60,10 +62,12 @@ const
       '"'+cjTargetHash+'":"",'+
       '"'+cjSolution+'":"",'+
       '"'+cjLastBlockHash+'":"",'+
+      '"'+cjLastBlockHashLegacy+'":"",'+
       '"'+cjNextBlockDifficulty+'":-1,'+
       '"'+cjMiner+'":"",'+
       '"'+cjFee+'":0,'+
       '"'+cjReward+'":0,'+
+      '"'+cjMerkleRoot+'":"",'+
       '"'+cjOperations+'":[]'+
     '}';
 
@@ -72,6 +76,8 @@ const
 procedure TTestNosoDataBlock.CheckFieldsCreate;
 begin
   AssertEquals('Block '+cjNumber+' is -1', -1, FBlock.Number);
+  AssertEquals('Block '+cjHash+' is Empty', EmptyStr, FBlock.Hash);
+  AssertEquals('Block '+cjHashLegacy+' is Empty', EmptyStr, FBlock.HashLegacy);
   AssertEquals('Block '+cjTimeStart+' is -1', -1, FBlock.TimeStart);
   AssertEquals('Block '+cjTimeEnd+' is -1', -1, FBlock.TimeEnd);
   AssertEquals('Block '+cjTimeTotal+' is -1', -1, FBlock.TimeTotal);
@@ -82,6 +88,7 @@ begin
   AssertEquals('Block '+cjTargetHash+' is empty', EmptyStr, FBlock.TargetHash);
   AssertEquals('Block '+cjSolution+' is empty', EmptyStr, FBlock.Solution);
   AssertEquals('Block '+cjLastBlockHash+' is empty', EmptyStr, FBlock.LastBlockHash);
+  AssertEquals('Block '+cjLastBlockHashLegacy+' is empty', EmptyStr, FBlock.LastBlockHashLegacy);
   AssertEquals('Block '+cjNextBlockDifficulty+' is -1', -1, FBlock.NextBlockDifficulty);
   AssertEquals('Block '+cjMiner+' is empty', EmptyStr, FBlock.Miner);
   AssertEquals('Block '+cjFee+' is 0', 0, FBlock.Fee);
