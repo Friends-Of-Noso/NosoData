@@ -13,8 +13,9 @@ uses
 ;
 
 const
-  cBlockWithPoS : Int64 = 8425;
-  cBlockWithMN  : Int64 = 48010;
+  cBlockWithPoS      : Int64 = 8425;
+  cBlockWithMNandPoS : Int64 = 48010;
+  cBlockWithMNOnly   : Int64 = 88500;
   cLegacyBlockFilenameFormat  = '%d.blk';
 
 resourcestring
@@ -241,7 +242,7 @@ begin
     end;
   end;
   //Load MN rewards
-  if FNumber >= cBlockWithMN then
+  if FNumber >= cBlockWithMNandPoS then
   begin
     bytesRead:= AStream.Read(FMasterNodeReward, SizeOf(FMasterNodeReward));
     Inc(Result, bytesRead);
@@ -327,7 +328,7 @@ begin
     end;
   end;
   // Save MN rewards
-  if FNumber >= cBlockWithMN then
+  if FNumber >= cBlockWithMNandPoS then
   begin
     bytesWritten:= AStream.Write(FMasterNodeReward, SizeOf(FMasterNodeReward));
     Inc(Result, bytesWritten);

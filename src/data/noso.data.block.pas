@@ -193,7 +193,7 @@ begin
   begin
     { TODO 99 -ogcarreno : Implement PoS Rewards }
   end;
-  if FNumber >= cBlockWithMN then
+  if FNumber >= cBlockWithMNandPoS then
   begin
     { TODO 99 -ogcarreno : Implement MN Rewards }
   end;
@@ -293,7 +293,7 @@ begin
   begin
     { TODO 99 -ogcarreno : Implement PoS Rewards }
   end;
-  if Result.Number >= cBlockWithMN then
+  if Result.Number >= cBlockWithMNandPoS then
   begin
     { TODO 99 -ogcarreno : Implement MN Rewards }
   end;

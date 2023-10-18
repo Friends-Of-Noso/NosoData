@@ -34,8 +34,8 @@ type
     otUnknown,
     otTransfer,
     otCustom,
-    otReserved3,
-    otReserved4,
+    otSendGVT,
+    otProjectFunds,
     otReserved5,
     otReserved6,
     otReserved7,
@@ -230,6 +230,10 @@ begin
   case FOperationType of
     otTransfer: Result.OrderType:= 'TRFR';
     otCustom: Result.OrderType:= 'CUSTOM';
+    otSendGVT: Result.OrderType:= 'SNDGVT';
+    otProjectFunds: Result.OrderType:= 'PROJCT';
+  otherwise
+    Result.OrderType:= 'UNKNWN';
   end;
   Result.OrderID:= FID;
   { TODO 99 -ogcarreno : Sort out the 2nd level of transactions }

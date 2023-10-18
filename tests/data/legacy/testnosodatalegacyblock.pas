@@ -28,6 +28,8 @@ type
     procedure CheckFieldsBlockTenKay;
     procedure CheckFieldsBlockTenKayTransactionZero(const ATransaction: TLegacyTransaction);
     procedure CheckFieldsBlockFiftyKay;
+    procedure CheckFieldsBlockHundredKay;
+    procedure CheckFieldsBlockHundredKayTransactionZero(const ATransaction: TLegacyTransaction);
   protected
   public
   published
@@ -38,6 +40,7 @@ type
     procedure TestNosoDataLegacyBlockFifty;
     procedure TestNosoDataLegacyBlockTenKay;
     procedure TestNosoDataLegacyBlockFiftyKay;
+    procedure TestNosoDataLegacyBlockHundredKay;
     procedure TestNosoDataLegacyBlockFindTransaction;
   end;
 
@@ -293,7 +296,7 @@ end;
 
 procedure TTestNosoDataLegacyBlock.CheckFieldsBlockFiftyKay;
 begin
-  AssertEquals('Noso Legacy Block Number is 10000', 50000, FLegacyBlock.Number);
+  AssertEquals('Noso Legacy Block Number is 50000', 50000, FLegacyBlock.Number);
   AssertEquals('Noso Legacy Block Hash is F40B85E3BC2FB3A96FF09D2ABA472501',
     'F40B85E3BC2FB3A96FF09D2ABA472501',
     FLegacyBlock.Hash
@@ -332,6 +335,81 @@ begin
   AssertEquals('Noso Legacy Block MN Address 0 is NLXvurcqcmfzDccvCVeVB876QVTiFa',
     'NLXvurcqcmfzDccvCVeVB876QVTiFa',
     FLegacyBlock.MNAddresses[0]
+  );
+end;
+
+procedure TTestNosoDataLegacyBlock.CheckFieldsBlockHundredKay;
+begin
+  AssertEquals('Noso Legacy Block Number is 100000', 100000, FLegacyBlock.Number);
+  AssertEquals('Noso Legacy Block Hash is 0973BCDDEF53FA450FBA133A04895BBD',
+    '0973BCDDEF53FA450FBA133A04895BBD',
+    FLegacyBlock.Hash
+  );
+  AssertEquals('Noso Legacy Block TimeStart is 1678108201', 1678108201, FLegacyBlock.TimeStart);
+  AssertEquals('Noso Legacy Block TimeEnd is 1678108800', 1678108800, FLegacyBlock.TimeEnd);
+  AssertEquals('Noso Legacy Block TimeTotal is 599', 599, FLegacyBlock.TimeTotal);
+  AssertEquals('Noso Legacy Block TimeLast20 is 0', 0, FLegacyBlock.TimeLast20);
+  AssertEquals('Noso Legacy Block Transactions count is 26', 26, FLegacyBlock.Transactions.Count);
+  CheckFieldsBlockHundredKayTransactionZero(FLegacyBlock.Transactions[0]);
+  AssertEquals('Noso Legacy Block Difficulty is 0', 0, FLegacyBlock.Difficulty);
+  AssertEquals('Noso Legacy Block TargetHash is 6A97DDC990ABB002A0F4553507338AF1', '6A97DDC990ABB002A0F4553507338AF1', FLegacyBlock.TargetHash);
+  AssertEquals('Noso Legacy Block Solution is !=J!!!!!!!!!!!!!!!104743216 000000101B4902697D39352AA68B1811 2400121681 2100106176 0',
+    '!=J!!!!!!!!!!!!!!!104743216 000000101B4902697D39352AA68B1811 2400121681 2100106176 0',
+    FLegacyBlock.Solution
+  );
+  AssertEquals('Noso Legacy Block LastBlockHash is 6A97DDC990ABB002A0F4553507338AF1',
+    '6A97DDC990ABB002A0F4553507338AF1',
+    FLegacyBlock.LastBlockHash
+  );
+  AssertEquals('Noso Legacy Block NextBlockDifficulty is 228', 228, FLegacyBlock.NextBlockDifficulty);
+  AssertEquals('Noso Legacy Block Miner is N3pzgU2jpvhjW6cSJL8zW8Rzj5fJdFa',
+    'N3pzgU2jpvhjW6cSJL8zW8Rzj5fJdFa',
+    FLegacyBlock.Miner
+  );
+  AssertEquals('Noso Legacy Block Fee is 253174', 253174, FLegacyBlock.Fee);
+  AssertEquals('Noso Legacy Block Reward is 5000000000', 5000000000, FLegacyBlock.Reward);
+  AssertEquals('Noso Legacy Block PoS Reward is 0', 0, FLegacyBlock.PoSReward);
+  AssertEquals('Noso Legacy Block MN Reward is 9210992', 9210992, FLegacyBlock.MNReward);
+  AssertEquals('Noso Legacy Block MN Address Count is 228', 228, Length(FLegacyBlock.MNAddresses));
+  AssertEquals('Noso Legacy Block MN Address 0 is N43kqHxEFAbowZS3c2WiGkTnhw13PDv',
+    'N43kqHxEFAbowZS3c2WiGkTnhw13PDv',
+    FLegacyBlock.MNAddresses[0]
+  );
+end;
+
+procedure TTestNosoDataLegacyBlock.CheckFieldsBlockHundredKayTransactionZero(
+  const ATransaction: TLegacyTransaction);
+begin
+  AssertEquals('Noso Legacy Transaction Block is 100000', 100000, ATransaction.Block);
+  AssertEquals('Noso Legacy Transaction OrderID is OR10dn3p32kljebwume4lk1ec3b61xpnndza3wwd9yuk9clcgcap',
+    'OR10dn3p32kljebwume4lk1ec3b61xpnndza3wwd9yuk9clcgcap',
+    ATransaction.OrderID
+  );
+  AssertEquals('Noso Legacy Transaction OrderLines is 1', 1, ATransaction.OrderLines);
+  AssertEquals('Noso Legacy Transaction OrderType is TRFR', 'TRFR', ATransaction.OrderType);
+  AssertEquals('Noso Legacy Transaction TimeStamp is 1678108260', 1678108260, ATransaction.TimeStamp);
+  AssertEquals('Noso Legacy Transaction Reference is PoolPay_GoneFishing', 'PoolPay_GoneFishing', ATransaction.Reference);
+  AssertEquals('Noso Legacy Transaction TrxLine is 1', 1, ATransaction.TrxLine);
+  AssertEquals('Noso Legacy Transaction Sender is N3ESwXxCAR4jw3GVHgmKiX9zx1ojWEf',
+    'N3ESwXxCAR4jw3GVHgmKiX9zx1ojWEf',
+    ATransaction.Sender
+  );
+  AssertEquals('Noso Legacy Transaction Address is N3ESwXxCAR4jw3GVHgmKiX9zx1ojWEf',
+  'N3ESwXxCAR4jw3GVHgmKiX9zx1ojWEf',
+  ATransaction.Address
+);
+  AssertEquals('Noso Legacy Transaction Receiver is N3WBskvLhDVoc56kEwLThnz9GxeqwGM',
+    'N3WBskvLhDVoc56kEwLThnz9GxeqwGM',
+    ATransaction.Receiver);
+  AssertEquals('Noso Legacy Transaction AmountFee is 10064', 10064, ATransaction.AmountFee);
+  AssertEquals('Noso Legacy Transaction AmountTrf is 100638791', 100638791, ATransaction.AmountTrf);
+  AssertEquals('Noso Legacy Transaction Signature is MEQCIBIUVSFyYbZuxDwm+GNrrrk0WxIGLHGwc+QltWAKKZTYAiAsGs+itbuDuH91HwKLhWooC9vRZtwznUuX+AAhf2Yv7Q==',
+    'MEQCIBIUVSFyYbZuxDwm+GNrrrk0WxIGLHGwc+QltWAKKZTYAiAsGs+itbuDuH91HwKLhWooC9vRZtwznUuX+AAhf2Yv7Q==',
+    ATransaction.Signature
+  );
+  AssertEquals('Noso Legacy Transaction TrfrID is tRJ1PhKvn9p4qUQgdNPJC1XQjSJo798zqEMgcwk4ExrnRwNc',
+    'tRJ1PhKvn9p4qUQgdNPJC1XQjSJo798zqEMgcwk4ExrnRwNc',
+    ATransaction.TrfrID
   );
 end;
 
@@ -426,6 +504,20 @@ begin
       50000
     );
     CheckFieldsBlockFiftyKay;
+  finally
+    FLegacyBlock.Free;
+  end;
+end;
+
+procedure TTestNosoDataLegacyBlock.TestNosoDataLegacyBlockHundredKay;
+begin
+  FLegacyBlock:= TLegacyBlock.Create;
+  try
+    FLegacyBlock.LoadFromFolder(
+      ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder,
+      100000
+    );
+    CheckFieldsBlockHundredKay;
   finally
     FLegacyBlock.Free;
   end;

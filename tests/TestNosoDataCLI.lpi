@@ -121,6 +121,7 @@
       <Unit4>
         <Filename Value="../src/data/noso.data.block.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Block"/>
       </Unit4>
       <Unit5>
         <Filename Value="data/testnosodataoperations.pas"/>
@@ -130,6 +131,7 @@
       <Unit6>
         <Filename Value="../src/data/noso.data.operations.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Operations"/>
       </Unit6>
       <Unit7>
         <Filename Value="data/testnosodataoperation.pas"/>
@@ -139,6 +141,7 @@
       <Unit8>
         <Filename Value="../src/data/noso.data.operation.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Operation"/>
       </Unit8>
       <Unit9>
         <Filename Value="data/legacy/testnosodatalegacyblocks.pas"/>
@@ -177,6 +180,7 @@
       <Unit16>
         <Filename Value="../src/data/legacy/noso.data.legacy.transaction.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Noso.Data.Legacy.Transaction"/>
       </Unit16>
       <Unit17>
         <Filename Value="data/legacy/testnosodatalegacywallet.pas"/>
