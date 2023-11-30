@@ -66,10 +66,10 @@ type
       const ANumber: Int64
     );
     procedure LoadFromFile(const AFilePath: String);
-    function LoadFromStream(const AStream: TStream): Int64;
+    procedure LoadFromStream(const AStream: TStream);
 
     procedure SaveToFile(const AFilePath: String);
-    function SaveToStream(const AStream: TStream): Int64;
+    procedure SaveToStream(const AStream: TStream);
 
     function FindTransaction(const ATransactionID: String): TLegacyTransaction;
 
@@ -185,74 +185,51 @@ begin
   end;
 end;
 
-function TLegacyBlock.LoadFromStream(const AStream: TStream): Int64;
+procedure TLegacyBlock.LoadFromStream(const AStream: TStream);
 var
-  bytesRead: Int64 = 0;
   posAddressCount: Integer = 0;
   mnAddressCount: Integer = 0;
   index: Integer = 0;
 begin
-  Result:= 0;
-  bytesRead:= AStream.Read(FNumber, SizeOf(FNumber));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTimeStart, SizeOf(FTimeStart));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTimeEnd, SizeOf(FTimeEnd));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTimeTotal, SizeOf(FTimeTotal));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTimeLast20, SizeOf(FTimeLast20));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTransactionsCount, SizeOf(FTransactionsCount));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FDifficulty, SizeOf(FDifficulty));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FTargetHash, SizeOf(FTargetHash));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FSolution, SizeOf(FSolution));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FLastBlockHash, SizeOf(FLastBlockHash));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FMinerAddress, SizeOf(FMinerAddress));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FFee, SizeOf(FFee));
-  Inc(Result, bytesRead);
-  bytesRead:= AStream.Read(FReward, SizeOf(FReward));
-  Inc(Result, bytesRead);
+  AStream.Read(FNumber, SizeOf(FNumber));
+  AStream.Read(FTimeStart, SizeOf(FTimeStart));
+  AStream.Read(FTimeEnd, SizeOf(FTimeEnd));
+  AStream.Read(FTimeTotal, SizeOf(FTimeTotal));
+  AStream.Read(FTimeLast20, SizeOf(FTimeLast20));
+  AStream.Read(FTransactionsCount, SizeOf(FTransactionsCount));
+  AStream.Read(FDifficulty, SizeOf(FDifficulty));
+  AStream.Read(FTargetHash, SizeOf(FTargetHash));
+  AStream.Read(FSolution, SizeOf(FSolution));
+  AStream.Read(FLastBlockHash, SizeOf(FLastBlockHash));
+  AStream.Read(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
+  AStream.Read(FMinerAddress, SizeOf(FMinerAddress));
+  AStream.Read(FFee, SizeOf(FFee));
+  AStream.Read(FReward, SizeOf(FReward));
   // Load Transactions
   if FTransactionsCount > 0 then
   begin
-    bytesRead:= FTransactions.LoadFromStream(AStream, FTransactionsCount);
-    Inc(Result, bytesRead);
+    FTransactions.LoadFromStream(AStream, FTransactionsCount);
   end;
   // Load PoS rewards
   if FNumber >= cBlockWithPoS then
   begin
-    bytesRead:= AStream.Read(FProofofStakeReward, SizeOf(FProofofStakeReward));
-    Inc(Result, bytesRead);
-    bytesRead:= AStream.Read(posAddressCount, SizeOf(posAddressCount));
-    Inc(Result, bytesRead);
+    AStream.Read(FProofofStakeReward, SizeOf(FProofofStakeReward));
+    AStream.Read(posAddressCount, SizeOf(posAddressCount));
     SetLength(FProofofStakeAddresses, posAddressCount);
     for index:= 0 to Pred(posAddressCount) do
     begin
-      bytesRead:= AStream.Read(FProofofStakeAddresses[index], SizeOf(TString32));
-      Inc(Result, bytesRead);
+      AStream.Read(FProofofStakeAddresses[index], SizeOf(TString32));
     end;
   end;
   //Load MN rewards
   if FNumber >= cBlockWithMNandPoS then
   begin
-    bytesRead:= AStream.Read(FMasterNodeReward, SizeOf(FMasterNodeReward));
-    Inc(Result, bytesRead);
-    bytesRead:= AStream.Read(mnAddressCount, SizeOf(mnAddressCount));
-    Inc(Result, bytesRead);
+    AStream.Read(FMasterNodeReward, SizeOf(FMasterNodeReward));
+    AStream.Read(mnAddressCount, SizeOf(mnAddressCount));
     SetLength(FMasterNodeAddresses, mnAddressCount);
     for index:= 0 to Pred(mnAddressCount) do
     begin
-      bytesRead:= AStream.Read(FMasterNodeAddresses[index], SizeOf(TString32));
-      Inc(Result, bytesRead);
+      AStream.Read(FMasterNodeAddresses[index], SizeOf(TString32));
     end;
   end;
   SetHASH;
@@ -270,75 +247,52 @@ begin
   end;
 end;
 
-function TLegacyBlock.SaveToStream(const AStream: TStream): Int64;
+procedure TLegacyBlock.SaveToStream(const AStream: TStream);
 var
-  bytesWritten: Int64 = 0;
   posAddressCount: Integer = 0;
   mnAddressCount: Integer = 0;
   index: Integer = 0;
 begin
-  Result:= 0;
   AStream.Position:= 0;
-  bytesWritten:= AStream.Write(FNumber, SizeOf(FNumber));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FTimeStart, SizeOf(FTimeStart));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FTimeEnd, SizeOf(FTimeEnd));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FTimeTotal, SizeOf(FTimeTotal));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FTimeLast20, SizeOf(FTimeLast20));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FTransactionsCount, SizeOf(FTransactionsCount));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FDifficulty, SizeOf(FDifficulty));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FTargetHash, SizeOf(FTargetHash));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FSolution, SizeOf(FSolution));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FLastBlockHash, SizeOf(FLastBlockHash));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FMinerAddress, SizeOf(FMinerAddress));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FFee, SizeOf(FFee));
-  Inc(Result, bytesWritten);
-  bytesWritten:= AStream.Write(FReward, SizeOf(FReward));
-  Inc(Result, bytesWritten);
+  AStream.Write(FNumber, SizeOf(FNumber));
+  AStream.Write(FTimeStart, SizeOf(FTimeStart));
+  AStream.Write(FTimeEnd, SizeOf(FTimeEnd));
+  AStream.Write(FTimeTotal, SizeOf(FTimeTotal));
+  AStream.Write(FTimeLast20, SizeOf(FTimeLast20));
+  AStream.Write(FTransactionsCount, SizeOf(FTransactionsCount));
+  AStream.Write(FDifficulty, SizeOf(FDifficulty));
+  AStream.Write(FTargetHash, SizeOf(FTargetHash));
+  AStream.Write(FSolution, SizeOf(FSolution));
+  AStream.Write(FLastBlockHash, SizeOf(FLastBlockHash));
+  AStream.Write(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
+  AStream.Write(FMinerAddress, SizeOf(FMinerAddress));
+  AStream.Write(FFee, SizeOf(FFee));
+  AStream.Write(FReward, SizeOf(FReward));
   // Save Transactions
   if FTransactionsCount > 0 then
   begin
-    bytesWritten:= FTransactions.SaveToStream(AStream);
-    Inc(Result, bytesWritten);
+    FTransactions.SaveToStream(AStream);
   end;
   // Save PoS rewards
   if FNumber >= cBlockWithPoS then
   begin
-    bytesWritten:= AStream.Write(FProofofStakeReward, SizeOf(FProofofStakeReward));
-    Inc(Result, bytesWritten);
+    AStream.Write(FProofofStakeReward, SizeOf(FProofofStakeReward));
     posAddressCount:= Length(FProofofStakeAddresses);
-    bytesWritten:= AStream.Write(posAddressCount, SizeOf(posAddressCount));
-    Inc(Result, bytesWritten);
+    AStream.Write(posAddressCount, SizeOf(posAddressCount));
     for index:= 0 to Pred(posAddressCount) do
     begin
-      bytesWritten:= AStream.Write(FProofofStakeAddresses[index], SizeOf(TString32));
-      Inc(Result, bytesWritten);
+      AStream.Write(FProofofStakeAddresses[index], SizeOf(TString32));
     end;
   end;
   // Save MN rewards
   if FNumber >= cBlockWithMNandPoS then
   begin
-    bytesWritten:= AStream.Write(FMasterNodeReward, SizeOf(FMasterNodeReward));
-    Inc(Result, bytesWritten);
+    AStream.Write(FMasterNodeReward, SizeOf(FMasterNodeReward));
     mnAddressCount:= Length(FMasterNodeAddresses);
-    bytesWritten:= AStream.Write(mnAddressCount, SizeOf(mnAddressCount));
-    Inc(Result, bytesWritten);
+    AStream.Write(mnAddressCount, SizeOf(mnAddressCount));
     for index:= 0 to Pred(mnAddressCount) do
     begin
-      bytesWritten:= AStream.Write(FMasterNodeAddresses[index], SizeOf(TString32));
-      Inc(Result, bytesWritten);
+      AStream.Write(FMasterNodeAddresses[index], SizeOf(TString32));
     end;
   end;
 end;
