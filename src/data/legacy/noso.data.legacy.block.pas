@@ -7,6 +7,7 @@ interface
 uses
   Classes
 , SysUtils
+, fpjson
 , Noso.Data.Legacy.Types
 , Noso.Data.Legacy.Transactions
 , Noso.Data.Legacy.Transaction
@@ -18,9 +19,28 @@ const
   cBlockWithMNOnly   : Int64 = 88500;
   cLegacyBlockFilenameFormat  = '%d.blk';
 
+  cjNumber              = 'number';
+  cjHASH                = 'hash';
+  cjLastBlockHASH       = 'last-block-hash';
+  cjTimeStart           = 'time-start';
+  cjTimeEnd             = 'time-end';
+  cjTimeTotal           = 'time-total';
+  cjTimeLast20          = 'time-last-20';
+  cjDifficulty          = 'difficulty';
+  cjTargetHASH          = 'target-hash';
+  cjSolution            = 'solution';
+  cjNextBlockDifficulty = 'number';
+  cjMiner               = 'miner';
+  cjFee                 = 'fee';
+  cjReward              = 'reward';
+  cjTransactions        = 'transactions';
+  cjProofOfStake        = 'proof-of-stake';
+  cjMasterNodes         = 'master-nodes';
+
 resourcestring
   rsECannotFindFolder = 'Cannot find folder %s';
   rsECannotFindFile = 'Cannot find file %s';
+  rsELegacyBlockWrongJSONObject = 'JSON data is not an object';
 
 type
 { ECannotFindFolder }
@@ -28,6 +48,9 @@ type
 
 { ECannotFindFile }
   ECannotFindFile = class(Exception);
+
+{ ELegacyBlockWrongJSONObject }
+  ELegacyBlockWrongJSONObject = class(Exception);
 
 { TLegacyBlock }
   TLegacyBlock = class(TObject)
@@ -45,7 +68,7 @@ type
     FSolution: TString200;
     FLastBlockHash: TString32;
     FNextBlockDifficulty: Integer;
-    FMinerAddress: TString40;
+    FMiner: TString40;
     FFee: Int64;
     FReward: Int64;
     FProofofStakeReward: Int64;
@@ -53,11 +76,27 @@ type
     FMasterNodeReward: Int64;
     FMasterNodeAddresses: TArrayOfString32;
 
+    FCompressedJSON: Boolean;
+
     procedure SetHASH;
+
+    procedure setFromJSON(const AJSON: TJSONStringType);
+    procedure setFromJSONData(const AJSONData: TJSONData);
+    procedure setFromJSONObject(const AJSONObject: TJSONObject);
+    procedure setFromStream(const AStream: TStream);
+
+    function getAsJSON: TJSONStringType;
+    function getAsJSONData: TJSONData;
+    function getAsJSONObject: TJSONObject;
+    function getAsStream: TStream;
   protected
   public
     constructor Create; overload;
-    constructor Create(const AFilename: String); overload;
+    constructor Create(const AFolder: String; const AFilename: String); overload;
+    constructor Create(const AJSON: TJSONStringType); overload;
+    constructor Create(const AJSONData: TJSONData); overload;
+    constructor Create(const AJSONObject: TJSONObject); overload;
+    constructor Create(const AStream: TStream); overload;
 
     destructor Destroy; override;
 
@@ -108,8 +147,8 @@ type
       read FNextBlockDifficulty
       write FNextBlockDifficulty;
     property Miner: TString40
-      read FMinerAddress
-      write FMinerAddress;
+      read FMiner
+      write FMiner;
     property Fee: Int64
       read FFee
       write FFee;
@@ -126,6 +165,19 @@ type
       write FMasterNodeReward;
     property MNAddresses: TArrayOfString32
       read FMasterNodeAddresses;
+
+    property CompressedJSON: Boolean
+      read FCompressedJSON
+      write FCompressedJSON;
+
+    property AsJSON: TJSONStringType
+      read getAsJSON;
+    property AsJSONData: TJSONData
+      read getAsJSONData;
+    property AsJSONObject: TJSONObject
+      read getAsJSONObject;
+    property AsStream: TStream
+      read getAsStream;
   published
   end;
 
@@ -151,6 +203,110 @@ begin
       sBlock.Free;
     end;
   end;
+end;
+
+procedure TLegacyBlock.setFromJSON(const AJSON: TJSONStringType);
+var
+  jData: TJSONData = nil;
+begin
+  jData:= GetJSON(AJSON);
+  try
+    setFromJSONData(jData);
+  finally
+    jData.Free;
+  end;
+end;
+
+procedure TLegacyBlock.setFromJSONData(const AJSONData: TJSONData);
+begin
+  if aJSONData.JSONType <> jtObject then
+  begin
+    raise ELegacyBlockWrongJSONObject.Create(rsELegacyBlockWrongJSONObject);
+  end;
+  setFromJSONObject(aJSONData as TJSONObject);
+end;
+
+procedure TLegacyBlock.setFromJSONObject(const AJSONObject: TJSONObject);
+begin
+  FNumber:= AJSONObject.Get(cjNumber, FNumber);
+  FHash:= AJSONObject.Get(cjHash, FHash);
+  FLastBlockHash:= AJSONObject.Get(cjLastBlockHASH, FLastBlockHash);
+  FTimeStart:= AJSONObject.Get(cjTimeStart, FTimeStart);
+  FTimeEnd:= AJSONObject.Get(cjTimeEnd, FTimeEnd);
+  FTimeTotal:= AJSONObject.Get(cjTimeTotal, FTimeTotal);
+  FTimeLast20:= AJSONObject.Get(cjTimeLast20, FTimeLast20);
+  FDifficulty:= AJSONObject.Get(cjDifficulty, FDifficulty);
+  FTargetHash:= AJSONObject.Get(cjTargetHASH, FTargetHash);
+  FSolution:= AJSONObject.Get(cjSolution, FSolution);
+  FNextBlockDifficulty:= AJSONObject.Get(cjNextBlockDifficulty, FNextBlockDifficulty);
+  FMiner:= AJSONObject.Get(cjMiner, FMiner);
+  FFee:= AJSONObject.Get(cjFee, FFee);
+  FReward:= AJSONObject.Get(cjReward, FReward);
+
+  { #todo -ogcarreno : Implement the JSON Transactions }
+  //FTransactions:= TLegacyTransactions.Create;
+
+  { #todo -ogcarreno : Implement the JSON PoS }
+
+  { #todo -ogcarreno : Implement the JSON MNs }
+end;
+
+procedure TLegacyBlock.setFromStream(const AStream: TStream);
+var
+  jData: TJSONData = nil;
+begin
+  jData:= GetJSON(AStream);
+  try
+    setFromJSONData(jData);
+  finally
+    jData.Free;
+  end;
+end;
+
+function TLegacyBlock.getAsJSON: TJSONStringType;
+var
+  jObject: TJSONObject = nil;
+begin
+  Result:= '';
+  jObject:= getAsJSONObject;
+  jObject.CompressedJSON:= FCompressedJSON;
+  Result:= jObject.AsJSON;
+  jObject.Free;
+end;
+
+function TLegacyBlock.getAsJSONData: TJSONData;
+begin
+  Result:= getAsJSONObject as TJSONData;
+end;
+
+function TLegacyBlock.getAsJSONObject: TJSONObject;
+begin
+  Result:= TJSONObject.Create;
+  Result.Add(cjNumber, FNumber);
+  Result.Add(cjHASH, FHash);
+  Result.Add(cjLastBlockHASH, FLastBlockHash);
+  Result.Add(cjTimeStart, FTimeStart);
+  Result.Add(cjTimeEnd, FTimeEnd);
+  Result.Add(cjTimeTotal, FTimeTotal);
+  Result.Add(cjTimeLast20, FTimeLast20);
+  Result.Add(cjDifficulty, FDifficulty);
+  Result.Add(cjTargetHASH, FTargetHash);
+  Result.Add(cjSolution, FSolution);
+  Result.Add(cjNextBlockDifficulty, FNextBlockDifficulty);
+  Result.Add(cjMiner, FMiner);
+  Result.Add(cjFee, FFee);
+  Result.Add(cjReward, FReward);
+
+  { #todo -ogcarreno : Implement JSON Transactions }
+
+  { #todo -ogcarreno : Implement JSON PoS }
+
+  { #todo -ogcarreno : Implement JSON MNs }
+end;
+
+function TLegacyBlock.getAsStream: TStream;
+begin
+  Result:= TStringStream.Create(getAsJSON, TEncoding.UTF8);
 end;
 
 procedure TLegacyBlock.LoadFromFolder(
@@ -202,7 +358,7 @@ begin
   AStream.Read(FSolution, SizeOf(FSolution));
   AStream.Read(FLastBlockHash, SizeOf(FLastBlockHash));
   AStream.Read(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
-  AStream.Read(FMinerAddress, SizeOf(FMinerAddress));
+  AStream.Read(FMiner, SizeOf(FMiner));
   AStream.Read(FFee, SizeOf(FFee));
   AStream.Read(FReward, SizeOf(FReward));
   // Load Transactions
@@ -265,7 +421,7 @@ begin
   AStream.Write(FSolution, SizeOf(FSolution));
   AStream.Write(FLastBlockHash, SizeOf(FLastBlockHash));
   AStream.Write(FNextBlockDifficulty, SizeOf(FNextBlockDifficulty));
-  AStream.Write(FMinerAddress, SizeOf(FMinerAddress));
+  AStream.Write(FMiner, SizeOf(FMiner));
   AStream.Write(FFee, SizeOf(FFee));
   AStream.Write(FReward, SizeOf(FReward));
   // Save Transactions
@@ -328,7 +484,7 @@ begin
   FSolution:= EmptyStr;
   FLastBlockHash:= EmptyStr;
   FNextBlockDifficulty:= -1;
-  FMinerAddress:= EmptyStr;
+  FMiner:= EmptyStr;
   FFee:= 0;
   FReward:= 0;
   FProofofStakeReward:= 0;
@@ -337,10 +493,37 @@ begin
   SetLength(FMasterNodeAddresses, 0);
 end;
 
-constructor TLegacyBlock.Create(const AFilename: String);
+constructor TLegacyBlock.Create(const AFolder: String; const AFilename: String);
 begin
   Create;
-  LoadFromFile(AFilename);
+  LoadFromFile(
+    IncludeTrailingPathDelimiter(AFolder) +
+    AFilename
+  );
+end;
+
+constructor TLegacyBlock.Create(const AJSON: TJSONStringType);
+begin
+  Create;
+  setFromJSON(AJSON);
+end;
+
+constructor TLegacyBlock.Create(const AJSONData: TJSONData);
+begin
+  Create;
+  setFromJSONData(AJSONData);
+end;
+
+constructor TLegacyBlock.Create(const AJSONObject: TJSONObject);
+begin
+  Create;
+  setFromJSONObject(AJSONObject);
+end;
+
+constructor TLegacyBlock.Create(const AStream: TStream);
+begin
+  Create;
+  setFromStream(AStream);
 end;
 
 destructor TLegacyBlock.Destroy;

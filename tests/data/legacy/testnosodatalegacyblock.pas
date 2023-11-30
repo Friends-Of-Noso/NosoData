@@ -429,7 +429,7 @@ begin
     ExcludeTrailingPathDelimiter(
       ExtractFileDir(ParamStr(0))+DirectorySeparator+
       cTestDataFolder
-    )+DirectorySeparator+
+    ),
     '0.blk'
   );
   try
@@ -530,7 +530,7 @@ begin
   FLegacyBlock:= TLegacyBlock.Create(
     ExcludeTrailingPathDelimiter(
       ExtractFileDir(ParamStr(0))+DirectorySeparator+cTestDataFolder
-    )+DirectorySeparator+
+    ),
     '50.blk'
   );
   try

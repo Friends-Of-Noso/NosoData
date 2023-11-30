@@ -53,18 +53,21 @@ const
 
 function TLegacyBlocks.GetBlock(Index: Int64): TLegacyBlock;
 var
-  filename: String;
+  blockfilepath: String;
 begin
   Result:= nil;
   if (Index < 0) or (Index > FCount) then exit;
-  filename:= Format(cFilenameFormat,[
+  blockfilepath:= Format(cFilenameFormat,[
     ExcludeTrailingPathDelimiter(FFolder),
     cDataFolderName,
     cBlocksFolderName,
     Index
     ]);
-  if not FileExists(filename) then exit;
-  Result:= TLegacyBlock.Create(filename);
+  if not FileExists(blockfilepath) then exit;
+  Result:= TLegacyBlock.Create(
+    ExtractFileDir(blockfilepath),
+    ExtractFileName(blockfilepath)
+  );
 end;
 
 procedure TLegacyBlocks.Refresh;
